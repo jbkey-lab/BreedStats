@@ -1,0 +1,747 @@
+----------------------------Shd_50---------------------------- 
+Online License checked out Tue Dec 14 13:04:28 2021
+Model fitted using the sigma parameterization.
+ASReml 4.1.0 Tue Dec 14 13:04:28 2021
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -117475.8           1.0  11527 13:04:28    0.0
+ 2      -97408.0           1.0  11527 13:04:28    0.0
+ 3      -75009.5           1.0  11527 13:04:28    0.0
+ 4      -58854.4           1.0  11527 13:04:28    0.0
+ 5      -49330.0           1.0  11527 13:04:28    0.0
+ 6      -45803.9           1.0  11527 13:04:28    0.0
+ 7      -44842.8           1.0  11527 13:04:28    0.0
+ 8      -44703.4           1.0  11527 13:04:28    0.0
+ 9      -44698.4           1.0  11527 13:04:28    0.0
+10      -44698.4           1.0  11527 13:04:28    0.0
+$call
+asreml(fixed = feature ~ YEAR + FIELD, random = ~LINE, residual = ~idv(units), 
+    data = SP_data.filter, na.action = na.method(y = "omit"))
+
+$loglik
+[1] -44698.35
+
+$nedf
+[1] 11527
+
+$sigma
+[1] 1
+
+$varcomp
+            component std.error  z.ratio bound %ch
+LINE         80.45998  7.664854 10.49726     P 0.1
+units!units 798.67121 11.260083 70.92942     P 0.0
+units!R       1.00000        NA       NA     F 0.0
+
+$bic
+[1] 89415.41
+attr(,"parameters")
+[1] 2
+
+$aic
+[1] 89400.7
+attr(,"parameters")
+[1] 2
+
+attr(,"class")
+[1] "summary.asreml"
+Model fitted using the sigma parameterization.
+ASReml 4.1.0 Tue Dec 14 13:04:30 2021
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -44698.35           1.0  11527 13:04:30    0.0
+ 2     -44698.35           1.0  11527 13:04:30    0.0
+ 3     -44698.35           1.0  11527 13:04:30    0.1
+----------------------------Slk_50---------------------------- 
+Model fitted using the sigma parameterization.
+ASReml 4.1.0 Tue Dec 14 13:04:31 2021
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -117510.0           1.0  11527 13:04:31    0.0
+ 2      -97430.4           1.0  11527 13:04:31    0.0
+ 3      -75018.4           1.0  11527 13:04:31    0.0
+ 4      -58852.4           1.0  11527 13:04:31    0.0
+ 5      -49320.1           1.0  11527 13:04:31    0.0
+ 6      -45790.0           1.0  11527 13:04:31    0.0
+ 7      -44828.0           1.0  11527 13:04:31    0.0
+ 8      -44688.9           1.0  11527 13:04:31    0.0
+ 9      -44684.0           1.0  11527 13:04:31    0.0
+10      -44684.0           1.0  11527 13:04:31    0.0
+$call
+asreml(fixed = feature ~ YEAR + FIELD, random = ~LINE, residual = ~idv(units), 
+    data = SP_data.filter, na.action = na.method(y = "omit"))
+
+$loglik
+[1] -44683.95
+
+$nedf
+[1] 11527
+
+$sigma
+[1] 1
+
+$varcomp
+            component std.error  z.ratio bound %ch
+LINE         80.31812  7.628496 10.52870     P 0.1
+units!units 796.64727 11.228102 70.95119     P 0.0
+units!R       1.00000        NA       NA     F 0.0
+
+$bic
+[1] 89386.61
+attr(,"parameters")
+[1] 2
+
+$aic
+[1] 89371.9
+attr(,"parameters")
+[1] 2
+
+attr(,"class")
+[1] "summary.asreml"
+Model fitted using the sigma parameterization.
+ASReml 4.1.0 Tue Dec 14 13:04:32 2021
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -44683.95           1.0  11527 13:04:32    0.0
+ 2     -44683.95           1.0  11527 13:04:32    0.0
+ 3     -44683.95           1.0  11527 13:04:32    0.1
+----------------------------Brace.Root---------------------------- 
+----------------------------SLK10---------------------------- 
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Tue Dec 14 13:04:34 2021
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -44670.97       794.971  11531 13:04:34    0.0
+ 2     -44670.97       794.896  11531 13:04:34    0.0
+ 3     -44670.97       794.726  11531 13:04:34    0.0
+$call
+asreml(fixed = feature ~ FIELD, random = ~LINE, data = SP_data.filter, 
+    na.action = na.method(y = "omit"))
+
+$loglik
+[1] -44670.97
+
+$nedf
+[1] 11531
+
+$sigma
+[1] 28.19088
+
+$varcomp
+        component std.error  z.ratio bound %ch
+LINE     79.98865  7.606339 10.51605     P   0
+units!R 794.72553 11.203165 70.93759     P   0
+
+$bic
+[1] 89360.65
+attr(,"parameters")
+[1] 2
+
+$aic
+[1] 89345.94
+attr(,"parameters")
+[1] 2
+
+attr(,"class")
+[1] "summary.asreml"
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Tue Dec 14 13:04:35 2021
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -44670.97       794.711  11531 13:04:35    0.1
+ 2     -44670.97       794.710  11531 13:04:35    0.0
+ 3     -44670.97       794.709  11531 13:04:35    0.0
+----------------------------SLK90---------------------------- 
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Tue Dec 14 13:04:36 2021
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -44686.09       797.058  11531 13:04:37    0.0
+ 2     -44686.09       797.093  11531 13:04:37    0.0
+ 3     -44686.09       797.172  11531 13:04:37    0.0
+$call
+asreml(fixed = feature ~ FIELD, random = ~LINE, data = SP_data.filter, 
+    na.action = na.method(y = "omit"))
+
+$loglik
+[1] -44686.09
+
+$nedf
+[1] 11531
+
+$sigma
+[1] 28.23424
+
+$varcomp
+        component std.error  z.ratio bound %ch
+LINE     79.47807  7.602596 10.45407     P   0
+units!R 797.17215 11.237469 70.93876     P   0
+
+$bic
+[1] 89390.88
+attr(,"parameters")
+[1] 2
+
+$aic
+[1] 89376.18
+attr(,"parameters")
+[1] 2
+
+attr(,"class")
+[1] "summary.asreml"
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Tue Dec 14 13:04:38 2021
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -44686.09       797.179  11531 13:04:38    0.1
+ 2     -44686.09       797.179  11531 13:04:38    0.0
+ 3     -44686.09       797.179  11531 13:04:38    0.0
+----------------------------SHD10---------------------------- 
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Tue Dec 14 13:04:39 2021
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -44691.16       797.760  11531 13:04:39    0.0
+ 2     -44691.16       797.586  11531 13:04:39    0.0
+ 3     -44691.15       797.195  11531 13:04:39    0.0
+$call
+asreml(fixed = feature ~ FIELD, random = ~LINE, data = SP_data.filter, 
+    na.action = na.method(y = "omit"))
+
+$loglik
+[1] -44691.15
+
+$nedf
+[1] 11531
+
+$sigma
+[1] 28.23464
+
+$varcomp
+        component std.error  z.ratio bound %ch
+LINE     80.91312  7.675609 10.54159     P 0.1
+units!R 797.19472 11.242303 70.91027     P 0.0
+
+$bic
+[1] 89401.01
+attr(,"parameters")
+[1] 2
+
+$aic
+[1] 89386.31
+attr(,"parameters")
+[1] 2
+
+attr(,"class")
+[1] "summary.asreml"
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Tue Dec 14 13:04:40 2021
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -44691.15       797.158  11531 13:04:40    0.1
+ 2     -44691.15       797.157  11531 13:04:40    0.0
+ 3     -44691.15       797.154  11531 13:04:40    0.0
+----------------------------SHD90---------------------------- 
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Tue Dec 14 13:04:41 2021
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -44641.81       790.960  11531 13:04:42    0.0
+ 2     -44641.81       790.899  11531 13:04:42    0.0
+ 3     -44641.81       790.762  11531 13:04:42    0.0
+$call
+asreml(fixed = feature ~ FIELD, random = ~LINE, data = SP_data.filter, 
+    na.action = na.method(y = "omit"))
+
+$loglik
+[1] -44641.81
+
+$nedf
+[1] 11531
+
+$sigma
+[1] 28.1205
+
+$varcomp
+        component std.error  z.ratio bound %ch
+LINE     79.49174  7.571132 10.49932     P   0
+units!R 790.76234 11.148470 70.93012     P   0
+
+$bic
+[1] 89302.32
+attr(,"parameters")
+[1] 2
+
+$aic
+[1] 89287.61
+attr(,"parameters")
+[1] 2
+
+attr(,"class")
+[1] "summary.asreml"
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Tue Dec 14 13:04:43 2021
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -44641.81       790.750  11531 13:04:43    0.0
+ 2     -44641.81       790.750  11531 13:04:43    0.0
+ 3     -44641.81       790.749  11531 13:04:43    0.0
+----------------------------Ear.Stalk---------------------------- 
+----------------------------Plt.Height---------------------------- 
+Model fitted using the sigma parameterization.
+ASReml 4.1.0 Tue Dec 14 13:04:44 2021
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -94325.29           1.0  11529 13:04:44    0.1 (1 restrained)
+ 2     -75669.00           1.0  11529 13:04:44    0.0 (1 restrained)
+ 3     -54847.50           1.0  11529 13:04:44    0.0 (1 restrained)
+ 4     -39819.93           1.0  11529 13:04:44    0.0 (1 restrained)
+ 5     -30917.08           1.0  11529 13:04:44    0.0 (2 restrained)
+ 6     -27545.87           1.0  11529 13:04:44    0.0 (2 restrained)
+ 7     -26560.22           1.0  11529 13:04:45    0.0 (1 restrained)
+ 8     -26404.40           1.0  11529 13:04:45    0.0 (1 restrained)
+ 9     -26398.31           1.0  11529 13:04:45    0.0 (1 restrained)
+10     -26398.26           1.0  11529 13:04:45    0.0
+11     -26398.26           1.0  11529 13:04:45    0.0
+12     -26398.26           1.0  11529 13:04:45    0.0
+$call
+asreml(fixed = feature ~ YEAR, random = ~LINE + FIELD * LINE, 
+    residual = ~idv(units), data = SP_data.filter, na.action = na.method(y = "omit"))
+
+$loglik
+[1] -26398.26
+
+$nedf
+[1] 11529
+
+$sigma
+[1] 1
+
+$varcomp
+               component std.error    z.ratio bound %ch
+FIELD       1.143560e-07        NA         NA     B 0.0
+LINE        1.394510e-06        NA         NA     B 0.0
+FIELD:LINE  2.029548e-01 0.2086696  0.9726134     P 0.6
+units!units 3.553776e+01 0.5079907 69.9575083     P 0.0
+units!R     1.000000e+00        NA         NA     F 0.0
+
+$bic
+[1] 52833.93
+attr(,"parameters")
+[1] 4
+
+$aic
+[1] 52804.52
+attr(,"parameters")
+[1] 4
+
+attr(,"class")
+[1] "summary.asreml"
+Model fitted using the sigma parameterization.
+ASReml 4.1.0 Tue Dec 14 13:04:46 2021
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -26398.26           1.0  11529 13:04:46    0.1
+ 2     -26398.26           1.0  11529 13:04:46    0.0
+ 3     -26398.26           1.0  11529 13:04:46    0.1
+----------------------------EarHt---------------------------- 
+Model fitted using the sigma parameterization.
+ASReml 4.1.0 Tue Dec 14 13:04:47 2021
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -93504.23           1.0  11529 13:04:47    0.1 (1 restrained)
+ 2     -75042.11           1.0  11529 13:04:47    0.0 (1 restrained)
+ 3     -54444.53           1.0  11529 13:04:47    0.0
+ 4     -39590.55           1.0  11529 13:04:47    0.0
+ 5     -30806.22           1.0  11529 13:04:47    0.0
+ 6     -27490.90           1.0  11529 13:04:47    0.0 (2 restrained)
+ 7     -26524.74           1.0  11529 13:04:47    0.0 (2 restrained)
+ 8     -26371.64           1.0  11529 13:04:47    0.0 (2 restrained)
+ 9     -26365.73           1.0  11529 13:04:47    0.0 (1 restrained)
+10     -26365.70           1.0  11529 13:04:47    0.0 (1 restrained)
+11     -26365.70           1.0  11529 13:04:47    0.0
+$call
+asreml(fixed = feature ~ YEAR, random = ~LINE + FIELD * LINE, 
+    residual = ~idv(units), data = SP_data.filter, na.action = na.method(y = "omit"))
+
+$loglik
+[1] -26365.7
+
+$nedf
+[1] 11529
+
+$sigma
+[1] 1
+
+$varcomp
+               component std.error   z.ratio bound %ch
+FIELD       4.864121e-07        NA        NA     B 0.0
+LINE        3.931576e-07        NA        NA     B 0.0
+FIELD:LINE  4.684878e-01 0.2258045  2.074749     P 0.2
+units!units 3.509110e+01 0.5052100 69.458436     P 0.0
+units!R     1.000000e+00        NA        NA     F 0.0
+
+$bic
+[1] 52768.81
+attr(,"parameters")
+[1] 4
+
+$aic
+[1] 52739.4
+attr(,"parameters")
+[1] 4
+
+attr(,"class")
+[1] "summary.asreml"
+Model fitted using the sigma parameterization.
+ASReml 4.1.0 Tue Dec 14 13:04:49 2021
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -26365.70           1.0  11529 13:04:49    0.1
+ 2     -26365.70           1.0  11529 13:04:49    0.0
+ 3     -26365.70           1.0  11529 13:04:49    0.1
+----------------------------Tillers---------------------------- 
+----------------------------Leaf.Angle---------------------------- 
+Model fitted using the sigma parameterization.
+ASReml 4.1.0 Tue Dec 14 13:04:50 2021
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -93075.71           1.0  11529 13:04:50    0.1 (1 restrained)
+ 2     -74492.04           1.0  11529 13:04:50    0.0 (1 restrained)
+ 3     -53753.25           1.0  11529 13:04:50    0.0
+ 4     -38788.13           1.0  11529 13:04:50    0.0 (1 restrained)
+ 5     -29925.10           1.0  11529 13:04:50    0.0 (1 restrained)
+ 6     -26571.01           1.0  11529 13:04:51    0.0 (1 restrained)
+ 7     -25600.01           1.0  11529 13:04:51    0.0
+ 8     -25453.73           1.0  11529 13:04:51    0.0
+ 9     -25448.48           1.0  11529 13:04:51    0.0
+10     -25448.46           1.0  11529 13:04:51    0.0
+11     -25448.46           1.0  11529 13:04:51    0.0
+$call
+asreml(fixed = feature ~ YEAR, random = ~LINE + FIELD * LINE, 
+    residual = ~idv(units), data = SP_data.filter, na.action = na.method(y = "omit"))
+
+$loglik
+[1] -25448.46
+
+$nedf
+[1] 11529
+
+$sigma
+[1] 1
+
+$varcomp
+               component std.error    z.ratio bound %ch
+FIELD       1.962911e-07        NA         NA     B 0.0
+LINE        2.008065e-01 0.2212137  0.9077489     P 0.3
+FIELD:LINE  3.674839e-01 0.2918954  1.2589575     P 0.2
+units!units 2.978147e+01 0.4301443 69.2360070     P 0.0
+units!R     1.000000e+00        NA         NA     F 0.0
+
+$bic
+[1] 50934.34
+attr(,"parameters")
+[1] 4
+
+$aic
+[1] 50904.93
+attr(,"parameters")
+[1] 4
+
+attr(,"class")
+[1] "summary.asreml"
+Model fitted using the sigma parameterization.
+ASReml 4.1.0 Tue Dec 14 13:04:52 2021
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -25448.46           1.0  11529 13:04:52    0.1
+ 2     -25448.46           1.0  11529 13:04:52    0.0
+ 3     -25448.46           1.0  11529 13:04:52    0.1
+----------------------------Shed.Rating---------------------------- 
+Model fitted using the sigma parameterization.
+ASReml 4.1.0 Tue Dec 14 13:04:53 2021
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -67055.07           1.0  11529 13:04:53    0.1 (1 restrained)
+ 2     -48154.32           1.0  11529 13:04:53    0.0 (1 restrained)
+ 3     -27053.69           1.0  11529 13:04:53    0.0
+ 4     -11810.39           1.0  11529 13:04:53    0.0 (1 restrained)
+ 5      -2759.76           1.0  11529 13:04:53    0.0 (2 restrained)
+ 6        689.39           1.0  11529 13:04:53    0.0 (2 restrained)
+ 7       1713.27           1.0  11529 13:04:53    0.0 (1 restrained)
+ 8       1876.37           1.0  11529 13:04:53    0.0 (1 restrained)
+ 9       1881.35           1.0  11529 13:04:53    0.0
+10       1881.39           1.0  11529 13:04:53    0.0
+11       1881.40           1.0  11529 13:04:53    0.0
+$call
+asreml(fixed = feature ~ YEAR, random = ~LINE + FIELD * LINE, 
+    residual = ~idv(units), data = SP_data.filter, na.action = na.method(y = "omit"))
+
+$loglik
+[1] 1881.395
+
+$nedf
+[1] 11529
+
+$sigma
+[1] 1
+
+$varcomp
+               component    std.error    z.ratio bound
+FIELD       6.827043e-09           NA         NA     B
+LINE        1.537355e-07           NA         NA     B
+FIELD:LINE  3.017837e-04 0.0009334009  0.3233163     P
+units!units 2.642532e-01 0.0035996993 73.4098100     P
+units!R     1.000000e+00           NA         NA     F
+            %ch
+FIELD        NA
+LINE        0.0
+FIELD:LINE  4.4
+units!units 0.0
+units!R     0.0
+
+$bic
+[1] -3725.38
+attr(,"parameters")
+[1] 4
+
+$aic
+[1] -3754.79
+attr(,"parameters")
+[1] 4
+
+attr(,"class")
+[1] "summary.asreml"
+Model fitted using the sigma parameterization.
+ASReml 4.1.0 Tue Dec 14 13:04:55 2021
+          LogLik        Sigma2     DF     wall    cpu
+ 1      1881.395           1.0  11529 13:04:55    0.1
+ 2      1881.395           1.0  11529 13:04:55    0.0
+ 3      1881.395           1.0  11529 13:04:55    0.1
+----------------------------Stand.Count---------------------------- 
+----------------------------Pollen.Duration..GDUs.10..to.90..---------------------------- 
+----------------------------Silk.Color---------------------------- 
+----------------------------Tassel.Extension---------------------------- 
+Model fitted using the sigma parameterization.
+ASReml 4.1.0 Tue Dec 14 13:04:57 2021
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -82218.10           1.0  11527 13:04:57    0.0
+ 2     -60108.62           1.0  11527 13:04:57    0.0
+ 3     -35375.33           1.0  11527 13:04:57    0.0
+ 4     -17418.23           1.0  11527 13:04:57    0.0
+ 5      -6661.16           1.0  11527 13:04:57    0.0
+ 6      -2516.41           1.0  11527 13:04:57    0.0
+ 7      -1308.51           1.0  11527 13:04:57    0.0 (1 restrained)
+ 8      -1122.63           1.0  11527 13:04:57    0.0
+ 9      -1115.41           1.0  11527 13:04:57    0.0
+10      -1115.39           1.0  11527 13:04:57    0.0
+$call
+asreml(fixed = feature ~ YEAR + FIELD, random = ~LINE, residual = ~idv(units), 
+    data = SP_data.filter, na.action = na.method(y = "omit"))
+
+$loglik
+[1] -1115.391
+
+$nedf
+[1] 11527
+
+$sigma
+[1] 1
+
+$varcomp
+               component   std.error    z.ratio bound
+LINE        0.0008186754 0.001368002  0.5984462     P
+units!units 0.4435838326 0.005990358 74.0496341     P
+units!R     1.0000000000          NA         NA     F
+            %ch
+LINE        0.8
+units!units 0.0
+units!R     0.0
+
+$bic
+[1] 2249.486
+attr(,"parameters")
+[1] 2
+
+$aic
+[1] 2234.781
+attr(,"parameters")
+[1] 2
+
+attr(,"class")
+[1] "summary.asreml"
+Model fitted using the sigma parameterization.
+ASReml 4.1.0 Tue Dec 14 13:04:58 2021
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -1115.391           1.0  11527 13:04:58    0.0
+ 2     -1115.391           1.0  11527 13:04:58    0.0
+ 3     -1115.391           1.0  11527 13:04:58    0.1
+----------------------------Tassel.Branches---------------------------- 
+Model fitted using the sigma parameterization.
+ASReml 4.1.0 Tue Dec 14 13:04:59 2021
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -70200.63           1.0  11529 13:04:59    0.1 (1 restrained)
+ 2     -51265.77           1.0  11529 13:04:59    0.0 (1 restrained)
+ 3     -30125.49           1.0  11529 13:04:59    0.0
+ 4     -14850.44           1.0  11529 13:04:59    0.0 (1 restrained)
+ 5      -5776.51           1.0  11529 13:04:59    0.0 (1 restrained)
+ 6      -2314.56           1.0  11529 13:04:59    0.0 (2 restrained)
+ 7      -1291.33           1.0  11529 13:04:59    0.0 (1 restrained)
+ 8      -1132.74           1.0  11529 13:04:59    0.0 (1 restrained)
+ 9      -1127.24           1.0  11529 13:04:59    0.0
+10      -1127.23           1.0  11529 13:04:59    0.0
+$call
+asreml(fixed = feature ~ YEAR, random = ~LINE + FIELD * LINE, 
+    residual = ~idv(units), data = SP_data.filter, na.action = na.method(y = "omit"))
+
+$loglik
+[1] -1127.229
+
+$nedf
+[1] 11529
+
+$sigma
+[1] 1
+
+$varcomp
+               component   std.error    z.ratio bound
+FIELD       9.420623e-09          NA         NA     B
+LINE        5.950111e-07          NA         NA     B
+FIELD:LINE  1.025005e-03 0.001910082  0.5366289     P
+units!units 4.448319e-01 0.006145772 72.3801500     P
+units!R     1.000000e+00          NA         NA     F
+            %ch
+FIELD        NA
+LINE        0.0
+FIELD:LINE  0.3
+units!units 0.0
+units!R     0.0
+
+$bic
+[1] 2291.869
+attr(,"parameters")
+[1] 4
+
+$aic
+[1] 2262.458
+attr(,"parameters")
+[1] 4
+
+attr(,"class")
+[1] "summary.asreml"
+Model fitted using the sigma parameterization.
+ASReml 4.1.0 Tue Dec 14 13:05:01 2021
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -1127.229           1.0  11529 13:05:01    0.1
+ 2     -1127.229           1.0  11529 13:05:01    0.0
+ 3     -1127.229           1.0  11529 13:05:01    0.1
+----------------------------Anther.Color---------------------------- 
+----------------------------Glume.Color---------------------------- 
+----------------------------Glume.Ring---------------------------- 
+----------------------------Leaf.Color---------------------------- 
+----------------------------Leaf.Texture---------------------------- 
+----------------------------NCLB---------------------------- 
+Model fitted using the sigma parameterization.
+ASReml 4.1.0 Tue Dec 14 13:05:04 2021
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -57834.92           1.0  11533 13:05:04    0.2 (1 restrained)
+ 2     -41372.07           1.0  11533 13:05:04    0.1 (1 restrained)
+ 3     -23033.07           1.0  11533 13:05:04    0.1 (1 restrained)
+ 4      -9855.56           1.0  11533 13:05:04    0.1 (1 restrained)
+ 5      -2108.09           1.0  11533 13:05:04    0.1 (2 restrained)
+ 6        804.06           1.0  11533 13:05:05    0.1 (2 restrained)
+ 7       1649.00           1.0  11533 13:05:05    0.1 (3 restrained)
+ 8       1758.24           1.0  11533 13:05:05    0.1 (2 restrained)
+ 9       1778.45           1.0  11533 13:05:05    0.1 (1 restrained)
+10       1778.59           1.0  11533 13:05:05    0.1 (1 restrained)
+11       1778.59           1.0  11533 13:05:05    0.1
+$call
+asreml(fixed = feature ~ YEAR, random = ~LINE + REP * LINE + 
+    REP * YEAR, residual = ~idv(units), data = SP_data.filter, 
+    na.action = na.method(y = "omit"))
+
+$loglik
+[1] 1778.589
+
+$nedf
+[1] 11533
+
+$sigma
+[1] 1
+
+$varcomp
+               component    std.error     z.ratio bound
+YEAR        2.160367e-07           NA          NA     B
+REP         9.309681e-05 0.0001693982  0.54957386     P
+REP:YEAR    1.422529e-05 0.0001513011  0.09401972     P
+LINE        1.621097e-07           NA          NA     B
+REP:LINE    2.828201e-07           NA          NA     B
+units!units 2.699638e-01 0.0035575847 75.88402025     P
+units!R     1.000000e+00           NA          NA     F
+            %ch
+YEAR        0.0
+REP         0.1
+REP:YEAR    0.2
+LINE        0.0
+REP:LINE    0.0
+units!units 0.0
+units!R     0.0
+
+$bic
+[1] -3501.06
+attr(,"parameters")
+[1] 6
+
+$aic
+[1] -3545.177
+attr(,"parameters")
+[1] 6
+
+attr(,"class")
+[1] "summary.asreml"
+Model fitted using the sigma parameterization.
+ASReml 4.1.0 Tue Dec 14 13:05:07 2021
+          LogLik        Sigma2     DF     wall    cpu
+ 1      1778.589           1.0  11533 13:05:07    0.2
+ 2      1778.589           1.0  11533 13:05:07    0.1
+ 3      1778.589           1.0  11533 13:05:08    0.1
+----------------------------GOSS---------------------------- 
+Model fitted using the sigma parameterization.
+ASReml 4.1.0 Tue Dec 14 13:05:09 2021
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -73326.24           1.0  11529 13:05:09    0.0
+ 2     -51767.56           1.0  11529 13:05:09    0.0
+ 3     -27662.06           1.0  11529 13:05:09    0.0
+ 4     -10183.97           1.0  11529 13:05:09    0.0
+ 5        256.41           1.0  11529 13:05:09    0.0
+ 6       4258.73           1.0  11529 13:05:09    0.0
+ 7       5425.03           1.0  11529 13:05:09    0.0 (1 restrained)
+ 8       5613.36           1.0  11529 13:05:09    0.0 (1 restrained)
+ 9       5623.38           1.0  11529 13:05:09    0.0 (1 restrained)
+10       5623.69           1.0  11529 13:05:09    0.0 (1 restrained)
+11       5623.71           1.0  11529 13:05:09    0.0 (1 restrained)
+12       5623.71           1.0  11529 13:05:09    0.0
+$call
+asreml(fixed = feature ~ YEAR, random = ~LINE + REP, residual = ~idv(units), 
+    data = SP_data.filter, na.action = na.method(y = "omit"))
+
+$loglik
+[1] 5623.713
+
+$nedf
+[1] 11529
+
+$sigma
+[1] 1
+
+$varcomp
+               component    std.error     z.ratio bound
+REP         5.083072e-09           NA          NA     B
+LINE        2.111108e-05 0.0005029627  0.04197345     P
+units!units 1.381976e-01 0.0018870202 73.23587958     P
+units!R     1.000000e+00           NA          NA     F
+             %ch
+REP           NA
+LINE        14.1
+units!units  0.0
+units!R      0.0
+
+$bic
+[1] -11219.37
+attr(,"parameters")
+[1] 3
+
+$aic
+[1] -11241.43
+attr(,"parameters")
+[1] 3
+
+attr(,"class")
+[1] "summary.asreml"
+Model fitted using the sigma parameterization.
+ASReml 4.1.0 Tue Dec 14 13:05:10 2021
+          LogLik        Sigma2     DF     wall    cpu
+ 1      5623.713           1.0  11529 13:05:10    0.0
+ 2      5623.713           1.0  11529 13:05:10    0.0
+ 3      5623.713           1.0  11529 13:05:10    0.0

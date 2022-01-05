@@ -1,0 +1,738 @@
+[1] "A"
+[1] "Prop"
+[1] "EarHt"
+[1] "GS.Late"
+[1] "PCT.HOH"
+[1] "Plt.Height"
+[1] "RL.."
+[1] "RL.Count"
+[1] "SL.."
+[1] "SL.Count"
+[1] "StandCnt..Final."
+[1] "StandCnt..UAV."
+[1] "Test.WT"
+[1] "Y.M"
+[1] "Yield"
+--------------------------------------EarHt-------------------------------------- 
+Online License checked out Mon Dec 20 08:39:26 2021
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:39:26 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -110294.4       21.9675  53213 08:39:47    0.9
+ 2     -109995.7       21.5025  53213 08:39:47    0.4
+ 3     -109677.9       20.9084  53213 08:39:48    0.3
+ 4     -109494.6       20.4122  53213 08:39:48    0.3
+ 5     -109434.6       20.0785  53213 08:39:48    0.3
+ 6     -109430.1       19.9822  53213 08:39:49    0.3
+ 7     -109430.0       19.9682  53213 08:39:49    0.4
+ 8     -109430.0       19.9669  53213 08:39:49    0.3
+[1] "EarHt"
+$call
+asreml(fixed = feature ~ YEAR, random = ~FEMALE + and(MALE, 1), 
+    residual = ~units, data = BV.HSIdentical.df[, c("YEAR", "FIELD", 
+        "MALE", "FEMALE", "feature")], na.action = na.method(y = c("include"), 
+        x = c("include")), equate.levels = c("FEMALE", "MALE"), 
+    workspace = "31gb")
+
+$loglik
+[1] -109430
+
+$nedf
+[1] 53213
+
+$sigma
+[1] 4.46843
+
+$varcomp
+        component std.error   z.ratio bound %ch
+FEMALE   8.793404 0.2807398  31.32225     P   0
+units!R 19.966867 0.1272117 156.95782     P   0
+
+$bic
+[1] 218881.8
+attr(,"parameters")
+[1] 2
+
+$aic
+[1] 218864
+attr(,"parameters")
+[1] 2
+
+attr(,"class")
+[1] "summary.asreml"
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:40:01 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -109430.0       19.9668  53213 08:40:20    1.6
+ 2     -109430.0       19.9668  53213 08:40:20    0.3
+ 3     -109430.0       19.9668  53213 08:40:21    0.7
+[1] "Heritability = 0.611496572814093"
+4496 0 0 30.2 72.1 41.9 229335.3 51 51.00874 0.06969649 0.1366394 21.83977 4.673304 0.09161771 
+--------------------------------------GS.Late-------------------------------------- 
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:40:33 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -33025.05       11.0815  19069 08:40:47    0.9
+ 2     -33008.04       10.9988  19069 08:40:48    0.3
+ 3     -32987.95       10.8785  19069 08:40:48    0.3
+ 4     -32973.52       10.7589  19069 08:40:48    0.3
+ 5     -32965.33       10.6515  19069 08:40:49    0.3
+ 6     -32962.69       10.5893  19069 08:40:49    0.3
+ 7     -32961.90       10.5550  19069 08:40:49    0.3
+ 8     -32961.68       10.5367  19069 08:40:50    0.3
+ 9     -32961.62       10.5271  19069 08:40:50    0.3
+10     -32961.60       10.5221  19069 08:40:50    0.3
+11     -32961.60       10.5196  19069 08:40:51    0.3
+12     -32961.60       10.5183  19069 08:40:51    0.3
+13     -32961.60       10.5176  19069 08:40:51    0.3
+[1] "GS.Late"
+$call
+asreml(fixed = feature ~ YEAR, random = ~FEMALE + and(MALE, 1), 
+    residual = ~units, data = BV.HSIdentical.df[, c("YEAR", "FIELD", 
+        "MALE", "FEMALE", "feature")], na.action = na.method(y = c("include"), 
+        x = c("include")), equate.levels = c("FEMALE", "MALE"), 
+    workspace = "31gb")
+
+$loglik
+[1] -32961.6
+
+$nedf
+[1] 19069
+
+$sigma
+[1] 3.243084
+
+$varcomp
+        component std.error  z.ratio bound %ch
+FEMALE   3.343345 0.2245588 14.88851     P 0.1
+units!R 10.517594 0.1129708 93.10014     P 0.0
+
+$bic
+[1] 65942.91
+attr(,"parameters")
+[1] 2
+
+$aic
+[1] 65927.19
+attr(,"parameters")
+[1] 2
+
+attr(,"class")
+[1] "summary.asreml"
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:40:59 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -32961.60       10.5173  19069 08:41:14    1.5
+ 2     -32961.60       10.5172  19069 08:41:15    0.3
+ 3     -32961.60       10.5170  19069 08:41:15    0.5
+[1] "Heritability = 0.482412466457958"
+4496 0 0 -9.86 37.6 47.46 4950.659 1.1 1.101125 0.02422295 0.0474889 2.638034 1.624203 1.475039 
+--------------------------------------PCT.HOH-------------------------------------- 
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:41:24 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -358693.4       9.19702 220838 08:41:37    0.4
+ 2     -358636.5       9.17780 220838 08:41:37    0.2
+ 3     -358587.0       9.15378 220838 08:41:37    0.2
+ 4     -358569.2       9.13666 220838 08:41:37    0.2
+ 5     -358566.8       9.12853 220838 08:41:38    0.2
+ 6     -358566.7       9.12787 220838 08:41:38    0.2
+ 7     -358566.7       9.12785 220838 08:41:38    0.2
+[1] "PCT.HOH"
+$call
+asreml(fixed = feature ~ YEAR, random = ~FEMALE + and(MALE, 1), 
+    residual = ~units, data = BV.HSIdentical.df[, c("YEAR", "FIELD", 
+        "MALE", "FEMALE", "feature")], na.action = na.method(y = c("include"), 
+        x = c("include")), equate.levels = c("FEMALE", "MALE"), 
+    workspace = "31gb")
+
+$loglik
+[1] -358566.7
+
+$nedf
+[1] 220838
+
+$sigma
+[1] 3.021233
+
+$varcomp
+        component  std.error   z.ratio bound %ch
+FEMALE   1.431459 0.03993904  35.84109     P   0
+units!R  9.127846 0.02773551 329.10325     P   0
+
+$bic
+[1] 717158.1
+attr(,"parameters")
+[1] 2
+
+$aic
+[1] 717137.5
+attr(,"parameters")
+[1] 2
+
+attr(,"class")
+[1] "summary.asreml"
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:42:01 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -358566.7       9.12785 220838 08:42:16    0.6
+ 2     -358566.7       9.12785 220838 08:42:16    0.2
+ 3     -358566.7       9.12785 220838 08:42:17    0.6
+[1] "Heritability = 0.271127445207619"
+4496 0 0 12.5 30.6 18.1 90714.5 20.1 20.17671 0.03055586 0.05990451 4.197738 2.048838 0.1015447 
+--------------------------------------Plt.Height-------------------------------------- 
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:42:32 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -247195.3       106.233  86550 08:42:43    0.6
+ 2     -247182.1       105.980  86550 08:42:44    0.3
+ 3     -247170.5       105.655  86550 08:42:44    0.3
+ 4     -247166.5       105.420  86550 08:42:44    0.3
+ 5     -247165.9       105.304  86550 08:42:44    0.3
+ 6     -247165.9       105.290  86550 08:42:45    0.3
+[1] "Plt.Height"
+$call
+asreml(fixed = feature ~ YEAR, random = ~FEMALE + and(MALE, 1), 
+    residual = ~units, data = BV.HSIdentical.df[, c("YEAR", "FIELD", 
+        "MALE", "FEMALE", "feature")], na.action = na.method(y = c("include"), 
+        x = c("include")), equate.levels = c("FEMALE", "MALE"), 
+    workspace = "31gb")
+
+$loglik
+[1] -247165.9
+
+$nedf
+[1] 86550
+
+$sigma
+[1] 10.26108
+
+$varcomp
+        component std.error  z.ratio bound %ch
+FEMALE   14.31035 0.5240638  27.3065     P   0
+units!R 105.28984 0.5182808 203.1521     P   0
+
+$bic
+[1] 494354.4
+attr(,"parameters")
+[1] 2
+
+$aic
+[1] 494335.7
+attr(,"parameters")
+[1] 2
+
+attr(,"class")
+[1] "summary.asreml"
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:42:58 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -247165.9       105.288  86550 08:43:10    1.4
+ 2     -247165.9       105.288  86550 08:43:11    0.3
+ 3     -247165.9       105.288  86550 08:43:11    0.6
+[1] "Heritability = 0.239303115288516"
+4496 0 0 86.6 148 61.4 478752.7 106 106.4841 0.08346365 0.1636298 31.31995 5.596423 0.0525564 
+--------------------------------------RL..-------------------------------------- 
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:43:23 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -487736.0       94.2484 174828 08:43:36    0.5
+ 2     -487686.2       94.4509 174828 08:43:36    0.2
+ 3     -487657.0       94.6878 174828 08:43:37    0.2
+ 4     -487652.6       94.8011 174828 08:43:37    0.2
+ 5     -487652.3       94.8361 174828 08:43:37    0.2
+ 6     -487652.3       94.8371 174828 08:43:37    0.2
+[1] "RL.."
+$call
+asreml(fixed = feature ~ YEAR, random = ~FEMALE + and(MALE, 1), 
+    residual = ~units, data = BV.HSIdentical.df[, c("YEAR", "FIELD", 
+        "MALE", "FEMALE", "feature")], na.action = na.method(y = c("include"), 
+        x = c("include")), equate.levels = c("FEMALE", "MALE"), 
+    workspace = "31gb")
+
+$loglik
+[1] -487652.3
+
+$nedf
+[1] 174828
+
+$sigma
+[1] 9.738434
+
+$varcomp
+        component std.error   z.ratio bound %ch
+FEMALE   5.886429 0.2127518  27.66806     P   0
+units!R 94.837095 0.3243781 292.36587     P   0
+
+$bic
+[1] 975328.7
+attr(,"parameters")
+[1] 2
+
+$aic
+[1] 975308.6
+attr(,"parameters")
+[1] 2
+
+attr(,"class")
+[1] "summary.asreml"
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:43:56 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -487652.3       94.8371 174828 08:44:08    1.0
+ 2     -487652.3       94.8371 174828 08:44:08    0.2
+ 3     -487652.3       94.8371 174828 08:44:09    0.6
+[1] "Heritability = 0.116882910648749"
+4496 0 0 -5.89 32.9 38.79 16306.76 2.81 3.626948 0.05330313 0.1045003 12.77414 3.574093 0.985427 
+--------------------------------------RL.Count-------------------------------------- 
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:44:21 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -421478.1       41.3268 177279 08:44:35    0.5
+ 2     -421409.4       41.4286 177279 08:44:35    0.2
+ 3     -421372.8       41.5436 177279 08:44:35    0.2
+ 4     -421368.1       41.5937 177279 08:44:36    0.2
+ 5     -421367.8       41.6079 177279 08:44:36    0.2
+ 6     -421367.8       41.6081 177279 08:44:36    0.2
+[1] "RL.Count"
+$call
+asreml(fixed = feature ~ YEAR, random = ~FEMALE + and(MALE, 1), 
+    residual = ~units, data = BV.HSIdentical.df[, c("YEAR", "FIELD", 
+        "MALE", "FEMALE", "feature")], na.action = na.method(y = c("include"), 
+        x = c("include")), equate.levels = c("FEMALE", "MALE"), 
+    workspace = "31gb")
+
+$loglik
+[1] -421367.8
+
+$nedf
+[1] 177279
+
+$sigma
+[1] 6.450431
+
+$varcomp
+        component  std.error   z.ratio bound %ch
+FEMALE   2.417144 0.08773052  27.55192     P   0
+units!R 41.608064 0.14126582 294.53737     P   0
+
+$bic
+[1] 842759.9
+attr(,"parameters")
+[1] 2
+
+$aic
+[1] 842739.7
+attr(,"parameters")
+[1] 2
+
+attr(,"class")
+[1] "summary.asreml"
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:44:55 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -421367.8       41.6081 177279 08:45:06    0.9
+ 2     -421367.8       41.6081 177279 08:45:06    0.3
+ 3     -421367.8       41.6081 177279 08:45:07    0.5
+[1] "Heritability = 0.109807263060178"
+4496 0 0 -4.01 22 26.01 10458.45 1.82 2.326168 0.03386328 0.06638868 5.15566 2.270608 0.976115 
+--------------------------------------SL..-------------------------------------- 
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:45:19 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -515932.6       119.675 177350 08:45:30    0.6
+ 2     -515791.1       119.112 177350 08:45:30    0.2
+ 3     -515634.0       118.344 177350 08:45:30    0.2
+ 4     -515536.5       117.656 177350 08:45:30    0.2
+ 5     -515497.0       117.138 177350 08:45:31    0.2
+ 6     -515490.9       116.931 177350 08:45:31    0.2
+ 7     -515490.3       116.863 177350 08:45:31    0.2
+ 8     -515490.2       116.843 177350 08:45:31    0.2
+ 9     -515490.2       116.838 177350 08:45:32    0.2
+10     -515490.2       116.836 177350 08:45:32    0.2
+[1] "SL.."
+$call
+asreml(fixed = feature ~ YEAR, random = ~FEMALE + and(MALE, 1), 
+    residual = ~units, data = BV.HSIdentical.df[, c("YEAR", "FIELD", 
+        "MALE", "FEMALE", "feature")], na.action = na.method(y = c("include"), 
+        x = c("include")), equate.levels = c("FEMALE", "MALE"), 
+    workspace = "31gb")
+
+$loglik
+[1] -515490.2
+
+$nedf
+[1] 177350
+
+$sigma
+[1] 10.80909
+
+$varcomp
+        component std.error   z.ratio bound %ch
+FEMALE    33.4618 0.9725334  34.40684     P   0
+units!R  116.8364 0.3982985 293.33877     P   0
+
+$bic
+[1] 1031005
+attr(,"parameters")
+[1] 2
+
+$aic
+[1] 1030984
+attr(,"parameters")
+[1] 2
+
+attr(,"class")
+[1] "summary.asreml"
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:45:51 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -515490.2       116.836 177350 08:46:02    0.9
+ 2     -515490.2       116.836 177350 08:46:02    0.2
+ 3     -515490.2       116.836 177350 08:46:02    0.6
+[1] "Heritability = 0.445272100168605"
+4496 0 0 -35.5 111 146.5 29847.34 4.33 6.638644 0.1529509 0.299859 105.1793 10.2557 1.544848 
+--------------------------------------SL.Count-------------------------------------- 
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:46:15 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -445272.7       50.9671 179383 08:46:26    0.5
+ 2     -445197.9       50.8038 179383 08:46:27    0.2
+ 3     -445118.9       50.5820 179383 08:46:27    0.2
+ 4     -445075.1       50.3902 179383 08:46:27    0.2
+ 5     -445060.3       50.2551 179383 08:46:27    0.2
+ 6     -445058.6       50.2086 179383 08:46:27    0.2
+ 7     -445058.5       50.1951 179383 08:46:28    0.2
+ 8     -445058.4       50.1915 179383 08:46:28    0.2
+ 9     -445058.4       50.1906 179383 08:46:28    0.2
+[1] "SL.Count"
+$call
+asreml(fixed = feature ~ YEAR, random = ~FEMALE + and(MALE, 1), 
+    residual = ~units, data = BV.HSIdentical.df[, c("YEAR", "FIELD", 
+        "MALE", "FEMALE", "feature")], na.action = na.method(y = c("include"), 
+        x = c("include")), equate.levels = c("FEMALE", "MALE"), 
+    workspace = "31gb")
+
+$loglik
+[1] -445058.4
+
+$nedf
+[1] 179383
+
+$sigma
+[1] 7.08453
+
+$varcomp
+        component std.error   z.ratio bound %ch
+FEMALE   10.57854 0.3190606  33.15527     P   0
+units!R  50.19057 0.1700484 295.15465     P   0
+
+$bic
+[1] 890141.1
+attr(,"parameters")
+[1] 2
+
+$aic
+[1] 890120.9
+attr(,"parameters")
+[1] 2
+
+attr(,"class")
+[1] "summary.asreml"
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:46:47 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -445058.4       50.1903 179383 08:46:58    0.9
+ 2     -445058.4       50.1903 179383 08:46:58    0.2
+ 3     -445058.4       50.1903 179383 08:46:59    0.6
+[1] "Heritability = 0.348155156668567"
+4496 0 0 -19.4 59.8 79.2 18134.12 2.78 4.033391 0.0839991 0.1646796 31.7231 5.632326 1.396425 
+--------------------------------------StandCnt..Final.-------------------------------------- 
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:47:12 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -370092.1       94.8856 132472 08:47:22    0.6
+ 2     -370084.5       94.9821 132472 08:47:22    0.2
+ 3     -370079.2       95.1006 132472 08:47:23    0.2
+ 4     -370078.1       95.1680 132472 08:47:23    0.3
+ 5     -370078.0       95.1918 132472 08:47:23    0.3
+ 6     -370078.0       95.1930 132472 08:47:23    0.2
+[1] "StandCnt..Final."
+$call
+asreml(fixed = feature ~ YEAR, random = ~FEMALE + and(MALE, 1), 
+    residual = ~units, data = BV.HSIdentical.df[, c("YEAR", "FIELD", 
+        "MALE", "FEMALE", "feature")], na.action = na.method(y = c("include"), 
+        x = c("include")), equate.levels = c("FEMALE", "MALE"), 
+    workspace = "31gb")
+
+$loglik
+[1] -370078
+
+$nedf
+[1] 132472
+
+$sigma
+[1] 9.756688
+
+$varcomp
+        component std.error   z.ratio bound %ch
+FEMALE    7.71977 0.2954586  26.12809     P   0
+units!R  95.19296 0.3745010 254.18614     P   0
+
+$bic
+[1] 740179.7
+attr(,"parameters")
+[1] 2
+
+$aic
+[1] 740160.1
+attr(,"parameters")
+[1] 2
+
+attr(,"class")
+[1] "summary.asreml"
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:47:40 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -370078.0       95.1930 132472 08:47:53    1.1
+ 2     -370078.0       95.1930 132472 08:47:53    0.2
+ 3     -370078.0       95.1930 132472 08:47:53    0.6
+[1] "Heritability = 0.150025557417328"
+4496 0 0 33.6 83.3 49.7 291467.1 64.8 64.82809 0.05678104 0.1113188 14.49549 3.807295 0.05872909 
+--------------------------------------StandCnt..UAV.-------------------------------------- 
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:48:09 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -48296.77       18.4584  24307 08:48:20    1.0
+ 2     -48264.74       18.2920  24307 08:48:21    0.3
+ 3     -48232.86       18.0728  24307 08:48:21    0.3
+ 4     -48217.37       17.8941  24307 08:48:21    0.3
+ 5     -48213.46       17.7830  24307 08:48:22    0.3
+ 6     -48213.26       17.7572  24307 08:48:22    0.3
+ 7     -48213.26       17.7529  24307 08:48:22    0.3
+[1] "StandCnt..UAV."
+$call
+asreml(fixed = feature ~ YEAR, random = ~FEMALE + and(MALE, 1), 
+    residual = ~units, data = BV.HSIdentical.df[, c("YEAR", "FIELD", 
+        "MALE", "FEMALE", "feature")], na.action = na.method(y = c("include"), 
+        x = c("include")), equate.levels = c("FEMALE", "MALE"), 
+    workspace = "31gb")
+
+$loglik
+[1] -48213.26
+
+$nedf
+[1] 24307
+
+$sigma
+[1] 4.21342
+
+$varcomp
+        component std.error   z.ratio bound %ch
+FEMALE   4.059987 0.2222587  18.26695     P 0.1
+units!R 17.752907 0.1670632 106.26460     P 0.0
+
+$bic
+[1] 96446.71
+attr(,"parameters")
+[1] 2
+
+$aic
+[1] 96430.52
+attr(,"parameters")
+[1] 2
+
+attr(,"class")
+[1] "summary.asreml"
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:48:31 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -48213.26       17.7523  24307 08:48:43    1.4
+ 2     -48213.26       17.7522  24307 08:48:43    0.3
+ 3     -48213.26       17.7522  24307 08:48:44    0.5
+[1] "Heritability = 0.37225570111569"
+4496 0 0 44.6 74.9 30.3 296197.7 65.9 65.88027 0.02942611 0.05768965 3.893068 1.973086 0.02994957 
+--------------------------------------Test.WT-------------------------------------- 
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:48:54 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -281905.2       4.64717 219729 08:49:08    0.4
+ 2     -281644.6       4.62333 219729 08:49:08    0.2
+ 3     -281392.1       4.59390 219729 08:49:08    0.2
+ 4     -281272.6       4.57130 219729 08:49:09    0.2
+ 5     -281245.6       4.55820 219729 08:49:09    0.2
+ 6     -281244.8       4.55595 219729 08:49:09    0.2
+ 7     -281244.8       4.55583 219729 08:49:09    0.2
+[1] "Test.WT"
+$call
+asreml(fixed = feature ~ YEAR, random = ~FEMALE + and(MALE, 1), 
+    residual = ~units, data = BV.HSIdentical.df[, c("YEAR", "FIELD", 
+        "MALE", "FEMALE", "feature")], na.action = na.method(y = c("include"), 
+        x = c("include")), equate.levels = c("FEMALE", "MALE"), 
+    workspace = "31gb")
+
+$loglik
+[1] -281244.8
+
+$nedf
+[1] 219729
+
+$sigma
+[1] 2.134439
+
+$varcomp
+        component  std.error   z.ratio bound %ch
+FEMALE   1.148063 0.02984462  38.46801     P   0
+units!R  4.555830 0.01388118 328.20196     P   0
+
+$bic
+[1] 562514.3
+attr(,"parameters")
+[1] 2
+
+$aic
+[1] 562493.7
+attr(,"parameters")
+[1] 2
+
+attr(,"class")
+[1] "summary.asreml"
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:49:32 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -281244.8       4.55583 219729 08:49:48    0.6
+ 2     -281244.8       4.55583 219729 08:49:48    0.2
+ 3     -281244.8       4.55583 219729 08:49:49    0.5
+[1] "Heritability = 0.402554228991436"
+4496 0 0 49.2 65.4 16.2 256694.3 57.1 57.09393 0.02846136 0.05579827 3.641981 1.908397 0.03342558 
+--------------------------------------Y.M-------------------------------------- 
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:50:04 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -294433.4       5.13997 220827 08:50:16    0.5
+ 2     -294424.0       5.13576 220827 08:50:17    0.2
+ 3     -294416.1       5.13038 220827 08:50:17    0.2
+ 4     -294413.4       5.12658 220827 08:50:17    0.2
+ 5     -294413.0       5.12476 220827 08:50:17    0.2
+ 6     -294413.0       5.12454 220827 08:50:17    0.2
+[1] "Y.M"
+$call
+asreml(fixed = feature ~ YEAR, random = ~FEMALE + and(MALE, 1), 
+    residual = ~units, data = BV.HSIdentical.df[, c("YEAR", "FIELD", 
+        "MALE", "FEMALE", "feature")], na.action = na.method(y = c("include"), 
+        x = c("include")), equate.levels = c("FEMALE", "MALE"), 
+    workspace = "31gb")
+
+$loglik
+[1] -294413
+
+$nedf
+[1] 220827
+
+$sigma
+[1] 2.263745
+
+$varcomp
+        component  std.error   z.ratio bound %ch
+FEMALE  0.6284704 0.01889858  33.25489     P   0
+units!R 5.1245420 0.01557903 328.93837     P   0
+
+$bic
+[1] 588850.6
+attr(,"parameters")
+[1] 2
+
+$aic
+[1] 588830
+attr(,"parameters")
+[1] 2
+
+attr(,"class")
+[1] "summary.asreml"
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:50:40 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -294413.0       5.12452 220827 08:50:51    0.6
+ 2     -294413.0       5.12452 220827 08:50:51    0.2
+ 3     -294413.0       5.12452 220827 08:50:51    0.6
+[1] "Heritability = 0.218483929235719"
+4496 0 0 3.95 16 12.05 52256.68 11.6 11.62293 0.01973988 0.03869987 1.751924 1.323603 0.1138786 
+--------------------------------------Yield-------------------------------------- 
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:51:07 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -894513.8      1178.378 220827 08:51:19    0.4
+ 2     -894496.6      1177.040 220827 08:51:20    0.2
+ 3     -894481.3      1175.306 220827 08:51:20    0.2
+ 4     -894475.5      1174.025 220827 08:51:20    0.2
+ 5     -894474.5      1173.357 220827 08:51:20    0.2
+ 6     -894474.5      1173.251 220827 08:51:20    0.2
+ 7     -894474.5      1173.237 220827 08:51:21    0.2
+[1] "Yield"
+$call
+asreml(fixed = feature ~ YEAR, random = ~FEMALE + and(MALE, 1), 
+    residual = ~units, data = BV.HSIdentical.df[, c("YEAR", "FIELD", 
+        "MALE", "FEMALE", "feature")], na.action = na.method(y = c("include"), 
+        x = c("include")), equate.levels = c("FEMALE", "MALE"), 
+    workspace = "31gb")
+
+$loglik
+[1] -894474.5
+
+$nedf
+[1] 220827
+
+$sigma
+[1] 34.25254
+
+$varcomp
+        component std.error   z.ratio bound %ch
+FEMALE   156.3867  4.691868  33.33145     P   0
+units!R 1173.2368  3.567881 328.83298     P   0
+
+$bic
+[1] 1788974
+attr(,"parameters")
+[1] 2
+
+$aic
+[1] 1788953
+attr(,"parameters")
+[1] 2
+
+attr(,"class")
+[1] "summary.asreml"
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:51:43 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -894474.5      1173.235 220827 08:51:56    0.8
+ 2     -894474.5      1173.235 220827 08:51:56    0.2
+ 3     -894474.5      1173.235 220827 08:51:56    0.6
+[1] "Heritability = 0.235234629832954"
+4496 0 0 106 307 201 1027139 230 228.4562 0.3141473 0.6158832 443.7035 21.06427 0.09220268 

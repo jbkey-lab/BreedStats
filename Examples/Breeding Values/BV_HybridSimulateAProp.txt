@@ -1,0 +1,783 @@
+[1] "A"
+[1] "Prop"
+----------------------------EarHt---------------------------- 
+C 
+D 
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:52:15 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -115663.9       26.4163  53213 08:52:29    0.3
+ 2     -114848.7       24.6356  53213 08:52:30    0.2
+ 3     -113998.7       22.4227  53213 08:52:30    0.2
+ 4     -113588.2       20.8080  53213 08:52:30    0.2
+ 5     -113498.1       19.9381  53213 08:52:30    0.2
+ 6     -113495.9       19.7983  53213 08:52:30    0.2
+ 7     -113495.9       19.7909  53213 08:52:30    0.2
+E 
+[1] "EarHt"
+$call
+asreml(fixed = feature ~ YEAR, random = ~LINE, data = BV.HSIdentical.df[, 
+    c("YEAR", "LINE", "feature")], na.action = na.method(y = c("include"), 
+    x = c("include")), workspace = "31gb")
+
+$loglik
+[1] -113495.9
+
+$nedf
+[1] 53213
+
+$sigma
+[1] 4.448699
+
+$varcomp
+        component std.error   z.ratio bound %ch
+LINE     13.40716 0.2561314  52.34484     P   0
+units!R  19.79092 0.1392333 142.14211     P   0
+
+$bic
+[1] 227013.5
+attr(,"parameters")
+[1] 2
+
+$aic
+[1] 226995.7
+attr(,"parameters")
+[1] 2
+
+attr(,"class")
+[1] "summary.asreml"
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:52:41 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -113495.9       19.7907  53213 08:52:53    0.9
+ 2     -113495.9       19.7907  53213 08:52:53    0.2
+ 3     -113495.9       19.7907  53213 08:52:56    2.7
+F 
+G 
+H 
+I 
+J 
+K 
+----------------------------GS.Late---------------------------- 
+C 
+D 
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:53:12 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -33558.14       11.5420  19069 08:53:26    0.5
+ 2     -33524.82       11.3341  19069 08:53:26    0.2
+ 3     -33493.95       11.0622  19069 08:53:26    0.2
+ 4     -33480.87       10.8503  19069 08:53:26    0.2
+ 5     -33478.10       10.7283  19069 08:53:26    0.2
+ 6     -33477.99       10.7031  19069 08:53:27    0.2
+ 7     -33477.98       10.6987  19069 08:53:27    0.2
+E 
+[1] "GS.Late"
+$call
+asreml(fixed = feature ~ YEAR, random = ~LINE, data = BV.HSIdentical.df[, 
+    c("YEAR", "LINE", "feature")], na.action = na.method(y = c("include"), 
+    x = c("include")), workspace = "31gb")
+
+$loglik
+[1] -33477.98
+
+$nedf
+[1] 19069
+
+$sigma
+[1] 3.270891
+
+$varcomp
+        component std.error  z.ratio bound %ch
+LINE     2.581522 0.1318021 19.58635     P 0.1
+units!R 10.698730 0.1236524 86.52262     P 0.0
+
+$bic
+[1] 66975.68
+attr(,"parameters")
+[1] 2
+
+$aic
+[1] 66959.96
+attr(,"parameters")
+[1] 2
+
+attr(,"class")
+[1] "summary.asreml"
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:53:34 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -33477.98       10.6980  19069 08:53:48    0.8
+ 2     -33477.98       10.6980  19069 08:53:48    0.2
+ 3     -33477.98       10.6979  19069 08:53:50    1.9
+F 
+G 
+H 
+I 
+J 
+K 
+----------------------------PCT.HOH---------------------------- 
+C 
+D 
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:54:01 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -363486.2       9.40934 220838 08:54:10    0.2
+ 2     -362879.7       9.28215 220838 08:54:11    0.1
+ 3     -362324.7       9.12833 220838 08:54:11    0.1
+ 4     -362095.4       9.01655 220838 08:54:11    0.1
+ 5     -362056.1       8.95896 220838 08:54:11    0.1
+ 6     -362055.7       8.95323 220838 08:54:11    0.1
+ 7     -362055.7       8.95318 220838 08:54:11    0.1
+E 
+[1] "PCT.HOH"
+$call
+asreml(fixed = feature ~ YEAR, random = ~LINE, data = BV.HSIdentical.df[, 
+    c("YEAR", "LINE", "feature")], na.action = na.method(y = c("include"), 
+    x = c("include")), workspace = "31gb")
+
+$loglik
+[1] -362055.7
+
+$nedf
+[1] 220838
+
+$sigma
+[1] 2.992186
+
+$varcomp
+        component  std.error   z.ratio bound %ch
+LINE     2.292234 0.03778660  60.66261     P   0
+units!R  8.953176 0.02780256 322.02701     P   0
+
+$bic
+[1] 724136.1
+attr(,"parameters")
+[1] 2
+
+$aic
+[1] 724115.5
+attr(,"parameters")
+[1] 2
+
+attr(,"class")
+[1] "summary.asreml"
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:54:33 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -362055.7       8.95318 220838 08:54:45    0.5
+ 2     -362055.7       8.95318 220838 08:54:45    0.1
+ 3     -362055.7       8.95318 220838 08:54:48    2.9
+F 
+G 
+H 
+I 
+J 
+K 
+----------------------------Plt.Height---------------------------- 
+C 
+D 
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:55:12 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -250383.2       112.210  86550 08:55:29    0.4
+ 2     -250223.8       110.418  86550 08:55:29    0.2
+ 3     -250081.6       108.153  86550 08:55:29    0.2
+ 4     -250028.2       106.508  86550 08:55:29    0.2
+ 5     -250020.1       105.698  86550 08:55:30    0.2
+ 6     -250020.0       105.615  86550 08:55:30    0.2
+ 7     -250020.0       105.610  86550 08:55:30    0.2
+E 
+[1] "Plt.Height"
+$call
+asreml(fixed = feature ~ YEAR, random = ~LINE, data = BV.HSIdentical.df[, 
+    c("YEAR", "LINE", "feature")], na.action = na.method(y = c("include"), 
+    x = c("include")), workspace = "31gb")
+
+$loglik
+[1] -250020
+
+$nedf
+[1] 86550
+
+$sigma
+[1] 10.27666
+
+$varcomp
+        component std.error   z.ratio bound %ch
+LINE     23.98721 0.5831467  41.13409     P   0
+units!R 105.60975 0.5503104 191.90941     P   0
+
+$bic
+[1] 500062.8
+attr(,"parameters")
+[1] 2
+
+$aic
+[1] 500044
+attr(,"parameters")
+[1] 2
+
+attr(,"class")
+[1] "summary.asreml"
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:55:45 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -250020.0       105.609  86550 08:56:00    0.7
+ 2     -250020.0       105.609  86550 08:56:00    0.1
+ 3     -250020.0       105.609  86550 08:56:03    3.1
+F 
+G 
+H 
+I 
+J 
+K 
+----------------------------RL..---------------------------- 
+C 
+D 
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:56:19 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -489075.9       93.8458 174828 08:56:34    0.2
+ 2     -489063.3       93.6520 174828 08:56:34    0.1
+ 3     -489053.7       93.4130 174828 08:56:34    0.1
+ 4     -489051.1       93.2626 174828 08:56:34    0.1
+ 5     -489050.9       93.2060 174828 08:56:34    0.1
+ 6     -489050.9       93.2047 174828 08:56:34    0.1
+E 
+[1] "RL.."
+$call
+asreml(fixed = feature ~ YEAR, random = ~LINE, data = BV.HSIdentical.df[, 
+    c("YEAR", "LINE", "feature")], na.action = na.method(y = c("include"), 
+    x = c("include")), workspace = "31gb")
+
+$loglik
+[1] -489050.9
+
+$nedf
+[1] 174828
+
+$sigma
+[1] 9.654258
+
+$varcomp
+        component std.error   z.ratio bound %ch
+LINE     11.10279 0.2593342  42.81267     P   0
+units!R  93.20469 0.3271828 284.87036     P   0
+
+$bic
+[1] 978126
+attr(,"parameters")
+[1] 2
+
+$aic
+[1] 978105.8
+attr(,"parameters")
+[1] 2
+
+attr(,"class")
+[1] "summary.asreml"
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:56:53 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -489050.9       93.2047 174828 08:57:08    0.8
+ 2     -489050.9       93.2047 174828 08:57:08    0.1
+ 3     -489050.9       93.2047 174828 08:57:10    2.6
+F 
+G 
+H 
+I 
+J 
+K 
+----------------------------RL.Count---------------------------- 
+C 
+D 
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:57:27 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -422773.1       41.1154 177279 08:57:38    0.3
+ 2     -422767.6       41.0608 177279 08:57:38    0.1
+ 3     -422763.6       40.9943 177279 08:57:38    0.1
+ 4     -422762.6       40.9542 177279 08:57:38    0.1
+ 5     -422762.5       40.9405 177279 08:57:38    0.1
+ 6     -422762.5       40.9405 177279 08:57:38    0.1
+E 
+[1] "RL.Count"
+$call
+asreml(fixed = feature ~ YEAR, random = ~LINE, data = BV.HSIdentical.df[, 
+    c("YEAR", "LINE", "feature")], na.action = na.method(y = c("include"), 
+    x = c("include")), workspace = "31gb")
+
+$loglik
+[1] -422762.5
+
+$nedf
+[1] 177279
+
+$sigma
+[1] 6.398477
+
+$varcomp
+        component std.error  z.ratio bound %ch
+LINE     4.580767 0.1078244  42.4836     P   0
+units!R 40.940510 0.1425415 287.2181     P   0
+
+$bic
+[1] 845549.2
+attr(,"parameters")
+[1] 2
+
+$aic
+[1] 845529.1
+attr(,"parameters")
+[1] 2
+
+attr(,"class")
+[1] "summary.asreml"
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:57:57 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -422762.5       40.9405 177279 08:58:10    0.7
+ 2     -422762.5       40.9405 177279 08:58:10    0.1
+ 3     -422762.5       40.9405 177279 08:58:13    2.8
+F 
+G 
+H 
+I 
+J 
+K 
+----------------------------SL..---------------------------- 
+C 
+D 
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:58:29 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -519362.3       122.014 177350 08:58:42    1.1
+ 2     -518765.1       119.870 177350 08:58:42    0.1
+ 3     -518113.5       117.027 177350 08:58:42    0.1
+ 4     -517727.1       114.591 177350 08:58:42    0.1
+ 5     -517588.0       112.885 177350 08:58:42    0.1
+ 6     -517572.5       112.303 177350 08:58:42    0.1
+ 7     -517571.6       112.158 177350 08:58:42    0.1
+ 8     -517571.6       112.127 177350 08:58:42    0.1
+ 9     -517571.5       112.121 177350 08:58:42    0.1
+E 
+[1] "SL.."
+$call
+asreml(fixed = feature ~ YEAR, random = ~LINE, data = BV.HSIdentical.df[, 
+    c("YEAR", "LINE", "feature")], na.action = na.method(y = c("include"), 
+    x = c("include")), workspace = "31gb")
+
+$loglik
+[1] -517571.5
+
+$nedf
+[1] 177350
+
+$sigma
+[1] 10.58872
+
+$varcomp
+        component std.error   z.ratio bound %ch
+LINE     44.38602 0.7753672  57.24516     P   0
+units!R 112.12093 0.3941655 284.45139     P   0
+
+$bic
+[1] 1035167
+attr(,"parameters")
+[1] 2
+
+$aic
+[1] 1035147
+attr(,"parameters")
+[1] 2
+
+attr(,"class")
+[1] "summary.asreml"
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:59:03 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -517571.5       112.120 177350 08:59:18    0.6
+ 2     -517571.5       112.120 177350 08:59:18    0.1
+ 3     -517571.5       112.119 177350 08:59:21    2.7
+F 
+G 
+H 
+I 
+J 
+K 
+----------------------------SL.Count---------------------------- 
+C 
+D 
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 08:59:37 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -448330.6       51.7207 179383 08:59:54    0.3
+ 2     -447911.9       51.0012 179383 08:59:54    0.1
+ 3     -447480.0       50.0585 179383 08:59:54    0.1
+ 4     -447251.8       49.2796 179383 08:59:54    0.1
+ 5     -447184.2       48.7709 179383 08:59:54    0.1
+ 6     -447179.2       48.6283 179383 08:59:54    0.1
+ 7     -447179.0       48.5992 179383 08:59:54    0.1
+ 8     -447179.0       48.5940 179383 08:59:54    0.1
+ 9     -447179.0       48.5932 179383 08:59:54    0.1
+E 
+[1] "SL.Count"
+$call
+asreml(fixed = feature ~ YEAR, random = ~LINE, data = BV.HSIdentical.df[, 
+    c("YEAR", "LINE", "feature")], na.action = na.method(y = c("include"), 
+    x = c("include")), workspace = "31gb")
+
+$loglik
+[1] -447179
+
+$nedf
+[1] 179383
+
+$sigma
+[1] 6.970879
+
+$varcomp
+        component std.error   z.ratio bound %ch
+LINE     14.73069 0.2695747  54.64417     P   0
+units!R  48.59316 0.1695963 286.52252     P   0
+
+$bic
+[1] 894382.1
+attr(,"parameters")
+[1] 2
+
+$aic
+[1] 894361.9
+attr(,"parameters")
+[1] 2
+
+attr(,"class")
+[1] "summary.asreml"
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 09:00:13 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -447179.0       48.5930 179383 09:00:27    0.9
+ 2     -447179.0       48.5930 179383 09:00:27    0.1
+ 3     -447179.0       48.5930 179383 09:00:30    2.6
+F 
+G 
+H 
+I 
+J 
+K 
+----------------------------StandCnt..Final.---------------------------- 
+C 
+D 
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 09:00:46 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -371765.5       95.5936 132472 09:01:02    0.3
+ 2     -371727.2       95.1967 132472 09:01:02    0.1
+ 3     -371696.3       94.7050 132472 09:01:03    0.1
+ 4     -371687.0       94.3790 132472 09:01:03    0.1
+ 5     -371686.1       94.2445 132472 09:01:03    0.1
+ 6     -371686.1       94.2388 132472 09:01:03    0.1
+E 
+[1] "StandCnt..Final."
+$call
+asreml(fixed = feature ~ YEAR, random = ~LINE, data = BV.HSIdentical.df[, 
+    c("YEAR", "LINE", "feature")], na.action = na.method(y = c("include"), 
+    x = c("include")), workspace = "31gb")
+
+$loglik
+[1] -371686.1
+
+$nedf
+[1] 132472
+
+$sigma
+[1] 9.707665
+
+$varcomp
+        component std.error   z.ratio bound %ch
+LINE     13.28198 0.3342158  39.74072     P   0
+units!R  94.23876 0.3795742 248.27493     P   0
+
+$bic
+[1] 743395.8
+attr(,"parameters")
+[1] 2
+
+$aic
+[1] 743376.2
+attr(,"parameters")
+[1] 2
+
+attr(,"class")
+[1] "summary.asreml"
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 09:01:19 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -371686.1       94.2386 132472 09:01:35    0.3
+ 2     -371686.1       94.2386 132472 09:01:36    0.1
+ 3     -371686.1       94.2386 132472 09:01:38    2.5
+F 
+G 
+H 
+I 
+J 
+K 
+----------------------------StandCnt..UAV.---------------------------- 
+C 
+D 
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 09:01:54 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -48848.38       19.1017  24307 09:02:10    0.3
+ 2     -48619.53       18.2424  24307 09:02:10    0.1
+ 3     -48392.74       17.1912  24307 09:02:10    0.2
+ 4     -48285.04       16.4068  24307 09:02:10    0.1
+ 5     -48260.70       15.9663  24307 09:02:10    0.1
+ 6     -48259.99       15.8885  24307 09:02:10    0.2
+ 7     -48259.99       15.8824  24307 09:02:11    0.2
+E 
+[1] "StandCnt..UAV."
+$call
+asreml(fixed = feature ~ YEAR, random = ~LINE, data = BV.HSIdentical.df[, 
+    c("YEAR", "LINE", "feature")], na.action = na.method(y = c("include"), 
+    x = c("include")), workspace = "31gb")
+
+$loglik
+[1] -48259.99
+
+$nedf
+[1] 24307
+
+$sigma
+[1] 3.985276
+
+$varcomp
+        component std.error  z.ratio bound %ch
+LINE     7.780736 0.2587716 30.06796     P   0
+units!R 15.882424 0.1591945 99.76740     P   0
+
+$bic
+[1] 96540.17
+attr(,"parameters")
+[1] 2
+
+$aic
+[1] 96523.97
+attr(,"parameters")
+[1] 2
+
+attr(,"class")
+[1] "summary.asreml"
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 09:02:19 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -48259.99       15.8821  24307 09:02:33    0.6
+ 2     -48259.99       15.8821  24307 09:02:33    0.1
+ 3     -48259.99       15.8821  24307 09:02:35    1.8
+F 
+G 
+H 
+I 
+J 
+K 
+----------------------------Test.WT---------------------------- 
+C 
+D 
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 09:02:49 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -288958.8       4.85430 219729 09:03:04    0.3
+ 2     -287458.2       4.73567 219729 09:03:04    0.1
+ 3     -285989.0       4.59604 219729 09:03:04    0.1
+ 4     -285260.6       4.49244 219729 09:03:04    0.1
+ 5     -285078.8       4.43226 219729 09:03:04    0.1
+ 6     -285072.9       4.42076 219729 09:03:04    0.1
+ 7     -285072.9       4.42029 219729 09:03:04    0.1
+E 
+[1] "Test.WT"
+$call
+asreml(fixed = feature ~ YEAR, random = ~LINE, data = BV.HSIdentical.df[, 
+    c("YEAR", "LINE", "feature")], na.action = na.method(y = c("include"), 
+    x = c("include")), workspace = "31gb")
+
+$loglik
+[1] -285072.9
+
+$nedf
+[1] 219729
+
+$sigma
+[1] 2.102448
+
+$varcomp
+        component  std.error   z.ratio bound %ch
+LINE     1.771993 0.02659276  66.63441     P   0
+units!R  4.420286 0.01376883 321.03569     P   0
+
+$bic
+[1] 570170.4
+attr(,"parameters")
+[1] 2
+
+$aic
+[1] 570149.8
+attr(,"parameters")
+[1] 2
+
+attr(,"class")
+[1] "summary.asreml"
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 09:03:25 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -285072.9       4.42028 219729 09:03:38    0.6
+ 2     -285072.9       4.42028 219729 09:03:38    0.1
+ 3     -285072.9       4.42028 219729 09:03:41    2.5
+F 
+G 
+H 
+I 
+J 
+K 
+----------------------------Y.M---------------------------- 
+C 
+D 
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 09:03:59 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -297308.9       5.16811 220827 09:04:10    0.4
+ 2     -297058.5       5.12579 220827 09:04:10    0.1
+ 3     -296835.6       5.07309 220827 09:04:10    0.1
+ 4     -296750.4       5.03486 220827 09:04:10    0.1
+ 5     -296737.1       5.01576 220827 09:04:10    0.1
+ 6     -296737.0       5.01376 220827 09:04:10    0.1
+ 7     -296737.0       5.01365 220827 09:04:10    0.1
+E 
+[1] "Y.M"
+$call
+asreml(fixed = feature ~ YEAR, random = ~LINE, data = BV.HSIdentical.df[, 
+    c("YEAR", "LINE", "feature")], na.action = na.method(y = c("include"), 
+    x = c("include")), workspace = "31gb")
+
+$loglik
+[1] -296737
+
+$nedf
+[1] 220827
+
+$sigma
+[1] 2.239118
+
+$varcomp
+        component  std.error   z.ratio bound %ch
+LINE    0.9838368 0.01780508  55.25597     P   0
+units!R 5.0136492 0.01558682 321.65953     P   0
+
+$bic
+[1] 593498.6
+attr(,"parameters")
+[1] 2
+
+$aic
+[1] 593478
+attr(,"parameters")
+[1] 2
+
+attr(,"class")
+[1] "summary.asreml"
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 09:04:31 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -296737.0       5.01364 220827 09:04:43    0.8
+ 2     -296737.0       5.01364 220827 09:04:43    0.1
+ 3     -296737.0       5.01364 220827 09:04:46    2.7
+F 
+G 
+H 
+I 
+J 
+K 
+----------------------------Yield---------------------------- 
+C 
+D 
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 09:05:05 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -897265.6      1183.502 220827 09:05:16    0.2
+ 2     -896947.2      1172.265 220827 09:05:16    0.1
+ 3     -896651.0      1158.097 220827 09:05:16    0.1
+ 4     -896525.1      1147.383 220827 09:05:16    0.1
+ 5     -896500.5      1141.493 220827 09:05:16    0.1
+ 6     -896499.9      1140.552 220827 09:05:17    0.1
+ 7     -896499.9      1140.460 220827 09:05:17    0.1
+E 
+[1] "Yield"
+$call
+asreml(fixed = feature ~ YEAR, random = ~LINE, data = BV.HSIdentical.df[, 
+    c("YEAR", "LINE", "feature")], na.action = na.method(y = c("include"), 
+    x = c("include")), workspace = "31gb")
+
+$loglik
+[1] -896499.9
+
+$nedf
+[1] 220827
+
+$sigma
+[1] 33.7707
+
+$varcomp
+        component std.error   z.ratio bound %ch
+LINE     251.3867  4.482083  56.08701     P   0
+units!R 1140.4604  3.550247 321.23413     P   0
+
+$bic
+[1] 1793024
+attr(,"parameters")
+[1] 2
+
+$aic
+[1] 1793004
+attr(,"parameters")
+[1] 2
+
+attr(,"class")
+[1] "summary.asreml"
+Model fitted using the gamma parameterization.
+ASReml 4.1.0 Mon Dec 20 09:05:38 2021
+Allocating main workspace...done!
+          LogLik        Sigma2     DF     wall    cpu
+ 1     -896499.9      1140.452 220827 09:05:50    0.9
+ 2     -896499.9      1140.452 220827 09:05:50    0.1
+ 3     -896499.9      1140.452 220827 09:05:52    2.5
+F 
+G 
+H 
+I 
+J 
+K 
