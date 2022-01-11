@@ -84,8 +84,12 @@ ws = paste0('R:/Breeding/MT_TP/Models/Data/Department Data/YT_BV Yield Trial Mas
 cat(args,"\n")
 #fdp=as.character(fdp)
 #########################################################
-#########################################################
-#########################################################
+# #########################################################
+# #########################################################
+library(BreedStats)
+library(tidyverse)
+library(data.table)
+
 fdp = paste0("C:/Users/jake.lamkey/Documents")
 year= "lmer"
 if(!dir.exists(paste0(fdp,"/",year))){
@@ -128,9 +132,9 @@ seas5 = ""
 doYear="False"
 doLmer="True"
 doField="False"
-doYear=if(doYear == "True"){doYear=T}else(doYear=F)
-doField=if(doField == "True"){doField=T}else(doField=F)
-doLmer=if(doLmer == "True"){doLmer=T}else(doLmer=F)#doYear,
+# doYear=if(doYear == "True"){doYear=T}else(doYear=F)
+# doField=if(doField == "True"){doField=T}else(doField=F)
+# doLmer=if(doLmer == "True"){doLmer=T}else(doLmer=F)#doYear,
 doDNN=F
  folder=year
 #

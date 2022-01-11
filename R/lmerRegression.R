@@ -10,7 +10,7 @@
 # results = openxlsx::read.xlsx("R:/Breeding/MT_TP/Models/Breeding Values/21/.Traits.BV.21AProp.xlsx",1)
 # BV.HSIdentical.df = fread(paste0(hdp,"BV.HSIdentical.df.csv"))
 
-lmerBV = function(name,BV.HSIdentical.df,df3.gmean,counts){
+lmerBV = function(name,BV.HSIdentical.df,counts.adjusted,counts.adjusted.raw){
   ######################################################
   # BV.HSIdentical.df = BV.HSIdentical.df %>% filter(Plot.Discarded != "Yes",
   #                                                  Plot.Status != "3 - Bad", !is.na(Yield) )

@@ -71,7 +71,7 @@ HybridID = function(
   #str(BV.HSIdentical.df)
   #l<-length(BV.HSIdentical.df); l
 
-  names<-names(BV.HSIdentical.df[,c(10:22)]); names
+  names<-names(BV.HSIdentical.df[,c(10:18,20:22)]); names
   classes<-sapply(BV.HSIdentical.df[c(10:22)],class); classes
   #cat("B","\n")
   #sink()
@@ -106,7 +106,7 @@ HybridID = function(
                     ,".pdf"), paper="special",width = 11, height = 8.5,
       family="Times", pointsize=11,bg="white",fg="black")
 
-  #name='yield'
+  #name='Yield'
   #cat("----------------------------Loading Hybrid Adjustments----------------------------", "\n")
   for(name in names){
 
@@ -313,9 +313,6 @@ HybridID = function(
       #sigfigs to three digits
       colnames(df7)[3:4]=c(paste0(name,"_Observations"),paste0(name,"_PctPlotObsCollected"))
 
-      sigfigs.traits<-c( paste0(name,"_BLUE"),  paste0(name,"_BLUP"),
-                         paste0(name,"_standard.error.BLUE"), paste0(name,"_accuracy.BLUE"),
-                         paste0(name,"_PctPlotObsCollected"))
       #for(i in round.traits){df7[,i]<-round(df7[,i] ,4)}
       df7=data.frame(df7)
 
@@ -466,8 +463,8 @@ HybridID = function(
       #.9999
 
       VC<- vc(DIBV)
-      N = length(levels(as.factor(BV.HSIdentical.df.3$YEAR)))
-      FA = length(levels(as.factor(BV.HSIdentical.df.3$FIELD)))
+      N = length(levels(as.factor(BV.HSIdentical.df$YEAR)))
+      FA = length(levels(as.factor(BV.HSIdentical.df$FIELD)))
 
       cat("Heritability = ",(as.numeric(VC$vcov[1]))/((as.numeric(VC$vcov[1]))+
                                                         (as.numeric(VC$vcov[3])/N)))
@@ -512,6 +509,9 @@ HybridID = function(
     gc()
     }
 
+    sigfigs.traits<-c( paste0(name,"_BLUE"),  paste0(name,"_BLUP"),
+                       paste0(name,"_standard.error.BLUE"), paste0(name,"_accuracy.BLUE"),
+                       paste0("PctPlotObsCollected_",name))
 
     for(r in sigfigs.traits){
       for(i in 1:nrow(df7)){

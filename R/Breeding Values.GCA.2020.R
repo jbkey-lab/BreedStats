@@ -508,7 +508,12 @@ BV = function(fdp ,
       }
 
       if(doLmer){
-        df7 = lmerBV(name=name,BV.HSIdentical.df=BV.HSIdentical.df,counts=counts)
+        df7 = lmerBV(name=name,
+                     BV.HSIdentical.df=BV.HSIdentical.df,
+                     counts.adjusted=counts.adjusted,
+
+                     counts.adjusted.raw=counts.adjusted.raw)
+        df7 = data.frame(df7)
         #df8 = df7[!duplicated(df7$FEMALE),]
         invisible(gc())
 
@@ -742,8 +747,9 @@ BV = function(fdp ,
       ptm=ptm,
       doField=doField,
       doLmer = doLmer,
-      GEM=GEM,
+      GEM=GEM
       )
+
   }
 
 }
