@@ -36,7 +36,9 @@ HybridID = function(
   Q,
   V,
   GEM,
-  ptm=ptm
+  ptm=ptm,
+  doLmer,
+  doField
 ){
   #sink("Debugger.Hybrid.txt")
 
@@ -210,10 +212,116 @@ HybridID = function(
                                     na.action=na.method(y=c("include"),x=c("include"))
       )
       cat("E","\n")
+      plot(BV.HSIdentical.model)
+      print(name)
+      QUALDAT.SUM <- print(summary(BV.HSIdentical.model))
+      BV.HSIdentical.model.predicted <- predict(BV.HSIdentical.model,classify="LINE"
+                                                #,pworkspace=812e6
+                                                ,aliased=T
+      )
+      cat("F","\n")
+
+      ######CREATE A HERITABILITY
+      HTvca<-summary(BV.HSIdentical.model)$varcomp$component
+      Va<-HTvca[1]*4
+      Vp<-sum(HTvca[-2])
+      h2=Va/Vp
+      #print(paste0("Heritability = ", h2))
+      #######################################
+      ######BLUPs
+      #######################################
+      qualdat.blups<-coef(BV.HSIdentical.model)$fixed#determine the fixed effects (BLUPS)
+      #qualdat.blups<-data.frame(qualdat.blups$hybridID)
+      #qualdat.blups<-setDT(qualdat.blups,keep.rownames=T)[];colnames(qualdat.blups)=c("hybridID",paste0(name,"BLUP"))
+      #qualdat.blups.export<-left_join(qualdat.blups, qualdat.gmean, by="hybridID")
+      #write.csv(qualdat.blups.export,paste0(name,"_BLUPs_19S.csv")) #write blups to spreadsheet
+      cat("G","\n")
+
+      #######################################
+      ######BLUEs
+      #######################################
+      # Create a numeric vector with the BLUP for each line
+      BV.HSIdentical.blues <- coef(BV.HSIdentical.model)$random #determine the fixed effects (blues)
+      BV.HSIdentical.blues <- setDT(data.frame(BV.HSIdentical.blues),keep.rownames=T)[]; colnames(BV.HSIdentical.blues)=c("LINE",paste0(name,"_BV")); word.remove.fem="LINE_"; word.remove.mal="MALE_"
+      #BV.HSIdentical.blues$LINE = gsub(paste0(word.remove.fem,collapse = "|"), "", BV.HSIdentical.blues$LINE)
+      #BV.HSIdentical.blues$LINE = gsub(paste0(word.remove.mal,collapse = "|"), "", BV.HSIdentical.blues$LINE)
+      BV.HSIdentical.blues.line <- BV.HSIdentical.blues %>% filter(grepl("LINE_", LINE));dim(BV.HSIdentical.blues.line);colnames(BV.HSIdentical.blues.line)[1]="LINE"
+      BV.HSIdentical.blues.line$LINE = gsub(paste0(word.remove.fem,collapse = "|"), "", BV.HSIdentical.blues.line$LINE)
+      BV.HSIdentical.blues.field <- BV.HSIdentical.blues %>% filter(grepl("FIELD_", LINE));dim(BV.HSIdentical.blues.field)
+      BV.HSIdentical.blues.exp <- BV.HSIdentical.blues %>% filter(grepl("EXP_", LINE));dim(BV.HSIdentical.blues.exp)
+
+      #BV.HSIdentical.blues.female
+      BV.HSIdentical.blues.export <- left_join(BV.HSIdentical.blues.line, BV.HSIdentical.df.gmean, by="LINE")
+      head(BV.HSIdentical.blues.export); dim(BV.HSIdentical.blues.export)
+      ######FIND SE, etc...
+      #write.csv(BV.HSIdentical.blues.export,paste0(name,"_BV_19S.csv")) #write blues to spreadsheet
+      mu.idx = which(BV.HSIdentical.model$factor.names=='(Intercept)')
+      mu=BV.HSIdentical.model$coefficients$random[mu.idx]
+      mu.idx.line = which(BV.HSIdentical.model$factor.names=='LINE')
+      mu.line=BV.HSIdentical.model$coefficients$random[mu.idx.line]
+      cat("H","\n")
+
+      #fam.idx=BV.HSIdentical.model$coefficients=='FEMALE'
+      pred<-BV.HSIdentical.model.predicted$pvals
+      pred.line<-BV.HSIdentical.model.predicted$pvals$LINE
+      BV=pred$predicted.value
+      se.BV = BV.HSIdentical.model.predicted$pvals$std.error
+      accuracy<-round(sqrt(abs(1-(se.BV/HTvca[1]))),2)
+      std.errors<-cbind(data.frame(pred.line),BV,se.BV,accuracy)
+      std.errors=data.frame(std.errors);colnames(std.errors)=c("LINE",paste0(name,"_BLUE"),paste0(name,"_standard.error.BLUE"),paste0(name,"_accuracy.BLUE"))
+      cat("I","\n")
+
+      #######################################
+      ######predicted values with fitted() function
+      #######################################
+      #BV.HSIdentical.blues = data.frame(predict(BV.HSIdentical)) #predict the dataset to get BLUE Values 2866
+      #df3<-cbind(data.frame(BV.HSIdentical.data$EXP),data.frame(BV.HSIdentical.data$hybridID),data.frame(BV.HSIdentical.blues)); colnames(df3)=c("EXP","hybridID","BLUE")
+      #df3.gmean = aggregate(df3[,c("BLUE")], by=list(hybridID = df3$hybridID),mean,na.rm=T);colnames(df3.gmean) = c('hybridID',paste0(name)); df3.gmean=data.frame(df3.gmean)
+      #df3<-df3[!duplicated(df3[,1]),]
+      #BV.HSIdentical.blues.filtered<-na.omit(df3)
+      #write.csv(df3.gmean, file=paste0(name,"_BLUEs_19S.csv")) #write BLUEs to spreadsheet
+
+      BV.HSIdentical.fitted = fitted(BV.HSIdentical.model) #predict the dataset
+      df3<-cbind(BV.HSIdentical.fitted,BV.HSIdentical.df); colnames(df3)[1]=c(paste0("fitted_",name))
+      df3.gmean = aggregate(df3[,c(paste0("fitted_",name))], by=list(LINE = df3$LINE),mean,na.rm=T);colnames(df3.gmean) = c('LINE',paste0("fitted_",name)); df3.gmean=data.frame(df3.gmean)
+      #df3.gmean.female = aggregate(df3[,c(paste0("fitted_",name))], by=list(FEMALE = df3$FEMALE),mean,na.rm=T);colnames(df3.gmean.female) = c('LINE',paste0("fitted_",name)); df3.gmean.female=data.frame(df3.gmean.female)
+      #df3.gmean <- rbind(df3.gmean.male,df3.gmean.female)
+      #df3<-df3[!duplicated(df3[,1]),]
+      #BV.HSIdentical.blues.filtered<-na.omit(df3)
+      #write.csv(df3.gmean, file=paste0(name,"_BLUEs_19S.csv")) #write BLUEs to spreadsheet
+      cat("J","\n")
+
+      #######################################
+      ######Graphs and Figures
+      #######################################
+      df5<-left_join(BV.HSIdentical.blues.export,df3.gmean,by="LINE");dim(df5)
+      #df5<-df5[!duplicated(df5$LINE),]
+      counts = left_join(counts.adjusted, counts.adjusted.raw,by=c("LINE"="V1"))
+      counts = data.frame(counts)
+      counts$Observations = as.numeric(counts$Observations )
+      counts$rowCount = as.numeric(counts$rowCount )
+
+      counts[is.na(counts)] = 0
+
+      counts$ObsPercent = counts$rowCount / counts$Observations
+      counts = counts[, c(1,2,4)]
+
+      df6<-left_join(df5, counts, by="LINE")
+      #df6<-left_join(df6,counts,by="LINE")
+      df7<-left_join(df6,std.errors,by="LINE")
+      df7<-df7[,-c(3,4)];colnames(df7)[2]=paste0(name,"_BLUP")
+      #sigfigs to three digits
+      colnames(df7)[3:4]=c(paste0(name,"_Observations"),paste0(name,"_PctPlotObsCollected"))
+
+      sigfigs.traits<-c( paste0(name,"_BLUE"),  paste0(name,"_BLUP"),
+                         paste0(name,"_standard.error.BLUE"), paste0(name,"_accuracy.BLUE"),
+                         paste0(name,"_PctPlotObsCollected"))
+      #for(i in round.traits){df7[,i]<-round(df7[,i] ,4)}
+      df7=data.frame(df7)
 
     }
 
-    else{
+    if(doField){
       BV.HSIdentical.model = asreml(fixed = feature ~ FIELD,
                                     random = ~ LINE ,#+ LINE*EXP + REP*FIELD,
                                     #residual = ~units,
@@ -222,114 +330,188 @@ HybridID = function(
                                     workspace="31gb"#,
                                     #na.action=na.method(y=c("include"),x=c("omit"))
       ) #run the model
+      plot(BV.HSIdentical.model)
+      print(name)
+      QUALDAT.SUM <- print(summary(BV.HSIdentical.model))
+      BV.HSIdentical.model.predicted <- predict(BV.HSIdentical.model,classify="LINE"
+                                                #,pworkspace=812e6
+                                                ,aliased=T
+      )
+      cat("F","\n")
+
+      ######CREATE A HERITABILITY
+      HTvca<-summary(BV.HSIdentical.model)$varcomp$component
+      Va<-HTvca[1]*4
+      Vp<-sum(HTvca[-2])
+      h2=Va/Vp
+      #print(paste0("Heritability = ", h2))
+      #######################################
+      ######BLUPs
+      #######################################
+      qualdat.blups<-coef(BV.HSIdentical.model)$fixed#determine the fixed effects (BLUPS)
+      #qualdat.blups<-data.frame(qualdat.blups$hybridID)
+      #qualdat.blups<-setDT(qualdat.blups,keep.rownames=T)[];colnames(qualdat.blups)=c("hybridID",paste0(name,"BLUP"))
+      #qualdat.blups.export<-left_join(qualdat.blups, qualdat.gmean, by="hybridID")
+      #write.csv(qualdat.blups.export,paste0(name,"_BLUPs_19S.csv")) #write blups to spreadsheet
+      cat("G","\n")
+
+      #######################################
+      ######BLUEs
+      #######################################
+      # Create a numeric vector with the BLUP for each line
+      BV.HSIdentical.blues <- coef(BV.HSIdentical.model)$random #determine the fixed effects (blues)
+      BV.HSIdentical.blues <- setDT(data.frame(BV.HSIdentical.blues),keep.rownames=T)[]; colnames(BV.HSIdentical.blues)=c("LINE",paste0(name,"_BV")); word.remove.fem="LINE_"; word.remove.mal="MALE_"
+      #BV.HSIdentical.blues$LINE = gsub(paste0(word.remove.fem,collapse = "|"), "", BV.HSIdentical.blues$LINE)
+      #BV.HSIdentical.blues$LINE = gsub(paste0(word.remove.mal,collapse = "|"), "", BV.HSIdentical.blues$LINE)
+      BV.HSIdentical.blues.line <- BV.HSIdentical.blues %>% filter(grepl("LINE_", LINE));dim(BV.HSIdentical.blues.line);colnames(BV.HSIdentical.blues.line)[1]="LINE"
+      BV.HSIdentical.blues.line$LINE = gsub(paste0(word.remove.fem,collapse = "|"), "", BV.HSIdentical.blues.line$LINE)
+      BV.HSIdentical.blues.field <- BV.HSIdentical.blues %>% filter(grepl("FIELD_", LINE));dim(BV.HSIdentical.blues.field)
+      BV.HSIdentical.blues.exp <- BV.HSIdentical.blues %>% filter(grepl("EXP_", LINE));dim(BV.HSIdentical.blues.exp)
+
+      #BV.HSIdentical.blues.female
+      BV.HSIdentical.blues.export <- left_join(BV.HSIdentical.blues.line, BV.HSIdentical.df.gmean, by="LINE")
+      head(BV.HSIdentical.blues.export); dim(BV.HSIdentical.blues.export)
+      ######FIND SE, etc...
+      #write.csv(BV.HSIdentical.blues.export,paste0(name,"_BV_19S.csv")) #write blues to spreadsheet
+      mu.idx = which(BV.HSIdentical.model$factor.names=='(Intercept)')
+      mu=BV.HSIdentical.model$coefficients$random[mu.idx]
+      mu.idx.line = which(BV.HSIdentical.model$factor.names=='LINE')
+      mu.line=BV.HSIdentical.model$coefficients$random[mu.idx.line]
+      cat("H","\n")
+
+      #fam.idx=BV.HSIdentical.model$coefficients=='FEMALE'
+      pred<-BV.HSIdentical.model.predicted$pvals
+      pred.line<-BV.HSIdentical.model.predicted$pvals$LINE
+      BV=pred$predicted.value
+      se.BV = BV.HSIdentical.model.predicted$pvals$std.error
+      accuracy<-round(sqrt(abs(1-(se.BV/HTvca[1]))),2)
+      std.errors<-cbind(data.frame(pred.line),BV,se.BV,accuracy)
+      std.errors=data.frame(std.errors);colnames(std.errors)=c("LINE",paste0(name,"_BLUE"),paste0(name,"_standard.error.BLUE"),paste0(name,"_accuracy.BLUE"))
+      cat("I","\n")
+
+      #######################################
+      ######predicted values with fitted() function
+      #######################################
+      #BV.HSIdentical.blues = data.frame(predict(BV.HSIdentical)) #predict the dataset to get BLUE Values 2866
+      #df3<-cbind(data.frame(BV.HSIdentical.data$EXP),data.frame(BV.HSIdentical.data$hybridID),data.frame(BV.HSIdentical.blues)); colnames(df3)=c("EXP","hybridID","BLUE")
+      #df3.gmean = aggregate(df3[,c("BLUE")], by=list(hybridID = df3$hybridID),mean,na.rm=T);colnames(df3.gmean) = c('hybridID',paste0(name)); df3.gmean=data.frame(df3.gmean)
+      #df3<-df3[!duplicated(df3[,1]),]
+      #BV.HSIdentical.blues.filtered<-na.omit(df3)
+      #write.csv(df3.gmean, file=paste0(name,"_BLUEs_19S.csv")) #write BLUEs to spreadsheet
+
+      BV.HSIdentical.fitted = fitted(BV.HSIdentical.model) #predict the dataset
+      df3<-cbind(BV.HSIdentical.fitted,BV.HSIdentical.df); colnames(df3)[1]=c(paste0("fitted_",name))
+      df3.gmean = aggregate(df3[,c(paste0("fitted_",name))], by=list(LINE = df3$LINE),mean,na.rm=T);colnames(df3.gmean) = c('LINE',paste0("fitted_",name)); df3.gmean=data.frame(df3.gmean)
+      #df3.gmean.female = aggregate(df3[,c(paste0("fitted_",name))], by=list(FEMALE = df3$FEMALE),mean,na.rm=T);colnames(df3.gmean.female) = c('LINE',paste0("fitted_",name)); df3.gmean.female=data.frame(df3.gmean.female)
+      #df3.gmean <- rbind(df3.gmean.male,df3.gmean.female)
+      #df3<-df3[!duplicated(df3[,1]),]
+      #BV.HSIdentical.blues.filtered<-na.omit(df3)
+      #write.csv(df3.gmean, file=paste0(name,"_BLUEs_19S.csv")) #write BLUEs to spreadsheet
+      cat("J","\n")
+
+      #######################################
+      ######Graphs and Figures
+      #######################################
+      df5<-left_join(BV.HSIdentical.blues.export,df3.gmean,by="LINE");dim(df5)
+      #df5<-df5[!duplicated(df5$LINE),]
+      counts = left_join(counts.adjusted, counts.adjusted.raw,by=c("LINE"="V1"))
+      counts = data.frame(counts)
+      counts$Observations = as.numeric(counts$Observations )
+      counts$rowCount = as.numeric(counts$rowCount )
+
+      counts[is.na(counts)] = 0
+
+      counts$ObsPercent = counts$rowCount / counts$Observations
+      counts = counts[, c(1,2,4)]
+
+      df6<-left_join(df5, counts, by="LINE")
+      #df6<-left_join(df6,counts,by="LINE")
+      df7<-left_join(df6,std.errors,by="LINE")
+      df7<-df7[,-c(3,4)];colnames(df7)[2]=paste0(name,"_BLUP")
+      #sigfigs to three digits
+      colnames(df7)[3:4]=c(paste0(name,"_Observations"),paste0(name,"_PctPlotObsCollected"))
+
+      sigfigs.traits<-c( paste0(name,"_BLUE"),  paste0(name,"_BLUP"),
+                         paste0(name,"_standard.error.BLUE"), paste0(name,"_accuracy.BLUE"),
+                         paste0(name,"_PctPlotObsCollected"))
+      #for(i in round.traits){df7[,i]<-round(df7[,i] ,4)}
+      df7=data.frame(df7)
+
     }
 
-    plot(BV.HSIdentical.model)
-    print(name)
-    QUALDAT.SUM <- print(summary(BV.HSIdentical.model))
-    BV.HSIdentical.model.predicted <- predict(BV.HSIdentical.model,classify="LINE"
-                                            #,pworkspace=812e6
-                                            ,aliased=T
-    )
-    cat("F","\n")
+    if(doLmer){
 
-    ######CREATE A HERITABILITY
-    HTvca<-summary(BV.HSIdentical.model)$varcomp$component
-    Va<-HTvca[1]*4
-    Vp<-sum(HTvca[-2])
-    h2=Va/Vp
-    #print(paste0("Heritability = ", h2))
-    #######################################
-    ######BLUPs
-    #######################################
-    qualdat.blups<-coef(BV.HSIdentical.model)$fixed#determine the fixed effects (BLUPS)
-    #qualdat.blups<-data.frame(qualdat.blups$hybridID)
-    #qualdat.blups<-setDT(qualdat.blups,keep.rownames=T)[];colnames(qualdat.blups)=c("hybridID",paste0(name,"BLUP"))
-    #qualdat.blups.export<-left_join(qualdat.blups, qualdat.gmean, by="hybridID")
-    #write.csv(qualdat.blups.export,paste0(name,"_BLUPs_19S.csv")) #write blups to spreadsheet
-    cat("G","\n")
+      DIBV = lmer(formula = feature ~ (1|LINE) + (1|YEAR) ,
+                  na.action='na.exclude', REML = T,
+                  control = lmerControl(
+                    sparseX = T),
+                  data = BV.HSIdentical.df[,c("YEAR","FIELD","MALE","FEMALE","feature","LINE")] )
 
-    #######################################
-    ######BLUEs
-    #######################################
-    # Create a numeric vector with the BLUP for each line
-    BV.HSIdentical.blues <- coef(BV.HSIdentical.model)$random #determine the fixed effects (blues)
-    BV.HSIdentical.blues <- setDT(data.frame(BV.HSIdentical.blues),keep.rownames=T)[]; colnames(BV.HSIdentical.blues)=c("LINE",paste0(name,"_BV")); word.remove.fem="LINE_"; word.remove.mal="MALE_"
-    #BV.HSIdentical.blues$LINE = gsub(paste0(word.remove.fem,collapse = "|"), "", BV.HSIdentical.blues$LINE)
-    #BV.HSIdentical.blues$LINE = gsub(paste0(word.remove.mal,collapse = "|"), "", BV.HSIdentical.blues$LINE)
-    BV.HSIdentical.blues.line <- BV.HSIdentical.blues %>% filter(grepl("LINE_", LINE));dim(BV.HSIdentical.blues.line);colnames(BV.HSIdentical.blues.line)[1]="LINE"
-    BV.HSIdentical.blues.line$LINE = gsub(paste0(word.remove.fem,collapse = "|"), "", BV.HSIdentical.blues.line$LINE)
-    BV.HSIdentical.blues.field <- BV.HSIdentical.blues %>% filter(grepl("FIELD_", LINE));dim(BV.HSIdentical.blues.field)
-    BV.HSIdentical.blues.exp <- BV.HSIdentical.blues %>% filter(grepl("EXP_", LINE));dim(BV.HSIdentical.blues.exp)
+      # 161
+      # 1073
+      sum.DIBV=print(summary(DIBV))
+      Blup = ranef(DIBV)
+      Blup=data.frame(Blup)
+      Blup = Blup %>% filter(grpvar != "MALE")
+      #Blup = Blup %>% filter(grpvar != "LINE")
+      Blup = Blup %>% filter(grpvar != "YEAR")
 
-    #BV.HSIdentical.blues.female
-    BV.HSIdentical.blues.export <- left_join(BV.HSIdentical.blues.line, BV.HSIdentical.df.gmean, by="LINE")
-    head(BV.HSIdentical.blues.export); dim(BV.HSIdentical.blues.export)
-    ######FIND SE, etc...
-    #write.csv(BV.HSIdentical.blues.export,paste0(name,"_BV_19S.csv")) #write blues to spreadsheet
-    mu.idx = which(BV.HSIdentical.model$factor.names=='(Intercept)')
-    mu=BV.HSIdentical.model$coefficients$random[mu.idx]
-    mu.idx.line = which(BV.HSIdentical.model$factor.names=='LINE')
-    mu.line=BV.HSIdentical.model$coefficients$random[mu.idx.line]
-    cat("H","\n")
+      #Blup.index = order(Blup$condval, decreasing=T)
+      #Blup = Blup[Blup.index,]
+      head(Blup,10)
 
-    #fam.idx=BV.HSIdentical.model$coefficients=='FEMALE'
-    pred<-BV.HSIdentical.model.predicted$pvals
-    pred.line<-BV.HSIdentical.model.predicted$pvals$LINE
-    BV=pred$predicted.value
-    se.BV = BV.HSIdentical.model.predicted$pvals$std.error
-    accuracy<-round(sqrt(abs(1-(se.BV/HTvca[1]))),2)
-    std.errors<-cbind(data.frame(pred.line),BV,se.BV,accuracy)
-    std.errors=data.frame(std.errors);colnames(std.errors)=c("LINE",paste0(name,"_BLUE"),paste0(name,"_standard.error.BLUE"),paste0(name,"_accuracy.BLUE"))
-    cat("I","\n")
+      # results1=left_join(results, Blup, by=c("FEMALE"="grp"))
+      # results1 = results1[,c(1,3,73)]
+      # cor(results1$Yield_GCA, results1$condval,use="pairwise.complete.obs", method="pearson")^2
+      #.9999
 
-    #######################################
-    ######predicted values with fitted() function
-    #######################################
-    #BV.HSIdentical.blues = data.frame(predict(BV.HSIdentical)) #predict the dataset to get BLUE Values 2866
-    #df3<-cbind(data.frame(BV.HSIdentical.data$EXP),data.frame(BV.HSIdentical.data$hybridID),data.frame(BV.HSIdentical.blues)); colnames(df3)=c("EXP","hybridID","BLUE")
-    #df3.gmean = aggregate(df3[,c("BLUE")], by=list(hybridID = df3$hybridID),mean,na.rm=T);colnames(df3.gmean) = c('hybridID',paste0(name)); df3.gmean=data.frame(df3.gmean)
-    #df3<-df3[!duplicated(df3[,1]),]
-    #BV.HSIdentical.blues.filtered<-na.omit(df3)
-    #write.csv(df3.gmean, file=paste0(name,"_BLUEs_19S.csv")) #write BLUEs to spreadsheet
+      VC<- vc(DIBV)
+      N = length(levels(as.factor(BV.HSIdentical.df.3$YEAR)))
+      FA = length(levels(as.factor(BV.HSIdentical.df.3$FIELD)))
 
-    BV.HSIdentical.fitted = fitted(BV.HSIdentical.model) #predict the dataset
-    df3<-cbind(BV.HSIdentical.fitted,BV.HSIdentical.df); colnames(df3)[1]=c(paste0("fitted_",name))
-    df3.gmean = aggregate(df3[,c(paste0("fitted_",name))], by=list(LINE = df3$LINE),mean,na.rm=T);colnames(df3.gmean) = c('LINE',paste0("fitted_",name)); df3.gmean=data.frame(df3.gmean)
-    #df3.gmean.female = aggregate(df3[,c(paste0("fitted_",name))], by=list(FEMALE = df3$FEMALE),mean,na.rm=T);colnames(df3.gmean.female) = c('LINE',paste0("fitted_",name)); df3.gmean.female=data.frame(df3.gmean.female)
-    #df3.gmean <- rbind(df3.gmean.male,df3.gmean.female)
-    #df3<-df3[!duplicated(df3[,1]),]
-    #BV.HSIdentical.blues.filtered<-na.omit(df3)
-    #write.csv(df3.gmean, file=paste0(name,"_BLUEs_19S.csv")) #write BLUEs to spreadsheet
-    cat("J","\n")
+      cat("Heritability = ",(as.numeric(VC$vcov[1]))/((as.numeric(VC$vcov[1]))+
+                                                        (as.numeric(VC$vcov[3])/N)))
 
-    #######################################
-    ######Graphs and Figures
-    #######################################
-    df5<-left_join(BV.HSIdentical.blues.export,df3.gmean,by="LINE");dim(df5)
-    #df5<-df5[!duplicated(df5$LINE),]
-    counts = left_join(counts.adjusted, counts.adjusted.raw,by=c("LINE"="V1"))
-    counts = data.frame(counts)
-    counts$Observations = as.numeric(counts$Observations )
-    counts$rowCount = as.numeric(counts$rowCount )
 
-    counts[is.na(counts)] = 0
+      #FEMALE/(FEMALE + Error)/NumofYears)
+      #pred.DIBV = predict(DIBV)
+      df5 = data.frame(LINE = Blup$grp,
+                       PREDS = Blup$condval,
+                       stderror = Blup$condsd)
 
-    counts$ObsPercent = counts$rowCount / counts$Observations
-    counts = counts[, c(1,2,4)]
+      counts = dplyr::left_join(counts.adjusted, counts.adjusted.raw,by=c("LINE"="V1"))
+      counts = data.frame(counts)
+      counts$Observations = as.numeric(counts$Observations )
+      counts$rowCount = as.numeric(counts$rowCount )
 
-    df6<-left_join(df5, counts, by="LINE")
-    #df6<-left_join(df6,counts,by="LINE")
-    df7<-left_join(df6,std.errors,by="LINE")
-    df7<-df7[,-c(3,4)];colnames(df7)[2]=paste0(name,"_BLUP")
-    #sigfigs to three digits
-    colnames(df7)[3:4]=c(paste0(name,"_Observations"),paste0(name,"_PctPlotObsCollected"))
+      counts[is.na(counts)] = 0
 
-    sigfigs.traits<-c( paste0(name,"_BLUE"),  paste0(name,"_BLUP"),
-                       paste0(name,"_standard.error.BLUE"), paste0(name,"_accuracy.BLUE"),
-                       paste0(name,"_PctPlotObsCollected"))
-    #for(i in round.traits){df7[,i]<-round(df7[,i] ,4)}
-    df7=data.frame(df7)
+      counts$ObsPercent = counts$rowCount / counts$Observations
+      counts = counts[, c(1,2,4)]
+      #counts[is.na(counts) ] = 0
+
+      #colnames(counts) = c("FEMALE", paste0(name,"_pctCounts"))
+      accuracy<-round(sqrt(abs(1-(df5$stderror/sum.DIBV$varcor$LINE[1]))),2)
+
+      df6<-dplyr::left_join(df5,counts,by="LINE")
+
+      df6 = data.frame(LINE = df6$LINE,
+                       GCA = df6$PREDS,
+                       obs = df6$Observations,
+                       obsperc = df6$ObsPercent,
+                       BV = (df6$PREDS*2) + sum.DIBV$coefficients[1],
+                       sterror = df6$stderror*2,
+                       accuracy)
+
+      colnames(df6)[2:7]=c(paste0(name,"_BLUP"),paste0("Observations_",name),paste0("PctPlotObsCollected_",name),
+                           paste0(name,"_BLUE"),paste0(name,"_standard.error.BLUE"),paste0(name, "_accuracy.BLUE"))
+
+    df7=df6
+
+    rm(df6,VC,N,FA,Blup,DIBV,p95,p05,MALE,FEMALE,BV.HSIdentical.df.2,Blup.index,BV.HSIdentical.df.3)
+    gc()
+    }
+
 
     for(r in sigfigs.traits){
       for(i in 1:nrow(df7)){

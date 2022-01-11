@@ -23,8 +23,8 @@ lmerBV = function(name,BV.HSIdentical.df,df3.gmean,counts){
   #  BV.HSIdentical.df = left_join(BV.HSIdentical.df, BV.HSIdentical.df.expmean, by="Book.Name" )
   #BV.HSIdentical.df$Yieldmean = NA
   #BV.HSIdentical.df$Yield = ifelse(is.na(BV.HSIdentical.df$Yield), BV.HSIdentical.df$Yieldmean,BV.HSIdentical.df$Yield)
-  BV.HSIdentical.df = data.frame(BV.HSIdentical.df)
-  BV.HSIdentical.df$feature = BV.HSIdentical.df[,name]
+  #BV.HSIdentical.df = data.frame(BV.HSIdentical.df)
+  #BV.HSIdentical.df$feature = BV.HSIdentical.df[,name]
 
   # male.rmdups = data.frame(inbred = BV.HSIdentical.df[!duplicated(BV.HSIdentical.df$MALE), c("MALE","LINE" )] )
   # female.rmdups = data.frame(inbred = BV.HSIdentical.df[!duplicated(BV.HSIdentical.df$FEMALE), c("FEMALE","LINE" )] )
@@ -36,22 +36,22 @@ lmerBV = function(name,BV.HSIdentical.df,df3.gmean,counts){
   BV.HSIdentical.df.2 = BV.HSIdentical.df[,c(1:29,31,30,32:34)]
   colnames(BV.HSIdentical.df.2)[c(30:31)] = c("MALE","FEMALE")
 
-  BV.HSIdentical.df = rbind(BV.HSIdentical.df.2,BV.HSIdentical.df)
-  BV.HSIdentical.df = data.frame(BV.HSIdentical.df)
-  FEMALE = length(levels(as.factor(BV.HSIdentical.df$FEMALE)))
-  MALE = length(levels(as.factor(BV.HSIdentical.df$MALE)))
+  BV.HSIdentical.df.3 = rbind(BV.HSIdentical.df.2,BV.HSIdentical.df)
+  BV.HSIdentical.df.3 = data.frame(BV.HSIdentical.df.3)
+  FEMALE = length(levels(as.factor(BV.HSIdentical.df.3$FEMALE)))
+  MALE = length(levels(as.factor(BV.HSIdentical.df.3$MALE)))
 
-  p95 <- quantile(BV.HSIdentical.df$feature, 0.9999, na.rm=T)
-  p05 <- quantile(BV.HSIdentical.df$feature, 0.0001, na.rm=T)
+  p95 <- quantile(BV.HSIdentical.df.3$feature, 0.9999, na.rm=T)
+  p05 <- quantile(BV.HSIdentical.df.3$feature, 0.0001, na.rm=T)
 
-  # BV.HSIdentical.df <- BV.HSIdentical.df %>% filter(feature <= p95,
+  # BV.HSIdentical.df.3 <- BV.HSIdentical.df.3 %>% filter(feature <= p95,
   #                                                    feature >= p05)
 
   DIBV = lmer(formula = feature ~ (1|FEMALE) + (1|MALE) + (1|YEAR) ,
               na.action='na.exclude', REML = T,
               control = lmerControl(
                 sparseX = T),
-              data = BV.HSIdentical.df[,c("YEAR","FIELD","MALE","FEMALE","feature","LINE")] )
+              data = BV.HSIdentical.df.3[,c("YEAR","FIELD","MALE","FEMALE","feature","LINE")] )
 
   # 161
   # 1073
@@ -60,8 +60,10 @@ lmerBV = function(name,BV.HSIdentical.df,df3.gmean,counts){
   Blup=data.frame(Blup)
   Blup = Blup %>% filter(grpvar != "MALE")
   Blup = Blup %>% filter(grpvar != "LINE")
-  Blup.index = order(Blup$condval, decreasing=T)
-  Blup = Blup[Blup.index,]
+  Blup = Blup %>% filter(grpvar != "YEAR")
+
+  #Blup.index = order(Blup$condval, decreasing=T)
+  #Blup = Blup[Blup.index,]
   head(Blup,10)
 
   # results1=left_join(results, Blup, by=c("FEMALE"="grp"))
@@ -70,8 +72,8 @@ lmerBV = function(name,BV.HSIdentical.df,df3.gmean,counts){
   #.9999
 
   VC<- vc(DIBV)
-  N = length(levels(as.factor(BV.HSIdentical.df$YEAR)))
-  FA = length(levels(as.factor(BV.HSIdentical.df$FIELD)))
+  N = length(levels(as.factor(BV.HSIdentical.df.3$YEAR)))
+  FA = length(levels(as.factor(BV.HSIdentical.df.3$FIELD)))
 
   cat("Heritability = ",(as.numeric(VC$vcov[1]))/((as.numeric(VC$vcov[1]))+
                                   (as.numeric(VC$vcov[4])/N)))
@@ -98,6 +100,7 @@ lmerBV = function(name,BV.HSIdentical.df,df3.gmean,counts){
   accuracy<-round(sqrt(abs(1-(df5$stderror/sum.DIBV$varcor$FEMALE[1]))),2)
 
   df6<-dplyr::left_join(df5,counts,by="FEMALE")
+
   df6 = data.frame(FEMALE = df6$FEMALE,
                    GCA = df6$PREDS,
                    obs = df6$Observations,
@@ -107,13 +110,13 @@ lmerBV = function(name,BV.HSIdentical.df,df3.gmean,counts){
                    accuracy)
 
   colnames(df6)[2:7]=c(paste0(name,"_GCA"),paste0("Observations_",name),paste0("PctPlotObsCollected_",name),
-                       paste0(name,"_Breeding.Value"),paste0(name,"standard.error.Breeding.Value"),paste0(name,
-                        "accuracy.Breeding.Value"))
+                       paste0(name,"_Breeding.Value"),paste0(name,"_standard.error.Breeding.Value"),paste0(name,
+                        "_accuracy.Breeding.Value"))
 
-  rm(VC,N,FA,Blup,DIBV,p95,p05,MALE,FEMALE,BV.HSIdentical.df.2,Blup.index)
+  rm(VC,N,FA,Blup,DIBV,p95,p05,MALE,FEMALE,BV.HSIdentical.df.2,Blup.index,BV.HSIdentical.df.3)
   gc()
 
-  return(data.frame(pred.DIBV))
+  return(data.frame(df6))
 
 
 }

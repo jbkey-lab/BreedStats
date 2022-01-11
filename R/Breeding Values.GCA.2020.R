@@ -330,7 +330,7 @@ BV = function(fdp ,
     #setwd(paste0(fdp))
     #str(BV.HSIdentical.df)
     l<-length(BV.HSIdentical.df)#; l
-    names<-names(BV.HSIdentical.df[,c(10:22)]); names
+    names<-names(BV.HSIdentical.df[,c(10:18,20:22)]); names
     classes<-sapply(BV.HSIdentical.df[c(10:22)], class); classes
     #cat(paste0(fdp),"\n")
     cat("F", "\n")
@@ -509,7 +509,7 @@ BV = function(fdp ,
 
       if(doLmer){
         df7 = lmerBV(name=name,BV.HSIdentical.df=BV.HSIdentical.df,counts=counts)
-
+        #df8 = df7[!duplicated(df7$FEMALE),]
         invisible(gc())
 
         #BV.HSIdentical.model.predicted = BV.HSIdentical.model$coefficients$random
@@ -584,7 +584,7 @@ BV = function(fdp ,
       #write.csv(df7, file=paste0(wdp,name,"_BV_",year,"S.csv")) #write BLUEs to spreadsheet
       assign(paste0(name,"_BV_",folder,"S"), df7)
       #df5=data.frame(df5)
-      cat(stat.desc(df7[,paste0(name,"_Breeding.Value")]),"\n")
+      cat(pastecs::stat.desc(df7[,paste0(name,"_Breeding.Value")]),"\n")
       #hist(as.numeric(df5[4]), col="gold", main=paste0(name," Histogram"), xlab=paste0(name))
       # hist(df5$EarHt_BV, col="blue", main=paste0("GCA Values For ",name), xlab="GCA Values")
       #  hist(df5$fitted_EarHt,main=paste0("BV Values For ", name), col="brown",xlab=paste0("Breeding Value (BV)"))
@@ -625,7 +625,7 @@ BV = function(fdp ,
     #gsl = read.csv(paste0(wdp,"GS.Late_BV_",year,"S.csv"))
     #scf = read.csv(paste0(wdp,"StandCnt..Final._BV_",year,"S.csv"))
     #scuav = read.csv(paste0(wdp,"StandCnt..UAV._BV_",year,"S.csv"))
-    sink("Debugger.txt")
+    #sink("Debugger.txt")
 
     BV.traits.1 <- left_join(eval(as.name(paste0("Yield_BV_",folder,"S")))[,c(1,3,2,4,5,6,7)], eval(as.name(paste0("PCT.HOH_BV_",folder,"S")))[,c(1,3,2,4,5,6,7)], by=c("FEMALE"));dim(BV.traits.1)
     BV.traits.2 <- left_join(BV.traits.1,eval(as.name(paste0("Y.M_BV_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("FEMALE"));dim(BV.traits.2)
@@ -713,7 +713,7 @@ BV = function(fdp ,
     cat("----------------------------Finished Breeding Values!----------------------------", "\n")
     #cat("-------------------------Time was-",proc.time() - ptm , "----------------------------\n")
 
-    sink()
+    #sink()
     #cat("No bugs for Breeding Values")
   }
 
@@ -740,7 +740,10 @@ BV = function(fdp ,
       Q=Q,
       V=V,
       ptm=ptm,
-      GEM=GEM)
+      doField=doField,
+      doLmer = doLmer,
+      GEM=GEM,
+      )
   }
 
 }
