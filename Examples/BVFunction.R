@@ -1,7 +1,7 @@
 
 library(BreedStats)
-# library(tidyverse)
-# library(data.table)
+library(tidyverse)
+library(data.table)
 # library(asreml)
 
 #cat("Date? ")
@@ -55,7 +55,9 @@ varGEM = as.character(args[20])
 #fdp = as.character(args[27])
 #fdph = as.character(args[28])
 directory= as.character(args[21])
-
+doField = as.character(args[24])
+doLmer = as.character(args[25])
+do
 fdp = "R:/Breeding/MT_TP/Models/Breeding Values"
 
 #varYear = as.numeric(varYear) - 2000
@@ -123,7 +125,10 @@ cat(args,"\n")
 # seas4 = ""
 # seas5 = ""
 #
-# doYear="True"
+# doYear="False"
+# doLmer="True"
+# doField="False"
+
 # folder=year
 #
 # season0=as.numeric(seas0)
@@ -201,7 +206,9 @@ suppressWarnings(suppressMessages(BV(fdp = fdp, #paste0("R:/Breeding/MT_TP/Model
                                      seas3=seas3,
                                      seas4=seas4,
                                      seas5=seas5,
-                                     doYear=if(doYear == "True"){doYear=T}else(doYear=F) #doYear,
+                                     doYear=if(doYear == "True"){doYear=T}else(doYear=F),
+                                     doField=if(doField == "True"){doField=T}else(doField),
+                                     doLmer=if(doLmer == "True"){doLmer=T}else(doLmer=F)#doYear,
 
 
 )))
