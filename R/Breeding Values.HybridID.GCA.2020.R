@@ -36,7 +36,7 @@ HybridID = function(
   Q,
   V,
   GEM,
-  ptm=ptm,
+  ptm,
   doLmer,
   doField
 ){
@@ -467,7 +467,7 @@ HybridID = function(
       FA = length(levels(as.factor(BV.HSIdentical.df$FIELD)))
 
       cat("Heritability = ",(as.numeric(VC$vcov[1]))/((as.numeric(VC$vcov[1]))+
-                                                        (as.numeric(VC$vcov[3])/N)))
+                                                        (as.numeric(VC$vcov[3])/N)), "\n")
 
 
       #FEMALE/(FEMALE + Error)/NumofYears)
@@ -500,7 +500,7 @@ HybridID = function(
                        sterror = df6$stderror*2,
                        accuracy)
 
-      colnames(df6)[2:7]=c(paste0(name,"_BLUP"),paste0("Observations_",name),paste0("PctPlotObsCollected_",name),
+      colnames(df6)[2:7]=c(paste0(name,"_BLUP"),paste0(name,"_Observations"),paste0(name,"_PctPlotObsCollected"),
                            paste0(name,"_BLUE"),paste0(name,"_standard.error.BLUE"),paste0(name, "_accuracy.BLUE"))
 
     df7=df6
@@ -511,7 +511,7 @@ HybridID = function(
 
     sigfigs.traits<-c( paste0(name,"_BLUE"),  paste0(name,"_BLUP"),
                        paste0(name,"_standard.error.BLUE"), paste0(name,"_accuracy.BLUE"),
-                       paste0("PctPlotObsCollected_",name))
+                       paste0(name,"_PctPlotObsCollected"))
 
     for(r in sigfigs.traits){
       for(i in 1:nrow(df7)){
