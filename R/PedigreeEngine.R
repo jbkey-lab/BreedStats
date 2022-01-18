@@ -150,7 +150,9 @@ pedigreeEngine = function(ws,
 
   BV.MC.Inbred <- openxlsx::read.xlsx(paste0("R:/Breeding/MT_TP/Models/Data/Department Data/NEW LINE CODES.xlsx"),1)
   BV.MC.Inbred$Pedigre_Backup = BV.MC.Inbred$PEDIGREE
-  BV.MC.Inbred = BV.MC.Inbred[,c(1:3,22,4:21)]
+  BV.MC.Inbred = BV.MC.Inbred[,c(1:3,21,4:20)]
+  BV.MC.Inbred = BV.MC.Inbred[!is.na(BV.MC.Inbred$PEDIGREE),]
+
   cat("D")
 
 
@@ -788,7 +790,7 @@ pedigreeEngine = function(ws,
   # cat("H")
 
   #source("R:/Breeding/MT_TP/Models/R-Scripts/pedAdjustment.R")
-  newData = PedAdjust( data = BV.MC.Entry.data.AB,doReduceNonCodes=doReduceNonCodes  )
+  newData = PedAdjust( data = BV.MC.Entry.data.AB, doReduceNonCodes=doReduceNonCodes  )
 
   nrow(newData)
 

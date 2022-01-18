@@ -86,64 +86,64 @@ cat(args,"\n")
 #########################################################
 # #########################################################
 # #########################################################
-# library(BreedStats)
-# library(tidyverse)
-# library(data.table)
+library(BreedStats)
+library(tidyverse)
+library(data.table)
+
+fdp = paste0("C:/Users/jake.lamkey/Documents")
+year= "Predictions"
+if(!dir.exists(paste0(fdp,"/",year))){
+  dir.create(paste0(fdp,"/",year))
+}
+
+x="11_8_2021"
+#ws = paste0('R:/Breeding/MT_TP/Models/Data/Department Data/YT_BV Yield Trial Master Catalog ',x, ".csv")
+ws=paste0("C:/Users/jake.lamkey/Documents/YT_BV Yield Trial Master Catalog ",x, ".csv")
+
+# #date="12_22_2021"
+# #ws = paste0("P:/Temp/PedAdjust ",date,".csv")
+wdp = paste0("C:/Users/jake.lamkey/Documents")
+varA ="True"
+varB ="True"
+varC ="True"
+varProp ="True"
+varChoice ="True"
+varD ="False"
+varR ="False"
+varX ="False"
+varE ="False"
+varQ ="False"
+varV ="False"
+varGEM ="False"
+s0=T
+s1 =T
+s2 =T
+s3 =F
+s4 =F
+s5 =F
+
+seas0 = 21
+seas1 = 20
+seas2 = 19
+seas3 = ""
+seas4 = ""
+seas5 = ""
 #
-# fdp = paste0("C:/Users/jake.lamkey/Documents")
-# year= "lmer"
-# if(!dir.exists(paste0(fdp,"/",year))){
-#   dir.create(paste0(fdp,"/",year))
-# }
+doYear="False"
+doLmer="True"
+doField="False"
+# doYear=if(doYear == "True"){doYear=T}else(doYear=F)
+# doField=if(doField == "True"){doField=T}else(doField=F)
+# doLmer=if(doLmer == "True"){doLmer=T}else(doLmer=F)#doYear,
+doDNN=F
+ folder=year
 #
-# x="11_8_2021"
-# #ws = paste0('R:/Breeding/MT_TP/Models/Data/Department Data/YT_BV Yield Trial Master Catalog ',x, ".csv")
-# ws=paste0("C:/Users/jake.lamkey/Documents/YT_BV Yield Trial Master Catalog ",x, ".csv")
-#
-# # #date="12_22_2021"
-# # #ws = paste0("P:/Temp/PedAdjust ",date,".csv")
-# wdp = paste0("C:/Users/jake.lamkey/Documents")
-# varA ="True"
-# varB ="False"
-# varC ="False"
-# varProp ="True"
-# varChoice ="False"
-# varD ="False"
-# varR ="False"
-# varX ="False"
-# varE ="False"
-# varQ ="False"
-# varV ="False"
-# varGEM ="False"
-# s0=T
-# s1 =T
-# s2 =T
-# s3 =F
-# s4 =F
-# s5 =F
-#
-# seas0 = 21
-# seas1 = 20
-# seas2 = 19
-# seas3 = ""
-# seas4 = ""
-# seas5 = ""
-# #
-# doYear="False"
-# doLmer="True"
-# doField="False"
-# # doYear=if(doYear == "True"){doYear=T}else(doYear=F)
-# # doField=if(doField == "True"){doField=T}else(doField=F)
-# # doLmer=if(doLmer == "True"){doLmer=T}else(doLmer=F)#doYear,
-# doDNN=F
-#  folder=year
-# #
-# season0=as.numeric(seas0)
-# season1=as.numeric(seas1)
-# season2=as.numeric(seas2)
-# season3=as.numeric(seas3)
-# season4=as.numeric(seas4)
-# season5=as.numeric(seas5)
+season0=as.numeric(seas0)
+season1=as.numeric(seas1)
+season2=as.numeric(seas2)
+season3=as.numeric(seas3)
+season4=as.numeric(seas4)
+season5=as.numeric(seas5)
 # # folder=folder
 # fdp=as.character(fdp)
 #########################################################
@@ -176,10 +176,10 @@ suppressWarnings(suppressMessages(BV(fdp = fdp, #paste0("R:/Breeding/MT_TP/Model
                                      wdp = wdp, #paste0("R:/Breeding/MT_TP/Models/Data/Department Data/",folder,"/"),
                                      ws = ws,
                                      #vdp = vdp,
-                                     doHybridID=T,
-                                     doPedigreeChange =F,
+                                     doHybridID=F,
+                                     doPedigreeChange =T,
                                      doPedigreeToBecksChange=F,
-                                     doGCABV = T,
+                                     doGCABV = F,
                                      doWriteFinalPedigrees =F,
                                      InventoryPedigree = F,
                                      date="12_22_2021",

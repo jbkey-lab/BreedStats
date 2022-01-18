@@ -218,7 +218,8 @@ PedAdjust = function(  data = BV.MC.Entry.data.AB,doReduceNonCodes  ){
 
   BV.MC.Inbred <- openxlsx::read.xlsx(paste0("R:/Breeding/MT_TP/Models/Data/Department Data/NEW LINE CODES.xlsx"),1)
   BV.MC.Inbred$Pedigre_Backup = BV.MC.Inbred$PEDIGREE
-  BV.MC.Inbred = BV.MC.Inbred[,c(1:3,22,4:21)]
+  BV.MC.Inbred = BV.MC.Inbred[,c(1:3,21,4:20)]
+  BV.MC.Inbred = BV.MC.Inbred[!is.na(BV.MC.Inbred$PEDIGREE),]
 
   to_search_in <- data.table(linked.peds[!duplicated(linked.peds$match),c(3)])
   colnames(to_search_in)=c("unique")
@@ -300,13 +301,13 @@ PedAdjust = function(  data = BV.MC.Entry.data.AB,doReduceNonCodes  ){
   #############################################################
   BV.MC.Inbred <- openxlsx::read.xlsx(paste0("R:/Breeding/MT_TP/Models/Data/Department Data/NEW LINE CODES.xlsx"),1)
   BV.MC.Inbred$Pedigre_Backup = BV.MC.Inbred$PEDIGREE
-  BV.MC.Inbred = BV.MC.Inbred[,c(1:3,22,4:21)]
-
+  BV.MC.Inbred = BV.MC.Inbred[,c(1:3,21,4:20)]
+  BV.MC.Inbred = BV.MC.Inbred[!is.na(BV.MC.Inbred$PEDIGREE),]
 
   ###run pedigree reduction function
   #source("R:/Breeding/MT_TP/Models/R-Scripts/greplPeds.R")
 
-  newData=pedigreeReduce(data=BV.MC.Inbred, Codes=T)
+  newData=pedigreeReduce( data=BV.MC.Inbred, Codes=T)
 
   BV.MC.Inbred = newData
   # rm(data,newData)
