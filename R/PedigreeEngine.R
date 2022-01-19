@@ -91,6 +91,8 @@
 pcSelector = function(commericalType, altCommericalType,BV.MC.Entry.data=BV.MC.Entry.data,s0,s1,s2,s3,s4,s5,
                       season0,season1,season2,season3,season4,season5){
   BV.MC.Entry.data=data.frame(BV.MC.Entry.data)
+  Book.Season = BV.MC.Entry.data$Book.Season
+  Entry.Book.Name = BV.MC.Entry.data$Entry.Book.Name
 
   if(s0){BV.MC.Entry.filterProps0 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season0,"S: Corn")) %>% filter(grepl(commericalType, Entry.Book.Name))
   BV.MC.Entry.filterProp0 <- BV.MC.Entry.data %>%filter(`Book.Season`== paste0(season0,"S: Corn")) %>%  filter(grepl(altCommericalType, Entry.Book.Name))
@@ -156,6 +158,11 @@ pcSelector = function(commericalType, altCommericalType,BV.MC.Entry.data=BV.MC.E
 levelSelector = function(level,BV.MC.Entry.data=BV.MC.Entry.data,s0,s1,s2,s3,s4,s5,
                          season0,season1,season2,season3,season4,season5){
   BV.MC.Entry.data=data.frame(BV.MC.Entry.data)
+  cat("A")
+  cat(colnames(BV.MC.Entry.data))
+  Book.Season = BV.MC.Entry.data$Book.Season
+  Entry.Book.Name = BV.MC.Entry.data$Entry.Book.Name
+
   if(s0){BV.MC.Entry.filterAs0 <- BV.MC.Entry.data %>% filter(paste0(season0,"S: Corn") == `Book.Season`) %>% filter(grepl(paste0(season0,paste0(level) ),Entry.Book.Name))}
   if(s0){BV.MC.Entry.filterAs0.1 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season0,"S: Corn")) %>% filter(grepl(paste0(season0-10,level),Entry.Book.Name)) %>%
     filter(!grepl(paste0("Prop"),substr(Entry.Book.Name,1,4)))}

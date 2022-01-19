@@ -236,7 +236,7 @@ xgblinearBV = function(){
       # # #qrf4=caretModelSpec(method="qrf", ntree = 150, tuneLength = 1), #7
       #qrf5=caretModelSpec(method="qrf", ntree=10, tuneLength = 1), #5
       qrf6=caretModelSpec(method="xgbLinear", tuneGrid = final_grid2), #5
-      #qrf5=caretModelSpec(method="xgbLinear", tuneGrid = final_grid1), #5
+      qrf5=caretModelSpec(method="qrf",ntree=10, tuneLength = 1), #5
       #qrf6=caretModelSpec(method="xgbLinear", tuneGrid = final_grid2), #5
 
       qrf7=caretModelSpec(method="xgbLinear", tuneGrid = final_grid3), #5
