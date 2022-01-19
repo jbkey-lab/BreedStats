@@ -88,6 +88,140 @@
 #
 
 #source("R:/Breeding/MT_TP/Models/R-Scripts/greplPeds.R")
+pcSelector = function(commericalType, altCommericalType,BV.MC.Entry.data=BV.MC.Entry.data,s0,s1,s2,s3,s4,s5,
+                      season0,season1,season2,season3,season4,season5){
+  BV.MC.Entry.data=data.frame(BV.MC.Entry.data)
+
+  if(s0){BV.MC.Entry.filterProps0 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season0,"S: Corn")) %>% filter(grepl(commericalType, Entry.Book.Name))
+  BV.MC.Entry.filterProp0 <- BV.MC.Entry.data %>%filter(`Book.Season`== paste0(season0,"S: Corn")) %>%  filter(grepl(altCommericalType, Entry.Book.Name))
+
+  BV.MC.Entry.filterProp00 = rbind(BV.MC.Entry.filterProps0,
+                                   BV.MC.Entry.filterProp0)
+  }
+
+  if(s1){BV.MC.Entry.filterProps1 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season1,"S: Corn")) %>% filter(grepl(commericalType, Entry.Book.Name))
+  BV.MC.Entry.filterProp1 <- BV.MC.Entry.data %>%filter(`Book.Season`== paste0(season1,"S: Corn")) %>%  filter(grepl(altCommericalType, Entry.Book.Name))
+
+  BV.MC.Entry.filterProp10 = rbind(BV.MC.Entry.filterProps1,
+                                   BV.MC.Entry.filterProp1)
+  }
+
+  if(s2){BV.MC.Entry.filterProps2 <- BV.MC.Entry.data %>%filter(`Book.Season`== paste0(season2,"S: Corn")) %>%  filter(grepl(commericalType, Entry.Book.Name))
+  BV.MC.Entry.filterProp2 <- BV.MC.Entry.data %>%filter(`Book.Season`== paste0(season2,"S: Corn")) %>%  filter(grepl(altCommericalType, Entry.Book.Name))
+
+  BV.MC.Entry.filterProp20 = rbind(BV.MC.Entry.filterProps2,
+                                   BV.MC.Entry.filterProp2)
+  }
+
+  if(s3){BV.MC.Entry.filterProps3 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season3,"S: Corn")) %>% filter(grepl(commericalType, Entry.Book.Name))
+  BV.MC.Entry.filterProp3 <- BV.MC.Entry.data %>%filter(`Book.Season`== paste0(season3,"S: Corn")) %>%  filter(grepl(altCommericalType, Entry.Book.Name))
+
+  BV.MC.Entry.filterProp30 = rbind(BV.MC.Entry.filterProps3,
+                                   BV.MC.Entry.filterProp3)
+  }
+
+  if(s4){BV.MC.Entry.filterProps4 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season4,"S: Corn")) %>% filter(grepl(commericalType, Entry.Book.Name))
+  BV.MC.Entry.filterProp4 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season4,"S: Corn")) %>%filter(grepl(altCommericalType, Entry.Book.Name))
+
+  BV.MC.Entry.filterProp40 = rbind(BV.MC.Entry.filterProps4,
+                                   BV.MC.Entry.filterProp4)
+  }
+
+  if(s5){BV.MC.Entry.filterProps5 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season5,"S: Corn")) %>%filter(grepl(commericalType, Entry.Book.Name))
+  BV.MC.Entry.filterProp5 <- BV.MC.Entry.data %>%filter(`Book.Season`== paste0(season5,"S: Corn")) %>% filter(grepl(altCommericalType, Entry.Book.Name))
+
+  BV.MC.Entry.filterProp50 = rbind(BV.MC.Entry.filterProps5,
+                                   BV.MC.Entry.filterProp5)
+  }
+
+  BV.MC.Entry.filter = rbind(if(s0){BV.MC.Entry.filterProp00},
+                             if(s1){BV.MC.Entry.filterProp10},
+                             if(s2){BV.MC.Entry.filterProp20},
+                             if(s3){BV.MC.Entry.filterProp30},
+                             if(s4){BV.MC.Entry.filterProp40},
+                             if(s5){BV.MC.Entry.filterProp50}
+
+
+  )
+  BV.MC.Entry.filter= BV.MC.Entry.filter[!duplicated(BV.MC.Entry.filter$RecId), ]
+  rm(BV.MC.Entry.filterProp20,BV.MC.Entry.filterProp30,BV.MC.Entry.filterProp40,BV.MC.Entry.filterProp50,
+     BV.MC.Entry.filterProps0, BV.MC.Entry.filterProp0, BV.MC.Entry.filterProps1, BV.MC.Entry.filterProp1,
+     BV.MC.Entry.filterProps2, BV.MC.Entry.filterProp2,BV.MC.Entry.filterProps3, BV.MC.Entry.filterProp3,
+     BV.MC.Entry.filterProps4, BV.MC.Entry.filterProp4,BV.MC.Entry.filterProps5, BV.MC.Entry.filterProp5)
+
+  invisible(gc())
+  return(BV.MC.Entry.filter)
+}
+
+levelSelector = function(level,BV.MC.Entry.data=BV.MC.Entry.data,s0,s1,s2,s3,s4,s5,
+                         season0,season1,season2,season3,season4,season5){
+  BV.MC.Entry.data=data.frame(BV.MC.Entry.data)
+  if(s0){BV.MC.Entry.filterAs0 <- BV.MC.Entry.data %>% filter(paste0(season0,"S: Corn") == `Book.Season`) %>% filter(grepl(paste0(season0,paste0(level) ),Entry.Book.Name))}
+  if(s0){BV.MC.Entry.filterAs0.1 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season0,"S: Corn")) %>% filter(grepl(paste0(season0-10,level),Entry.Book.Name)) %>%
+    filter(!grepl(paste0("Prop"),substr(Entry.Book.Name,1,4)))}
+  if(s0){BV.MC.Entry.filterAs0.2 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season0,"S: Corn")) %>% filter(grepl(paste0("Group ",level),Entry.Book.Name))}
+
+
+  if(s1){BV.MC.Entry.filterAs1 <- BV.MC.Entry.data %>% filter(paste0(season1,"S: Corn") == `Book.Season`) %>% filter(grepl(paste0(season1,paste0(level) ),Entry.Book.Name))}
+  if(s1){BV.MC.Entry.filterAs1.1 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season1,"S: Corn")) %>% filter(grepl(paste0(season1-10,level),Entry.Book.Name)) %>%
+    filter(!grepl(paste0("Prop"),substr(Entry.Book.Name,1,4)))}
+  if(s1){BV.MC.Entry.filterAs1.2 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season1,"S: Corn")) %>% filter(grepl(paste0("Group ",level),Entry.Book.Name))}
+
+
+  if(s2){BV.MC.Entry.filterAs2 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season2,"S: Corn")) %>% filter(grepl(paste0(season2,level),Entry.Book.Name))}
+  if(s2){BV.MC.Entry.filterAs2.1 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season2,"S: Corn")) %>%filter(grepl(paste0(season2-10,level),Entry.Book.Name))%>%
+    filter(!grepl(paste0("Prop"),substr(Entry.Book.Name,1,4)))}
+  if(s2){BV.MC.Entry.filterAs2.2 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season2,"S: Corn")) %>% filter(grepl(paste0("Group ",level),Entry.Book.Name))}
+
+
+  if(s3){BV.MC.Entry.filterAs3 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season3,"S: Corn")) %>% filter(grepl(paste0(level),substr(Entry.Book.Name,1,1)))}
+  if(s3){BV.MC.Entry.filterAs3.1 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season3,"S: Corn")) %>%filter(grepl(paste0(season3-10,level),Entry.Book.Name))%>%
+    filter(!grepl(paste0("Prop"),substr(Entry.Book.Name,1,4)))}
+  if(s3){BV.MC.Entry.filterAs3.2 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season3,"S: Corn")) %>% filter(grepl(paste0("Group ",level),Entry.Book.Name))}
+
+
+  if(s4){BV.MC.Entry.filterAs4 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season4,"S: Corn")) %>% filter(grepl(paste0(level),substr(Entry.Book.Name,1,1)))}
+  if(s4){BV.MC.Entry.filterAs4.1 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season4,"S: Corn")) %>% filter(grepl(paste0(season4-10,level),Entry.Book.Name))%>%
+    filter(!grepl(paste0("Prop"),substr(Entry.Book.Name,1,4)))}
+  if(s4){BV.MC.Entry.filterAs4.2 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season4,"S: Corn")) %>% filter(grepl(paste0("Group ",level),Entry.Book.Name))}
+
+
+  if(s5){BV.MC.Entry.filterAs5 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season5,"S: Corn")) %>% filter(grepl(paste0(level),substr(Entry.Book.Name,1,1))) %>%
+    filter(Entry.Book.Name != "Agrivida - Nash", Entry.Book.Name != "Agrivida - Crehan", Entry.Book.Name != "AT Herb")}
+  if(s5){BV.MC.Entry.filterAs5.1 <- BV.MC.Entry.data %>%filter(`Book.Season`== paste0(season5,"S: Corn")) %>% filter(grepl(paste0(season5-10,level),Entry.Book.Name))%>%
+    filter(!grepl(paste0("Prop"),substr(Entry.Book.Name,1,4)))}
+  if(s5){BV.MC.Entry.filterAs5.2 <- BV.MC.Entry.data %>%filter(`Book.Season`== paste0(season5,"S: Corn")) %>% filter(grepl(paste0("Group ",level),Entry.Book.Name))}
+  #BV.MC.Entry.filterAs5.1=BV.MC.Entry.filterAs5.1[c(1:),]
+
+  BV.MC.Entry.filterA = rbind(if(s0){BV.MC.Entry.filterAs0},
+                              if(s0){BV.MC.Entry.filterAs0.1},
+                              if(s0){BV.MC.Entry.filterAs0.2},
+                              if(s1){BV.MC.Entry.filterAs1},
+                              if(s1){BV.MC.Entry.filterAs1.1},
+                              if(s1){BV.MC.Entry.filterAs1.2},
+                              if(s2){BV.MC.Entry.filterAs2},
+                              if(s2){BV.MC.Entry.filterAs2.1},
+                              if(s2){BV.MC.Entry.filterAs2.2},
+                              if(s3){BV.MC.Entry.filterAs3},
+                              if(s3){BV.MC.Entry.filterAs3.1},
+                              if(s3){BV.MC.Entry.filterAs3.2},
+                              if(s4){BV.MC.Entry.filterAs4},
+                              if(s4){BV.MC.Entry.filterAs4.1},
+                              if(s4){BV.MC.Entry.filterAs4.2},
+                              if(s5){BV.MC.Entry.filterAs5},
+                              if(s5){BV.MC.Entry.filterAs5.1},
+                              if(s5){BV.MC.Entry.filterAs5.2}
+  )
+  BV.MC.Entry.filter = BV.MC.Entry.filterA[!duplicated(BV.MC.Entry.filterA$RecId),]
+  rm(BV.MC.Entry.filterAs1,BV.MC.Entry.filterAs1.1,BV.MC.Entry.filterAs1.2,BV.MC.Entry.filterAs2,BV.MC.Entry.filterAs2.1,
+     BV.MC.Entry.filterAs2.2,BV.MC.Entry.filterAs3,BV.MC.Entry.filterAs3.1,BV.MC.Entry.filterAs3.2,BV.MC.Entry.filterAs4,
+     BV.MC.Entry.filterAs4.1,BV.MC.Entry.filterAs4.2,BV.MC.Entry.filterAs5,BV.MC.Entry.filterAs5.1,BV.MC.Entry.filterAs5.2,
+     BV.MC.Entry.filterA,BV.MC.Entry.filterAs0,BV.MC.Entry.filterAs0.1,BV.MC.Entry.filterAs0.2)
+  invisible(gc())
+  #dim(BV.MC.Entry.filterA)
+  return(BV.MC.Entry.filter)
+}
+
 
 pedigreeEngine = function(ws,
                           season0,
@@ -170,9 +304,9 @@ pedigreeEngine = function(ws,
   BV.MC.Entry.data$Plot.Status = as.character(BV.MC.Entry.data$Plot.Status)
   cat("E","\n")
 
-  cat(A, B, C, Prop, Choice, D, R, X, E, Q, V, GEM, ws,"\n")
-  cat(season0,season1,season2,season3,season4,season5,"\n")
-  cat(s0,s1,s2,s3,s4,s5,"\n")
+  #cat(A, B, C, Prop, Choice, D, R, X, E, Q, V, GEM, ws,"\n")
+  #cat(season0,season1,season2,season3,season4,season5,"\n")
+  #cat(s0,s1,s2,s3,s4,s5,"\n")
 
   BV.MC.Entry.data <- BV.MC.Entry.data %>% dplyr::filter(#Plot.Discarded != "Yes", Plot.Status != "3 - Bad",
     Pedigree != "FILL",
@@ -183,101 +317,55 @@ pedigreeEngine = function(ws,
     Entry.Book.Name != "INBRED-GW_Prop"
   )
   dim(BV.MC.Entry.data)
-  levelSelector = function(level="A"){
-    if(s0){BV.MC.Entry.filterAs0 <- BV.MC.Entry.data %>% filter(paste0(season0,"S: Corn") == `Book.Season`) %>% filter(grepl(paste0(season0,paste0(level) ),Entry.Book.Name))}
-    if(s0){BV.MC.Entry.filterAs0.1 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season0,"S: Corn")) %>% filter(grepl(paste0(season0-10,level),Entry.Book.Name)) %>%
-      filter(!grepl(paste0("Prop"),substr(Entry.Book.Name,1,4)))}
-    if(s0){BV.MC.Entry.filterAs0.2 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season0,"S: Corn")) %>% filter(grepl(paste0("Group ",level),Entry.Book.Name))}
 
-
-    if(s1){BV.MC.Entry.filterAs1 <- BV.MC.Entry.data %>% filter(paste0(season1,"S: Corn") == `Book.Season`) %>% filter(grepl(paste0(season1,paste0(level) ),Entry.Book.Name))}
-    if(s1){BV.MC.Entry.filterAs1.1 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season1,"S: Corn")) %>% filter(grepl(paste0(season1-10,level),Entry.Book.Name)) %>%
-      filter(!grepl(paste0("Prop"),substr(Entry.Book.Name,1,4)))}
-    if(s1){BV.MC.Entry.filterAs1.2 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season1,"S: Corn")) %>% filter(grepl(paste0("Group ",level),Entry.Book.Name))}
-
-
-    if(s2){BV.MC.Entry.filterAs2 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season2,"S: Corn")) %>% filter(grepl(paste0(season2,level),Entry.Book.Name))}
-    if(s2){BV.MC.Entry.filterAs2.1 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season2,"S: Corn")) %>%filter(grepl(paste0(season2-10,level),Entry.Book.Name))%>%
-      filter(!grepl(paste0("Prop"),substr(Entry.Book.Name,1,4)))}
-    if(s2){BV.MC.Entry.filterAs2.2 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season2,"S: Corn")) %>% filter(grepl(paste0("Group ",level),Entry.Book.Name))}
-
-
-    if(s3){BV.MC.Entry.filterAs3 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season3,"S: Corn")) %>% filter(grepl(paste0(level),substr(Entry.Book.Name,1,1)))}
-    if(s3){BV.MC.Entry.filterAs3.1 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season3,"S: Corn")) %>%filter(grepl(paste0(season3-10,level),Entry.Book.Name))%>%
-      filter(!grepl(paste0("Prop"),substr(Entry.Book.Name,1,4)))}
-    if(s3){BV.MC.Entry.filterAs3.2 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season3,"S: Corn")) %>% filter(grepl(paste0("Group ",level),Entry.Book.Name))}
-
-
-    if(s4){BV.MC.Entry.filterAs4 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season4,"S: Corn")) %>% filter(grepl(paste0(level),substr(Entry.Book.Name,1,1)))}
-    if(s4){BV.MC.Entry.filterAs4.1 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season4,"S: Corn")) %>% filter(grepl(paste0(season4-10,level),Entry.Book.Name))%>%
-      filter(!grepl(paste0("Prop"),substr(Entry.Book.Name,1,4)))}
-    if(s4){BV.MC.Entry.filterAs4.2 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season4,"S: Corn")) %>% filter(grepl(paste0("Group ",level),Entry.Book.Name))}
-
-
-    if(s5){BV.MC.Entry.filterAs5 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season5,"S: Corn")) %>% filter(grepl(paste0(level),substr(Entry.Book.Name,1,1))) %>%
-      filter(Entry.Book.Name != "Agrivida - Nash", Entry.Book.Name != "Agrivida - Crehan", Entry.Book.Name != "AT Herb")}
-    if(s5){BV.MC.Entry.filterAs5.1 <- BV.MC.Entry.data %>%filter(`Book.Season`== paste0(season5,"S: Corn")) %>% filter(grepl(paste0(season5-10,level),Entry.Book.Name))%>%
-      filter(!grepl(paste0("Prop"),substr(Entry.Book.Name,1,4)))}
-    if(s5){BV.MC.Entry.filterAs5.2 <- BV.MC.Entry.data %>%filter(`Book.Season`== paste0(season5,"S: Corn")) %>% filter(grepl(paste0("Group ",level),Entry.Book.Name))}
-    #BV.MC.Entry.filterAs5.1=BV.MC.Entry.filterAs5.1[c(1:),]
-
-    BV.MC.Entry.filterA = rbind(if(s0){BV.MC.Entry.filterAs0},
-                                if(s0){BV.MC.Entry.filterAs0.1},
-                                if(s0){BV.MC.Entry.filterAs0.2},
-                                if(s1){BV.MC.Entry.filterAs1},
-                                if(s1){BV.MC.Entry.filterAs1.1},
-                                if(s1){BV.MC.Entry.filterAs1.2},
-                                if(s2){BV.MC.Entry.filterAs2},
-                                if(s2){BV.MC.Entry.filterAs2.1},
-                                if(s2){BV.MC.Entry.filterAs2.2},
-                                if(s3){BV.MC.Entry.filterAs3},
-                                if(s3){BV.MC.Entry.filterAs3.1},
-                                if(s3){BV.MC.Entry.filterAs3.2},
-                                if(s4){BV.MC.Entry.filterAs4},
-                                if(s4){BV.MC.Entry.filterAs4.1},
-                                if(s4){BV.MC.Entry.filterAs4.2},
-                                if(s5){BV.MC.Entry.filterAs5},
-                                if(s5){BV.MC.Entry.filterAs5.1},
-                                if(s5){BV.MC.Entry.filterAs5.2}
-    )
-    BV.MC.Entry.filter = BV.MC.Entry.filterA[!duplicated(BV.MC.Entry.filterA$RecId),]
-    rm(BV.MC.Entry.filterAs1,BV.MC.Entry.filterAs1.1,BV.MC.Entry.filterAs1.2,BV.MC.Entry.filterAs2,BV.MC.Entry.filterAs2.1,
-       BV.MC.Entry.filterAs2.2,BV.MC.Entry.filterAs3,BV.MC.Entry.filterAs3.1,BV.MC.Entry.filterAs3.2,BV.MC.Entry.filterAs4,
-       BV.MC.Entry.filterAs4.1,BV.MC.Entry.filterAs4.2,BV.MC.Entry.filterAs5,BV.MC.Entry.filterAs5.1,BV.MC.Entry.filterAs5.2,
-       BV.MC.Entry.filterA,BV.MC.Entry.filterAs0,BV.MC.Entry.filterAs0.1,BV.MC.Entry.filterAs0.2)
-    invisible(gc())
-    #dim(BV.MC.Entry.filterA)
-    return(BV.MC.Entry.filter)
-  }
-
-  BV.MC.Entry.filterA = levelSelector(level="A")
+  BV.MC.Entry.filterA = levelSelector(level="A",BV.MC.Entry.data=BV.MC.Entry.data,s0=s0,s1=s1,s2=s2,s3=s3,s4=s4,s5=s5,
+                                      season0=season0,season1=season1,season2=season2,
+                                      season3=season3,season4=season4,season5=season5)
   dim(BV.MC.Entry.filterA)
 
-  BV.MC.Entry.filterB = levelSelector(level="B")
+  BV.MC.Entry.filterB = levelSelector(level="B",BV.MC.Entry.data=BV.MC.Entry.data,s0=s0,s1=s1,s2=s2,s3=s3,s4=s4,s5=s5,
+                                      season0=season0,season1=season1,season2=season2,
+                                      season3=season3,season4=season4,season5=season5)
   dim(BV.MC.Entry.filterB)
 
-  BV.MC.Entry.filterC = levelSelector(level="C")
+  BV.MC.Entry.filterC = levelSelector(level="C",BV.MC.Entry.data=BV.MC.Entry.data,s0=s0,s1=s1,s2=s2,s3=s3,s4=s4,s5=s5,
+                                      season0=season0,season1=season1,season2=season2,
+                                      season3=season3,season4=season4,season5=season5)
   dim(BV.MC.Entry.filterC)
 
-  BV.MC.Entry.filterE= levelSelector(level="E")
+  BV.MC.Entry.filterE= levelSelector(level="E",BV.MC.Entry.data=BV.MC.Entry.data,s0=s0,s1=s1,s2=s2,s3=s3,s4=s4,s5=s5,
+                                     season0=season0,season1=season1,season2=season2,
+                                     season3=season3,season4=season4,season5=season5)
   dim(BV.MC.Entry.filterE)
 
-  BV.MC.Entry.filterR = levelSelector(level="R")
+  BV.MC.Entry.filterR = levelSelector(level="R",BV.MC.Entry.data=BV.MC.Entry.data,s0=s0,s1=s1,s2=s2,s3=s3,s4=s4,s5=s5,
+                                      season0=season0,season1=season1,season2=season2,
+                                      season3=season3,season4=season4,season5=season5)
   dim(BV.MC.Entry.filterR)
 
-  BV.MC.Entry.filterX = levelSelector(level="X")
+  BV.MC.Entry.filterX = levelSelector(level="X",BV.MC.Entry.data=BV.MC.Entry.data,s0=s0,s1=s1,s2=s2,s3=s3,s4=s4,s5=s5,
+                                      season0=season0,season1=season1,season2=season2,
+                                      season3=season3,season4=season4,season5=season5)
   dim(BV.MC.Entry.filterX)
 
-  BV.MC.Entry.filterD = levelSelector(level="D")
+  BV.MC.Entry.filterD = levelSelector(level="D",BV.MC.Entry.data=BV.MC.Entry.data,s0=s0,s1=s1,s2=s2,s3=s3,s4=s4,s5=s5,
+                                      season0=season0,season1=season1,season2=season2,
+                                      season3=season3,season4=season4,season5=season5)
   dim(BV.MC.Entry.filterD)
 
-  BV.MC.Entry.filterQ = levelSelector(level="Q")
+  BV.MC.Entry.filterQ = levelSelector(level="Q",BV.MC.Entry.data=BV.MC.Entry.data,s0=s0,s1=s1,s2=s2,s3=s3,s4=s4,s5=s5,
+                                      season0=season0,season1=season1,season2=season2,
+                                      season3=season3,season4=season4,season5=season5)
   dim(BV.MC.Entry.filterQ)
 
-  BV.MC.Entry.filterV = levelSelector(level="V")
+  BV.MC.Entry.filterV = levelSelector(level="V",BV.MC.Entry.data=BV.MC.Entry.data,s0=s0,s1=s1,s2=s2,s3=s3,s4=s4,s5=s5,
+                                      season0=season0,season1=season1,season2=season2,
+                                      season3=season3,season4=season4,season5=season5)
   dim(BV.MC.Entry.filterV)
 
-  BV.MC.Entry.filterGEM = levelSelector(level="GEM")
+  BV.MC.Entry.filterGEM = levelSelector(level="GEM",BV.MC.Entry.data=BV.MC.Entry.data,s0=s0,s1=s1,s2=s2,s3=s3,s4=s4,s5=s5,
+                                        season0=season0,season1=season1,season2=season2,
+                                        season3=season3,season4=season4,season5=season5)
   dim(BV.MC.Entry.filterGEM)
   cat("F")
   ## reset message sink and close the file connection
@@ -285,72 +373,16 @@ pedigreeEngine = function(ws,
 
 
 
-  pcSelector = function(commericalType = "Choice", altCommericalType = "CHOICE"){
 
-    if(s0){BV.MC.Entry.filterProps0 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season0,"S: Corn")) %>% filter(grepl(commericalType, Entry.Book.Name))
-    BV.MC.Entry.filterProp0 <- BV.MC.Entry.data %>%filter(`Book.Season`== paste0(season0,"S: Corn")) %>%  filter(grepl(altCommericalType, Entry.Book.Name))
-
-    BV.MC.Entry.filterProp00 = rbind(BV.MC.Entry.filterProps0,
-                                     BV.MC.Entry.filterProp0)
-    }
-
-    if(s1){BV.MC.Entry.filterProps1 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season1,"S: Corn")) %>% filter(grepl(commericalType, Entry.Book.Name))
-    BV.MC.Entry.filterProp1 <- BV.MC.Entry.data %>%filter(`Book.Season`== paste0(season1,"S: Corn")) %>%  filter(grepl(altCommericalType, Entry.Book.Name))
-
-    BV.MC.Entry.filterProp10 = rbind(BV.MC.Entry.filterProps1,
-                                     BV.MC.Entry.filterProp1)
-    }
-
-    if(s2){BV.MC.Entry.filterProps2 <- BV.MC.Entry.data %>%filter(`Book.Season`== paste0(season2,"S: Corn")) %>%  filter(grepl(commericalType, Entry.Book.Name))
-    BV.MC.Entry.filterProp2 <- BV.MC.Entry.data %>%filter(`Book.Season`== paste0(season2,"S: Corn")) %>%  filter(grepl(altCommericalType, Entry.Book.Name))
-
-    BV.MC.Entry.filterProp20 = rbind(BV.MC.Entry.filterProps2,
-                                     BV.MC.Entry.filterProp2)
-    }
-
-    if(s3){BV.MC.Entry.filterProps3 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season3,"S: Corn")) %>% filter(grepl(commericalType, Entry.Book.Name))
-    BV.MC.Entry.filterProp3 <- BV.MC.Entry.data %>%filter(`Book.Season`== paste0(season3,"S: Corn")) %>%  filter(grepl(altCommericalType, Entry.Book.Name))
-
-    BV.MC.Entry.filterProp30 = rbind(BV.MC.Entry.filterProps3,
-                                     BV.MC.Entry.filterProp3)
-    }
-
-    if(s4){BV.MC.Entry.filterProps4 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season4,"S: Corn")) %>% filter(grepl(commericalType, Entry.Book.Name))
-    BV.MC.Entry.filterProp4 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season4,"S: Corn")) %>%filter(grepl(altCommericalType, Entry.Book.Name))
-
-    BV.MC.Entry.filterProp40 = rbind(BV.MC.Entry.filterProps4,
-                                     BV.MC.Entry.filterProp4)
-    }
-
-    if(s5){BV.MC.Entry.filterProps5 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season5,"S: Corn")) %>%filter(grepl(commericalType, Entry.Book.Name))
-    BV.MC.Entry.filterProp5 <- BV.MC.Entry.data %>%filter(`Book.Season`== paste0(season5,"S: Corn")) %>% filter(grepl(altCommericalType, Entry.Book.Name))
-
-    BV.MC.Entry.filterProp50 = rbind(BV.MC.Entry.filterProps5,
-                                     BV.MC.Entry.filterProp5)
-    }
-
-    BV.MC.Entry.filter = rbind(if(s0){BV.MC.Entry.filterProp00},
-                               if(s1){BV.MC.Entry.filterProp10},
-                               if(s2){BV.MC.Entry.filterProp20},
-                               if(s3){BV.MC.Entry.filterProp30},
-                               if(s4){BV.MC.Entry.filterProp40},
-                               if(s5){BV.MC.Entry.filterProp50}
-
-
-    )
-    BV.MC.Entry.filter= BV.MC.Entry.filter[!duplicated(BV.MC.Entry.filter$RecId), ]
-    rm(BV.MC.Entry.filterProp20,BV.MC.Entry.filterProp30,BV.MC.Entry.filterProp40,BV.MC.Entry.filterProp50,
-       BV.MC.Entry.filterProps0, BV.MC.Entry.filterProp0, BV.MC.Entry.filterProps1, BV.MC.Entry.filterProp1,
-       BV.MC.Entry.filterProps2, BV.MC.Entry.filterProp2,BV.MC.Entry.filterProps3, BV.MC.Entry.filterProp3,
-       BV.MC.Entry.filterProps4, BV.MC.Entry.filterProp4,BV.MC.Entry.filterProps5, BV.MC.Entry.filterProp5)
-
-    invisible(gc())
-    return(BV.MC.Entry.filter)
-  }
-
-  BV.MC.Entry.filterChoice = pcSelector(commericalType = "Choice", altCommericalType = "CHOICE")
+  BV.MC.Entry.filterChoice = pcSelector(commericalType = "Choice", altCommericalType = "CHOICE",
+                                        BV.MC.Entry.data=BV.MC.Entry.data,s0=s0,s1=s1,s2=s2,s3=s3,s4=s4,s5=s5,
+                                        season0=season0,season1=season1,season2=season2,
+                                        season3=season3,season4=season4,season5=season5)
   dim(BV.MC.Entry.filterChoice)
-  BV.MC.Entry.filterProp = pcSelector(commericalType = "Prop", altCommericalType = "PET")
+  BV.MC.Entry.filterProp = pcSelector(commericalType = "Prop", altCommericalType = "PET",
+                                      BV.MC.Entry.data=BV.MC.Entry.data,s0=s0,s1=s1,s2=s2,s3=s3,s4=s4,s5=s5,
+                                      season0=season0,season1=season1,season2=season2,
+                                      season3=season3,season4=season4,season5=season5)
   dim(BV.MC.Entry.filterProp)
 
   cat("G")

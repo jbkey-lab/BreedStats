@@ -1,7 +1,7 @@
 
 InventoryPedigreeAdj = function(date){
 
-  BV.Entry = fread(paste0("P:/Temp/PedAdjust ",date,".csv"))
+  BV.Entry = data.table::fread(paste0("P:/Temp/PedAdjust ",date,".csv"))
   colnames(BV.Entry)[8] = "Inv.RecId"
 
   BV.Entry = data.frame(BV.Entry)
