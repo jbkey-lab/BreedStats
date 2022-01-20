@@ -8,4 +8,4 @@ Description: A group of functions for statistics. It uses ASReml for spatial and
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
-Imports: openxlsx,tidyverse,data.table,pastecs,magick,asreml,doParallel,DiGGer,fs,lme4,lucid,parallel,foreach,caret,caretEnsemble,stats
+Imports: openxlsx,tidyverse,data.table,pastecs,doParallel,DiGGer,fs,lme4,lucid,parallel,foreach,caret,caretEnsemble,stats
