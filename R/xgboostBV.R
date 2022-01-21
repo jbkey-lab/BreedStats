@@ -1,16 +1,39 @@
+trainVal = function(data, colToInd, sample ){
+
+  ID = data[!duplicated(data[, colToInd]),  colToInd]
+  ID = data.frame(ID)
+
+  idx = sample(nrow(ID), nrow(ID) * sample) #.25
+
+  Loc_Validate = data.frame(ID=ID[-idx, ])
+  Loc_Train = data.frame(ID=ID[idx, ])
+
+  trainx2 = dplyr::inner_join(data, Loc_Train, by=colToInd) #%>% rbind(trainx1)
+  validatex2 = dplyr::inner_join(data, Loc_Validate, by=colToInd)
+  trainx2 = data.frame(trainx2)    %>% dplyr::mutate_all(as.numeric) #%>% unique()
+  validatex2 = data.frame(validatex2)    %>% dplyr::mutate_all(as.numeric)
+
+
+  return(list(data.frame(trainx2),data.frame(validatex2)))
+}
+
+randomEffect = function(CNN, CN,trainingx2, startVal=1){
+  CS = CN[1]
+  field.2 = (trainingx2[!duplicated(trainingx2[,CS]), CN])
+  field.2$num = c(startVal:(nrow(field.2)+(startVal-1)))
+  colnames(field.2)[-ncol(field.2)] = CN
+  trainingx2 = left_join(trainingx2, field.2[,c(CS,"num")], by=CS)
+  colnames(trainingx2)[ncol(trainingx2)] = CNN
+  gc()
+  return(list(data.frame(field.2), data.frame(trainingx2)))
+}
+
+
+
 
 xgblinearBV = function(){
   library(BreedStats)
-  library(data.table)
-  library(tidyverse)
-  library(doParallel)
-  library(caret)
-  library(caretEnsemble)
-  library(lme4)
-  # library(stats)
-  # library(impute)
-  # library(keras)
-  # library(RcppCNPy)
+
   # #####################################################
   s0=T
   s1 =T
@@ -37,20 +60,6 @@ xgblinearBV = function(){
 
   hdp = "C:/Users/jake.lamkey/Documents/"
 
-  dp = "C:/Users/jake.lamkey/Documents/Dataset_Competition_Zip_File/Dataset_Competition/Training/"
-  tdp = "C:/Users/jake.lamkey/Documents/Dataset_Competition_Zip_File/Dataset_Competition/Test Inputs/"
-  gdp = "C:/Users/jake.lamkey/Documents/Dataset_Competition_Zip_File/Dataset_Competition/"
-
-  #####################################################
-
-  # o.train <- fread(paste0(dp,"inputs_others_train.csv"))[,-1]
-  # #w.train <- fread(paste0(dp,"inputs_weather_train.csv"))[,-1]
-  # y.train <- fread(paste0(dp,"yield_train.csv"))[,-1]
-  #
-  # o.test <- fread(paste0(tdp,"inputs_others_test.csv"))[,-1]
-  # #w.test <- fread(paste0(tdp,"inputs_weather_test.csv"))[,-1]
-  # geno <- fread(paste0(gdp,"clusterID_genotype.csv"))[-1788,-1]
-
   ######################################################
 
 
@@ -60,23 +69,7 @@ xgblinearBV = function(){
   trainingx2 = trainingx2 %>% filter(Plot.Discarded != "Yes",
                                      Plot.Status != "3 - Bad" )%>%data.frame()
 
-  #BV.HSIdentical.df.2 = BV.HSIdentical.df[,c(1:29,31,30,32:33)]
-  #colnames(BV.HSIdentical.df.2)[c(30:31)] = c("MALE","FEMALE")
 
-  #trainingx2 = data.frame(BV.MC.Entry.data)
-
-  # trainingx2 = rbind(BV.HSIdentical.df.2,BV.HSIdentical.df)
-  # trainingx2 = data.frame(trainingx2)
-  randomEffect = function(CNN, CN,trainingx2){
-    CS = CN[1]
-    field.2 = (trainingx2[!duplicated(trainingx2[,CS]), CN])
-    field.2$num = c(1:(nrow(field.2)+0))
-    colnames(field.2)[-ncol(field.2)] = CN
-    trainingx2 = left_join(trainingx2, field.2[,c(CS,"num")], by=CS)
-    colnames(trainingx2)[ncol(trainingx2)] = CNN
-    gc()
-    return(list(data.frame(field.2), data.frame(trainingx2)))
-  }
 
   RE = randomEffect(CNN= "field", CN=c("FIELD","LINE"),trainingx2)
   field.2 = RE[[1]]
@@ -123,20 +116,21 @@ xgblinearBV = function(){
   gc()
 
   male.3 = data.frame(male=c('BSQ033',	'GP734GTCBLL',	'BEX905',	'R08072HT',
-           'BRQ529',	'8D2',	'SGI193',	'8SY',
-           'GP718',	'FC2',	'BSR095',	'BRU059',
-           'BRQ291',	'BRP251',	'TR6254RR2',	'BSQ033-PWRA',
-           'BUR070',	'BRS312',	'8SY-AM',	'GP717Hx1',
-           'BAC020',	'TPCJ6605',	'BSU151',	'SGI193-V2P',
-           'BRQ064',	'GP6823Hx1',	'I10516',	'W8039RPGJZ',
-           'FB6455',	'BSU311',	'GP717',	'BSQ002',
-           'BAA441',	'GP738Hx1',	'BHH069',	'BQR042/BRQ064)-B-18-B',
-           '84Z',	'TR4949',	'GP695Hx1',	'BSU313',
-           'BHA493',	'R2846-NS6408DGV2P',	'I12003',	'R2846',
-           'BSR273',	'BSQ941',	'BUR032',	'PRW-AM',
-           'GP718Hx1',	'24AED-D02',"BAA419","bAA411","BHB075","BHJ471","GP702"))
+                             'BRQ529',	'8D2',	'SGI193',	'8SY',
+                             'GP718',	'FC2',	'BSR095',	'BRU059',
+                             'BRQ291',	'BRP251',	'TR6254RR2',	'BSQ033-PWRA',
+                             'BUR070',	'BRS312',	'8SY-AM',	'GP717Hx1',
+                             'BAC020',	'TPCJ6605',	'BSU151',	'SGI193-V2P',
+                             'BRQ064',	'GP6823Hx1',	'I10516',	'W8039RPGJZ',
+                             'FB6455',	'BSU311',	'GP717',	'BSQ002',
+                             'BAA441',	'GP738Hx1',	'BHH069',	'BQR042/BRQ064)-B-18-B',
+                             '84Z',	'TR4949',	'GP695Hx1',	'BSU313',
+                             'BHA493',	'R2846-NS6408DGV2P',	'I12003',	'R2846',
+                             'BSR273',	'BSQ941',	'BUR032',	'PRW-AM',
+                             'GP718Hx1',	'24AED-D02',"BAA419","bAA411","BHB075","BHJ471","GP702"))
 
   male.3 = left_join(male.3,male.2[,-2],by=c("male"="MALE") )
+
   #########################
   testx2 = expand.grid(male.3$num, female, Year.2$num, field )
   testx2 = left_join(testx2, id, by=c("Var1"="male","Var2"="female"))
@@ -168,39 +162,9 @@ xgblinearBV = function(){
   # colnames(id.unk.all) = c("female","male","line",'MALE',"FEMALE","LINE")
 
 
-
-  # field = (trainingx2[!duplicated(trainingx2$Pedigree), c("Pedigree",'LINE')])
-  # field$num = c(1:(nrow(field)+0))
-  # trainingx2 = left_join(trainingx2, field[,c(1,3)], by="Pedigree")
-  # colnames(trainingx2)[40] = "ID"
-
-
-  ID = trainingx2[!duplicated(trainingx2[,3]), 3]
-  ID = data.frame(ID)
-
-  idx = sample(nrow(ID), nrow(ID) * .95) #.25
-
-  Loc_Validate = data.frame(ID=ID[-idx, ])
-  Loc_Train = data.frame(ID=ID[idx, ])
-
-  # ID = o.train[!duplicated(o.train[,2]), 2]
-  # ID = data.frame(ID)
-  #
-  # idx = sample(nrow(ID), nrow(ID) * 0.9) #.9
-  #
-  # Loc_Validatesoy = data.frame(ID=ID[-idx, ])
-  # Loc_Trainsoy = data.frame(ID=ID[idx, ])
-  #
-  # trainx1 = inner_join(data.frame(y.train, o.train[ ,c(5,2,4)]), Loc_Trainsoy, by="ID")
-
-  trainx2 = inner_join(trainingx2, Loc_Train, by="ID") #%>% rbind(trainx1)
-  validatex2 = inner_join(trainingx2, Loc_Validate, by="ID")
-  # validatex3 = inner_join(data.frame(y.train, o.train[ ,c(5,2,4)]), Loc_Validatesoy, by="ID")
-
-  # trainx1 = data.frame(trainx1)  %>% mutate_all(as.numeric)
-  trainx2 = data.frame(trainx2)    %>% mutate_all(as.numeric) #%>% unique()
-  validatex2 = data.frame(validatex2)    %>% mutate_all(as.numeric)
-  # validatex3 = data.frame(validatex3)  %>% mutate_all(as.numeric)
+  datasets = trainVal(data = trainingx2, colToInd= "ID", sample = 0.95)
+  trainx2 = rbind(datasets[[1]], trainx1)
+  validatex2 = datasets[[2]]
 
 
   ##################################################################
@@ -211,10 +175,11 @@ xgblinearBV = function(){
   #final_grid2 <- expand.grid(nrounds = 450, eta = .5, lambda = .9, alpha=2)
 
   #final_grid3 <- expand.grid(nrounds = 500, eta = .7, lambda = .5, alpha=.9)
-  final_grid4 <- expand.grid(nrounds = c(30000), eta = .3, lambda = .8, alpha=.8)
+  final_grid4 <- expand.grid(nrounds = c(1000), eta = 1, lambda = 0.0003, alpha=0.0003)
 
   # final_grid3 <- expand.grid(mstop = 500, maxdepth = 2, nu = 0.1)
   # final_grid4 <- expand.grid(committees = 10, neighbors = 20)
+
 
   models.list2 <- caretList(
     x=trainx2[ , -1],
@@ -284,8 +249,8 @@ xgblinearBV = function(){
   invisible(gc())
   #626063 + 36001
   #----Yield Val = 59
-  #----Yield tra = 65
-  #----Yield apr = 59
+  #----Yield tra = 69
+  #----Yield apr = 63
 
   #~~~~~~~~~~~~~~~~~~
   #
@@ -315,6 +280,7 @@ xgblinearBV = function(){
   preds.test.agg.FEMALE = preds.ap %>%
     group_by(female) %>%
     summarize(preds.ap = mean(preds.ap))
+
   preds.test.agg.MALE = preds.ap %>%
     group_by(male) %>%
     summarize(preds.ap = mean(preds.ap))
@@ -348,74 +314,34 @@ xgblinearBV = function(){
   # #
   # BV.HSIdentical.df.3 = rbind(preds.test.bind.2,preds.test.bind)
   # BV.HSIdentical.df.3 = data.frame(BV.HSIdentical.df.3)
-  preds.test.agg.FEMALE = preds.test.bind %>%
-    group_by(FEMALE) %>%
-    summarize(preds.test = mean(preds.test))
-  preds.test.agg.MALE = preds.test.bind %>%
-    group_by(MALE) %>%
+
+  preds.test.agg.FIELD = preds.test.bind %>%
+    group_by(FIELD,LINE) %>%
     summarize(preds.test = mean(preds.test))
 
-  colnames(preds.test.agg.MALE) = c("FEMALE","preds.test")
-  preds.test.agg = rbind(preds.test.agg.FEMALE,preds.test.agg.MALE)
+  # preds.test.agg.FEMALE = preds.test.bind %>%
+  #   group_by(FEMALE) %>%
+  #   summarize(preds.test = mean(preds.test))
+  #
+  # preds.test.agg.MALE = preds.test.bind %>%
+  #   group_by(MALE) %>%
+  #   summarize(preds.test = mean(preds.test))
+  #
+  # colnames(preds.test.agg.MALE) = c("FEMALE","preds.test")
+  # preds.test.agg = rbind(preds.test.agg.FEMALE,preds.test.agg.MALE)
+  #
+  # preds.test.agg.FEMALE = preds.test.agg %>%
+  #   group_by(FEMALE) %>%
+  #   summarize(preds.test = mean(preds.test))
 
-  preds.test.agg.FEMALE = preds.test.agg %>%
-    group_by(FEMALE) %>%
-    summarize(preds.test = mean(preds.test))
 
-
-  write.csv(preds.test.agg.FEMALE,"E-EK-Prop.csv")
+  write.csv(preds.test.agg.FEMALE, "E-EK-Prop.csv")
   rm(preds.test,preds.test.bind,id.unk.all,df5,Blup,preds.test.bind.2, preds.test.agg.FEMALE,
      BV.HSIdentical.df.3)
   gc()
-  #cor(trainx2[, 1], preds.test)^2
-  #sqrt(mean((trainx2[, 1] -  preds.test)^2))
-
-  # preds = data.frame(validatex2, round(preds,0))
-  # preds = left_join(preds, field[,-2], by=c("variety"="num"))
-  # preds = left_join(preds, field[,-2], by=c("round.preds..0."="num"))
-
-  # #######Soybeans + 99
-  # preds = predict(NCAA.stacked,  trainx1)
-  # cor(data.frame(trainx1[,1]), (preds))^2
-  # sqrt(mean((trainx1[, 1] -  preds)^2))
-  #
-  # #######Validate Soybean 75.1
-  # preds = predict(NCAA.stacked,  validatex3)
-  # cor(data.frame(validatex3[,1]), (preds))^2
-  # sqrt(mean((validatex3[, 1] -  preds)^2))
-
 
 
 
 }
 
 
-
-
-
-
-
-# "blassoAveraged",
-# "bridge",
-# "gcvEarth",
-# "rqnc",
-# "rqlasso",
-# "relaxo",
-# "blasso"
-#"bayesglm"
-#"ctree2"
-#"brnn"
-#"glmboost"
-#"rpart1SE"
-#"rpart2"
-# "enet"
-
-
-
-#"treebag"
-#"bagEarth"
-# "bagEarthGCV"
-#"gamboost"
-#"bstSm"
-#"rpart"
-#"xgbDART"
