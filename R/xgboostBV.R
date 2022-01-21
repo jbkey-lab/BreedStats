@@ -122,12 +122,26 @@ xgblinearBV = function(){
   rm(BV.HSIdentical.df.A, BV.HSIdentical.df.Prop, BV.MC.Entry.data.test, BV.MC.Entry.data,RE)
   gc()
 
+  male.3 = data.frame(male=c('BSQ033',	'GP734GTCBLL',	'BEX905',	'R08072HT',
+           'BRQ529',	'8D2',	'SGI193',	'8SY',
+           'GP718',	'FC2',	'BSR095',	'BRU059',
+           'BRQ291',	'BRP251',	'TR6254RR2',	'BSQ033-PWRA',
+           'BUR070',	'BRS312',	'8SY-AM',	'GP717Hx1',
+           'BAC020',	'TPCJ6605',	'BSU151',	'SGI193-V2P',
+           'BRQ064',	'GP6823Hx1',	'I10516',	'W8039RPGJZ',
+           'FB6455',	'BSU311',	'GP717',	'BSQ002',
+           'BAA441',	'GP738Hx1',	'BHH069',	'BQR042/BRQ064)-B-18-B',
+           '84Z',	'TR4949',	'GP695Hx1',	'BSU313',
+           'BHA493',	'R2846-NS6408DGV2P',	'I12003',	'R2846',
+           'BSR273',	'BSQ941',	'BUR032',	'PRW-AM',
+           'GP718Hx1',	'24AED-D02',"BAA419","bAA411","BHB075","BHJ471","GP702"))
 
+  male.3 = left_join(male.3,male.2[,-2],by=c("male"="MALE") )
   #########################
-  testx2 = expand.grid(male, female, Year.2$num)
+  testx2 = expand.grid(male.3$num, female, Year.2$num, field )
   testx2 = left_join(testx2, id, by=c("Var1"="male","Var2"="female"))
   testx2= left_join(testx2, variety, by=c("ID"="ID"))
-  colnames(testx2)=c("male","female","Year","ID","variety")
+  colnames(testx2)[1:6]=c("male","female","Year","field","ID","variety")
   testx2$ID.cat = paste0(testx2$female, " + ", testx2$male)
 
   id.unk = testx2 %>% filter(is.na(ID)) %>%
@@ -138,9 +152,9 @@ xgblinearBV = function(){
   testx2 = left_join(testx2, id.unk, by=c("ID.cat"="ID.concat"))
   testx2$ID = ifelse(is.na(testx2$ID), testx2$num,testx2$ID)
   testx2$variety = ifelse(is.na(testx2$variety), nullvarnum, testx2$variety)
-  testx2$field = 9
+  #testx2$field = 9
 
-  testx2 = testx2[,c(5,4,1,2,3,8)]
+  testx2 = testx2[,c(6,5,1,2,3,4)]
   trainingx2 = na.omit(trainingx2[,c(22,39,37,35,36,38,34)]) #yield = 22, plt.height=13, ear=10
 
   # id.unk.all = id.unk %>%
@@ -194,10 +208,10 @@ xgblinearBV = function(){
   #final_grid2=expand.grid(nrounds=100, eta=.5, max_depth=5, gamma=0,colsample_bytree=0.95,min_child_weight=1,subsample = 1)
 
   #final_grid1 <- expand.grid(nrounds = 500, eta = .3, lambda = .5, alpha=1.5)
-  final_grid2 <- expand.grid(nrounds = 450, eta = .5, lambda = .9, alpha=2)
+  #final_grid2 <- expand.grid(nrounds = 450, eta = .5, lambda = .9, alpha=2)
 
-  final_grid3 <- expand.grid(nrounds = 500, eta = .7, lambda = .5, alpha=.9)
-  final_grid4 <- expand.grid(nrounds = 550, eta = .9, lambda = .9, alpha=.8)
+  #final_grid3 <- expand.grid(nrounds = 500, eta = .7, lambda = .5, alpha=.9)
+  final_grid4 <- expand.grid(nrounds = c(30000), eta = .3, lambda = .8, alpha=.8)
 
   # final_grid3 <- expand.grid(mstop = 500, maxdepth = 2, nu = 0.1)
   # final_grid4 <- expand.grid(committees = 10, neighbors = 20)
@@ -235,11 +249,11 @@ xgblinearBV = function(){
       #  qrf3=caretModelSpec(method="qrf", ntree=10, tuneLength = 1), #9
       # # #qrf4=caretModelSpec(method="qrf", ntree = 150, tuneLength = 1), #7
       #qrf5=caretModelSpec(method="qrf", ntree=10, tuneLength = 1), #5
-      qrf6=caretModelSpec(method="xgbLinear", tuneGrid = final_grid2), #5
-      qrf5=caretModelSpec(method="qrf",ntree=10, tuneLength = 1), #5
+      #qrf6=caretModelSpec(method="xgbLinear", tuneGrid = final_grid2), #5
+      #qrf5=caretModelSpec(method="qrf",ntree=10, tuneLength = 1), #5
       #qrf6=caretModelSpec(method="xgbLinear", tuneGrid = final_grid2), #5
 
-      qrf7=caretModelSpec(method="xgbLinear", tuneGrid = final_grid3), #5
+      #qrf7=caretModelSpec(method="xgbLinear", tuneGrid = final_grid3), #5
       qrf8=caretModelSpec(method="xgbLinear", tuneGrid = final_grid4) #5
 
       #qrf9=caretModelSpec(method="BstLm") #5
@@ -269,9 +283,9 @@ xgblinearBV = function(){
 
   invisible(gc())
   #626063 + 36001
-  #----Yield Val = 58
+  #----Yield Val = 59
   #----Yield tra = 65
-  #----Yield apr = 58
+  #----Yield apr = 59
 
   #~~~~~~~~~~~~~~~~~~
   #
@@ -329,39 +343,29 @@ xgblinearBV = function(){
     select(-c(1:6)) #%>%
   #filter(preds.test > 250)
 
-  preds.test.bind.2 = preds.test.bind[,c(1,3,2,4,5,6,7)]
-  colnames(preds.test.bind.2)[c(2,3)] = c("MALE","FEMALE")
-  #
-  BV.HSIdentical.df.3 = rbind(preds.test.bind.2,preds.test.bind)
-  BV.HSIdentical.df.3 = data.frame(BV.HSIdentical.df.3)
-  preds.test.agg.FEMALE = BV.HSIdentical.df.3 %>%
+  # preds.test.bind.2 = preds.test.bind[,c(1,3,2,4,5,6,7)]
+  # colnames(preds.test.bind.2)[c(2,3)] = c("MALE","FEMALE")
+  # #
+  # BV.HSIdentical.df.3 = rbind(preds.test.bind.2,preds.test.bind)
+  # BV.HSIdentical.df.3 = data.frame(BV.HSIdentical.df.3)
+  preds.test.agg.FEMALE = preds.test.bind %>%
+    group_by(FEMALE) %>%
+    summarize(preds.test = mean(preds.test))
+  preds.test.agg.MALE = preds.test.bind %>%
+    group_by(MALE) %>%
+    summarize(preds.test = mean(preds.test))
+
+  colnames(preds.test.agg.MALE) = c("FEMALE","preds.test")
+  preds.test.agg = rbind(preds.test.agg.FEMALE,preds.test.agg.MALE)
+
+  preds.test.agg.FEMALE = preds.test.agg %>%
     group_by(FEMALE) %>%
     summarize(preds.test = mean(preds.test))
 
 
-
-  DIBV = lmer(formula = preds.test ~ (1|FEMALE) + (1|MALE) + (1|YEAR) ,
-              na.action='na.exclude', REML = T,
-              control = lmerControl(
-                sparseX = T),
-              data = BV.HSIdentical.df.3[,c("YEAR","MALE","FEMALE","preds.test")] )
-
-  # 161
-  # 1073
-  sum.DIBV=print(summary(DIBV))
-  Blup = ranef(DIBV)
-  Blup=data.frame(Blup)
-  Blup = Blup %>% filter(grpvar != "MALE")
-  Blup = Blup %>% filter(grpvar != "LINE")
-  Blup = Blup %>% filter(grpvar != "YEAR")
-
-  df5 = data.frame(FEMALE = Blup$grp,
-                   PREDS = Blup$condval,
-                   BV = (Blup$condval*2) + sum.DIBV$coefficients[1],
-                   stderror = Blup$condsd)
-
-  write.csv(df5,"E-EK-Prop.csv")
-  rm(preds.test,preds.test.bind,id.unk.all,df5,Blup)
+  write.csv(preds.test.agg.FEMALE,"E-EK-Prop.csv")
+  rm(preds.test,preds.test.bind,id.unk.all,df5,Blup,preds.test.bind.2, preds.test.agg.FEMALE,
+     BV.HSIdentical.df.3)
   gc()
   #cor(trainx2[, 1], preds.test)^2
   #sqrt(mean((trainx2[, 1] -  preds.test)^2))

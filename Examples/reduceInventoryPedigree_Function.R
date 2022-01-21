@@ -24,7 +24,7 @@ seas5 = ""
 suppressWarnings(suppressMessages(BV(fdp = fdp, #paste0("R:/Breeding/MT_TP/Models/Breeding Values/",folder),
                                      wdp = wdp,#paste0("R:/Breeding/MT_TP/Models/Data/Department Data/",folder,"/"),
                                      ws = ws, date=date,  #LOAD DATA
-                                     doPedigreeChange =T, doReduceNonCodes=F, #PEDIGREE SETTINGS
+                                     doPedigreeChange =T, doReduceNonCodes=T, #PEDIGREE SETTINGS
                                      InventoryPedigree = T, ytData=F, simulate=F, #TYPE OF DATA LOADING
                                      doHybridID=F, doGCABV = F,doYear=T, #TYPE OF ANALYSIS
                                      doPedigreeToBecksChange=F,doWriteFinalPedigrees =F,

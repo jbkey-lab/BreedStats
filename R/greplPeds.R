@@ -63,9 +63,9 @@
 
 pedigreeReduce = function(data, Codes){
   if(Codes){
-    cores=detectCores()
-    cl = makeCluster(cores[1]-1,outfile="")
-    registerDoParallel(cl)
+    cores=parallel::detectCores()
+    cl = parallel::makeCluster(cores[1]-1,outfile="")
+    doParallel::registerDoParallel(cl)
 
     #for(i in (1:nrow(data))){
     #bind.data = foreach(i=(1:nrow(data)),.packages=c("tidyverse"), .export=c("str_detect"),.combind=rbind, .multicombine=T)%do%{
@@ -154,22 +154,22 @@ pedigreeReduce = function(data, Codes){
     data$Proccessed = ""
     cov1=function(data){
       #for(i in (1:nrow(data))){
-        if(!str_detect(data[,3], pattern = "\\.DH")){
-          #if(!str_detect(data[,3], pattern = conv1.1)){
-          if(!str_detect(data[,3], pattern = conv3)){
-            if(!str_detect(data[,3], pattern = conv4)){
+        if(!stringr::str_detect(data[,3], pattern = "\\.DH")){
+          #if(!stringr::str_detect(data[,3], pattern = conv1.1)){
+          if(!stringr::str_detect(data[,3], pattern = conv3)){
+            if(!stringr::str_detect(data[,3], pattern = conv4)){
               if(!grepl(data[,3], pattern ="\\*")){
-                if(!str_detect(data[,3], pattern =conv7)){
+                if(!stringr::str_detect(data[,3], pattern =conv7)){
                   if(!grepl(data[,3], pattern ="\\(wx")){
                     if(!grepl(data[,3], pattern ="\\(wx")){
-                      if(!str_detect(data[,3], pattern ="\\(GA21")){
+                      if(!stringr::str_detect(data[,3], pattern ="\\(GA21")){
                         if(!grepl(data[,3], pattern ="\\:")){
-                          if(!str_detect(data[,3], pattern ="\\.")){
+                          if(!stringr::str_detect(data[,3], pattern ="\\.")){
 
 
                             if(lengths(regmatches(data[,3], gregexpr("/", data[,3]))) == 1){
 
-                              if(str_detect(data[,3], pattern = conv1)){
+                              if(stringr::str_detect(data[,3], pattern = conv1)){
                                 data[,23] = "Proccessed" # add a period for using wildcards
 
                                 replacement = str_match(pattern = conv1, data[,3])
@@ -187,18 +187,18 @@ pedigreeReduce = function(data, Codes){
 
 
     for(i in (1:nrow(data))){
-      if(!str_detect(data[i,3], pattern = "\\.DH")){
-        if(!str_detect(data[i,3], pattern = conv3)){
-          if(!str_detect(data[i,3], pattern = conv4)){
+      if(!stringr::str_detect(data[i,3], pattern = "\\.DH")){
+        if(!stringr::str_detect(data[i,3], pattern = conv3)){
+          if(!stringr::str_detect(data[i,3], pattern = conv4)){
             if(!grepl(data[i,3], pattern ="\\*")){
               if(!grepl(data[i,3], pattern ="\\:")){
-                if(!str_detect(data[i,3], pattern =conv7)){
+                if(!stringr::str_detect(data[i,3], pattern =conv7)){
                   if(!grepl(data[i,3], pattern ="\\(wx")){
                     if(!grepl(data[i,3], pattern ="\\(wx")){
-                      if(!str_detect(data[i,3], pattern ="\\(GA21")){
-                        #if(!str_detect(data[i,3], pattern = conv1.1)){
+                      if(!stringr::str_detect(data[i,3], pattern ="\\(GA21")){
+                        #if(!stringr::str_detect(data[i,3], pattern = conv1.1)){
                         if(!grepl(data[i,3], pattern ="\\:")){
-                          if(!str_detect(data[i,3], pattern ="\\.")){
+                          if(!stringr::str_detect(data[i,3], pattern ="\\.")){
 
 
                             if(lengths(regmatches(data[i,3], gregexpr("/", data[i,3]))) ==1){
@@ -208,7 +208,7 @@ pedigreeReduce = function(data, Codes){
 
                               if(!is.na(replacement)){
 
-                                if(str_detect(data[i,3], pattern = fixed(replacement[1]))){
+                                if(stringr::str_detect(data[i,3], pattern = fixed(replacement[1]))){
                                   data[i,23] = "Proccessed" # add a period for using wildcards
 
                                   data[i,8] = replacement[1] # add a period for using wildcards
@@ -220,26 +220,26 @@ pedigreeReduce = function(data, Codes){
 
     #BDA015/BDA032//BHH069)-B-093-1-1
     for(i in (1:nrow(data))){
-      if(!str_detect(data[i,3], pattern = "\\.DH")){
-        if(!str_detect(data[i,3], pattern = conv4)){
-          #if(str_detect(data[i,3], pattern =conv2)){
-          if(!str_detect(data[i,3], pattern =conv3.1)){
-            if(str_detect(data[i,3], pattern =conv3)){
-              if(!str_detect(data[i,3], pattern =conv7)){
+      if(!stringr::str_detect(data[i,3], pattern = "\\.DH")){
+        if(!stringr::str_detect(data[i,3], pattern = conv4)){
+          #if(stringr::str_detect(data[i,3], pattern =conv2)){
+          if(!stringr::str_detect(data[i,3], pattern =conv3.1)){
+            if(stringr::str_detect(data[i,3], pattern =conv3)){
+              if(!stringr::str_detect(data[i,3], pattern =conv7)){
                 if(!grepl(data[i,3], pattern ="\\(wx")){
                   if(!grepl(data[i,3], pattern ="\\(wx")){
-                    if(!str_detect(data[i,3], pattern ="\\(GA21")){
-                      #if(!str_detect(data[i,3], pattern = conv1.1)){
+                    if(!stringr::str_detect(data[i,3], pattern ="\\(GA21")){
+                      #if(!stringr::str_detect(data[i,3], pattern = conv1.1)){
                       if(!grepl(data[i,3], pattern ="\\:")){
-                        if(!str_detect(data[i,3], pattern ="\\.")){
-                          #if(!str_detect(data[i,3], pattern = conv3.2)){
-                          #if(!str_detect(data[i,3], pattern = conv3.3)){
+                        if(!stringr::str_detect(data[i,3], pattern ="\\.")){
+                          #if(!stringr::str_detect(data[i,3], pattern = conv3.2)){
+                          #if(!stringr::str_detect(data[i,3], pattern = conv3.3)){
                           if(!grepl(data[i,3], pattern = "\\*")){
 
 
                             if(lengths(regmatches(data[i,3], gregexpr("/", data[i,3]))) ==2 ){
 
-                              if(str_detect(data[i,3], pattern = conv3)){
+                              if(stringr::str_detect(data[i,3], pattern = conv3)){
                                 data[i,23] = "Proccessed" # add a period for using wildcards
 
                                 replacement = str_match(pattern = conv3, data[i,3])
@@ -250,25 +250,25 @@ pedigreeReduce = function(data, Codes){
 
     #(I11063/FF6224)-B-B)/(I11063/FF6788)-14-03
     for(i in (1:nrow(data))){
-      if(!str_detect(data[i,3], pattern = "\\.DH")){
-        if(!str_detect(data[i,3], pattern = conv4)){
-          #if(str_detect(data[i,3], pattern =conv2)){
-          if(str_detect(data[i,3], pattern =conv3.1)){
-            if(!str_detect(data[i,3], pattern =conv7)){
+      if(!stringr::str_detect(data[i,3], pattern = "\\.DH")){
+        if(!stringr::str_detect(data[i,3], pattern = conv4)){
+          #if(stringr::str_detect(data[i,3], pattern =conv2)){
+          if(stringr::str_detect(data[i,3], pattern =conv3.1)){
+            if(!stringr::str_detect(data[i,3], pattern =conv7)){
               if(!grepl(data[i,3], pattern ="\\(wx")){
                 if(!grepl(data[i,3], pattern ="\\(wx")){
-                  if(!str_detect(data[i,3], pattern ="\\(GA21")){
-                    #if(str_detect(data[i,3], pattern = conv1.1)){
+                  if(!stringr::str_detect(data[i,3], pattern ="\\(GA21")){
+                    #if(stringr::str_detect(data[i,3], pattern = conv1.1)){
                     if(!grepl(data[i,3], pattern ="\\:")){
-                      if(!str_detect(data[i,3], pattern ="\\.")){
-                        if(!str_detect(data[i,3], pattern = conv3.2)){
-                          if(!str_detect(data[i,3], pattern = conv3.3)){
+                      if(!stringr::str_detect(data[i,3], pattern ="\\.")){
+                        if(!stringr::str_detect(data[i,3], pattern = conv3.2)){
+                          if(!stringr::str_detect(data[i,3], pattern = conv3.3)){
                             if(!grepl(data[i,3], pattern = "\\*")){
 
 
                               if(lengths(regmatches(data[i,3], gregexpr("/", data[i,3]))) >=3 ){
 
-                                if(str_detect(data[i,3], pattern = conv3.1)){
+                                if(stringr::str_detect(data[i,3], pattern = conv3.1)){
                                   data[i,23] = "Proccessed" # add a period for using wildcards
 
                                   replacement = str_match(pattern = conv3.1, data[i,3])
@@ -280,24 +280,24 @@ pedigreeReduce = function(data, Codes){
 
     #I10516/PHJ33//PHN82/I10516)-B-040-3-1-1-02
     for(i in (1:nrow(data))){
-      if(!str_detect(data[i,3], pattern = "\\.DH")){
-        if(str_detect(data[i,3], pattern = conv4)){
+      if(!stringr::str_detect(data[i,3], pattern = "\\.DH")){
+        if(stringr::str_detect(data[i,3], pattern = conv4)){
           if(lengths(regmatches(data[i,3], gregexpr("/", data[i,3]))) >=3){
-            if(!str_detect(data[i,3], pattern =conv7)){
-              if(!str_detect(data[i,3], pattern =conv4.1)){
+            if(!stringr::str_detect(data[i,3], pattern =conv7)){
+              if(!stringr::str_detect(data[i,3], pattern =conv4.1)){
                 if(!grepl(data[i,3], pattern ="\\(wx")){
                   if(!grepl(data[i,3], pattern ="\\(wx")){
-                    if(!str_detect(data[i,3], pattern ="\\(GA21")){
-                      if(!str_detect(data[i,3], pattern = conv1.1)){
-                        if(!str_detect(data[i,3], pattern = conv8)){
+                    if(!stringr::str_detect(data[i,3], pattern ="\\(GA21")){
+                      if(!stringr::str_detect(data[i,3], pattern = conv1.1)){
+                        if(!stringr::str_detect(data[i,3], pattern = conv8)){
                           if(!grepl(data[i,3], pattern ="\\:")){
-                            if(!str_detect(data[i,3], pattern = conv9)){
-                              if(!str_detect(data[i,3], pattern ="\\.")){
+                            if(!stringr::str_detect(data[i,3], pattern = conv9)){
+                              if(!stringr::str_detect(data[i,3], pattern ="\\.")){
 
 
-                                #if(!str_detect(data[i,3], pattern =conv3)){
+                                #if(!stringr::str_detect(data[i,3], pattern =conv3)){
 
-                                if(str_detect(data[i,3], pattern = conv4)){
+                                if(stringr::str_detect(data[i,3], pattern = conv4)){
                                   data[i,23] = "Proccessed" # add a period for using wildcards
 
                                   replacement = str_match(pattern = conv4, data[i,3])
@@ -312,23 +312,23 @@ pedigreeReduce = function(data, Codes){
 
     #(PHAW6/PHN82//PHAW6/PHJ33)-B-039-1)/BRP043)-B-18
     for(i in (1:nrow(data))){
-      if(!str_detect(data[i,3], pattern = "\\.DH")){
-        #if(str_detect(data[i,3], pattern = conv4)){
+      if(!stringr::str_detect(data[i,3], pattern = "\\.DH")){
+        #if(stringr::str_detect(data[i,3], pattern = conv4)){
         if(lengths(regmatches(data[i,3], gregexpr("/", data[i,3]))) >=3){
-          if(!str_detect(data[i,3], pattern =conv7)){
-            if(str_detect(data[i,3], pattern =conv4.1)){
+          if(!stringr::str_detect(data[i,3], pattern =conv7)){
+            if(stringr::str_detect(data[i,3], pattern =conv4.1)){
               if(!grepl(data[i,3], pattern ="\\(wx")){
                 if(!grepl(data[i,3], pattern ="\\(wx")){
-                  if(!str_detect(data[i,3], pattern ="\\(GA21")){
-                    #if(!str_detect(data[i,3], pattern =conv3)){
-                    #if(!str_detect(data[i,3], pattern = conv1.1)){
+                  if(!stringr::str_detect(data[i,3], pattern ="\\(GA21")){
+                    #if(!stringr::str_detect(data[i,3], pattern =conv3)){
+                    #if(!stringr::str_detect(data[i,3], pattern = conv1.1)){
                     if(!grepl(data[i,3], pattern ="\\:")){
-                      if(!str_detect(data[i,3], pattern = conv9)){
-                        if(!str_detect(data[i,3], pattern ="\\.")){
+                      if(!stringr::str_detect(data[i,3], pattern = conv9)){
+                        if(!stringr::str_detect(data[i,3], pattern ="\\.")){
 
 
 
-                          if(str_detect(data[i,3], pattern = conv4.1)){
+                          if(stringr::str_detect(data[i,3], pattern = conv4.1)){
                             data[i,23] = "Proccessed" # add a period for using wildcards
 
                             replacement = str_match(pattern = conv4.1, data[i,3])
@@ -339,22 +339,22 @@ pedigreeReduce = function(data, Codes){
 
     #(PHAW6/PHN82//PHAW6/PHJ33)-B-039-1)/BRP043)-B-18
     for(i in (1:nrow(data))){
-      if(!str_detect(data[i,3], pattern = "\\.DH")){
-        if(!str_detect(data[i,3], pattern = conv4)){
+      if(!stringr::str_detect(data[i,3], pattern = "\\.DH")){
+        if(!stringr::str_detect(data[i,3], pattern = conv4)){
           if(!lengths(regmatches(data[i,3], gregexpr("/", data[i,3]))) >=3){
-            if(!str_detect(data[i,3], pattern =conv7)){
-              if(!str_detect(data[i,3], pattern =conv4.1)){
+            if(!stringr::str_detect(data[i,3], pattern =conv7)){
+              if(!stringr::str_detect(data[i,3], pattern =conv4.1)){
                 if(!grepl(data[i,3], pattern ="\\(wx")){
                   if(!grepl(data[i,3], pattern ="\\(wx")){
-                    if(!str_detect(data[i,3], pattern ="\\(GA21")){
-                      #if(!str_detect(data[i,3], pattern =conv3)){
-                      if(str_detect(data[i,3], pattern = conv1.1)){
+                    if(!stringr::str_detect(data[i,3], pattern ="\\(GA21")){
+                      #if(!stringr::str_detect(data[i,3], pattern =conv3)){
+                      if(stringr::str_detect(data[i,3], pattern = conv1.1)){
                         if(!grepl(data[i,3], pattern ="\\:")){
-                          if(!str_detect(data[i,3], pattern = conv9)){
-                            if(!str_detect(data[i,3], pattern ="\\.")){
+                          if(!stringr::str_detect(data[i,3], pattern = conv9)){
+                            if(!stringr::str_detect(data[i,3], pattern ="\\.")){
 
 
-                              if(str_detect(data[i,3], pattern = conv1.1)){
+                              if(stringr::str_detect(data[i,3], pattern = conv1.1)){
                                 data[i,23] = "Proccessed" # add a period for using wildcards
 
                                 replacement = str_match(pattern = conv1.1, data[i,3])
@@ -366,21 +366,21 @@ pedigreeReduce = function(data, Codes){
     #LH195*2/DK2FACC)-B-B-B-0081-01-1-B
     for(i in (1:nrow(data))){
       if(!grepl(data[i,3], pattern ="\\.DH")){
-        #if(!str_detect(data[i,3], pattern =conv2)){
-        if(!str_detect(data[i,3], pattern =conv3)){
-          if(!str_detect(data[i,3], pattern =conv4)){
-            if(str_detect(data[i,3], pattern ="\\*")){
+        #if(!stringr::str_detect(data[i,3], pattern =conv2)){
+        if(!stringr::str_detect(data[i,3], pattern =conv3)){
+          if(!stringr::str_detect(data[i,3], pattern =conv4)){
+            if(stringr::str_detect(data[i,3], pattern ="\\*")){
               if(lengths(regmatches(data[i,3], gregexpr("/", data[i,3]))) ==1){
-                if(!str_detect(data[i,3], pattern =conv7)){
+                if(!stringr::str_detect(data[i,3], pattern =conv7)){
                   if(!grepl(data[i,3], pattern ="\\(wx")){
                     if(!grepl(data[i,3], pattern ="\\(wx")){
-                      if(!str_detect(data[i,3], pattern ="\\(GA21")){
-                        #if(!str_detect(data[i,3], pattern = conv1.1)){
+                      if(!stringr::str_detect(data[i,3], pattern ="\\(GA21")){
+                        #if(!stringr::str_detect(data[i,3], pattern = conv1.1)){
                         if(!grepl(data[i,3], pattern ="\\:")){
-                          if(!str_detect(data[i,3], pattern ="\\.")){
+                          if(!stringr::str_detect(data[i,3], pattern ="\\.")){
 
 
-                            if(str_detect(data[i,3], pattern = conv5)){
+                            if(stringr::str_detect(data[i,3], pattern = conv5)){
                               data[i,23] = "Proccessed" # add a period for using wildcards
 
                               replacement = str_match(pattern=conv5, data[i,3])
@@ -393,23 +393,23 @@ pedigreeReduce = function(data, Codes){
     #((065125/054245)/RS710-39.09)/065125-1-4-4
     for(i in (1:nrow(data))){
       if(!grepl(data[i,3], pattern ="\\.DH")){
-        #if(!str_detect(data[i,3], pattern =conv2)){
-        if(!str_detect(data[i,3], pattern =conv3)){
-          if(!str_detect(data[i,3], pattern =conv4)){
+        #if(!stringr::str_detect(data[i,3], pattern =conv2)){
+        if(!stringr::str_detect(data[i,3], pattern =conv3)){
+          if(!stringr::str_detect(data[i,3], pattern =conv4)){
             if(!grepl(data[i,3], pattern ="\\*")){
               if(lengths(regmatches(data[i,3], gregexpr("/", data[i,3]))) >= 3){
-                if(!str_detect(data[i,3], pattern =conv7)){
+                if(!stringr::str_detect(data[i,3], pattern =conv7)){
                   if(!grepl(data[i,3], pattern ="\\(wx")){
                     if(!grepl(data[i,3], pattern ="\\(wx")){
-                      if(!str_detect(data[i,3], pattern ="\\(GA21")){
-                        #if(!str_detect(data[i,3], pattern = conv1.1)){
+                      if(!stringr::str_detect(data[i,3], pattern ="\\(GA21")){
+                        #if(!stringr::str_detect(data[i,3], pattern = conv1.1)){
                         if(!grepl(data[i,3], pattern ="\\:")){
-                          if(str_detect(data[i,3], pattern ="\\.")){
-                            if(str_detect(data[i,3], pattern = conv11)){
-                              if(!str_detect(data[i,3], pattern = conv11.1)){
+                          if(stringr::str_detect(data[i,3], pattern ="\\.")){
+                            if(stringr::str_detect(data[i,3], pattern = conv11)){
+                              if(!stringr::str_detect(data[i,3], pattern = conv11.1)){
 
 
-                                if(str_detect(data[i,3], pattern = conv11)){
+                                if(stringr::str_detect(data[i,3], pattern = conv11)){
                                   data[i,23] = "Proccessed" # add a period for using wildcards
 
                                   replacement = str_match(pattern=conv11, data[i,3])
@@ -421,24 +421,24 @@ pedigreeReduce = function(data, Codes){
     #(046358/CI6621)/054530-B-45
     for(i in (1:nrow(data))){
       if(!grepl(data[i,3], pattern ="\\.DH")){
-        #if(!str_detect(data[i,3], pattern =conv2)){
-        #if(!str_detect(data[i,3], pattern =conv3)){
-        if(!str_detect(data[i,3], pattern =conv4)){
+        #if(!stringr::str_detect(data[i,3], pattern =conv2)){
+        #if(!stringr::str_detect(data[i,3], pattern =conv3)){
+        if(!stringr::str_detect(data[i,3], pattern =conv4)){
           if(!grepl(data[i,3], pattern ="\\*")){
             if(lengths(regmatches(data[i,3], gregexpr("/", data[i,3]))) >= 2){
-              if(!str_detect(data[i,3], pattern =conv7)){
+              if(!stringr::str_detect(data[i,3], pattern =conv7)){
                 if(!grepl(data[i,3], pattern ="\\(wx")){
                   if(!grepl(data[i,3], pattern ="\\(wx")){
-                    if(!str_detect(data[i,3], pattern ="\\(GA21")){
-                      #if(!str_detect(data[i,3], pattern = conv1.1)){
+                    if(!stringr::str_detect(data[i,3], pattern ="\\(GA21")){
+                      #if(!stringr::str_detect(data[i,3], pattern = conv1.1)){
                       if(!grepl(data[i,3], pattern ="\\:")){
-                        if(!str_detect(data[i,3], pattern ="\\.")){
-                          if(str_detect(data[i,3], pattern = conv19)){
-                            if(!str_detect(data[i,3], pattern = conv11.1)){
-                              if(!str_detect(data[i,3], pattern = conv6)){
+                        if(!stringr::str_detect(data[i,3], pattern ="\\.")){
+                          if(stringr::str_detect(data[i,3], pattern = conv19)){
+                            if(!stringr::str_detect(data[i,3], pattern = conv11.1)){
+                              if(!stringr::str_detect(data[i,3], pattern = conv6)){
 
 
-                                if(str_detect(data[i,3], pattern = conv19)){
+                                if(stringr::str_detect(data[i,3], pattern = conv19)){
                                   data[i,23] = "Proccessed" # add a period for using wildcards
 
                                   replacement = str_match(pattern=conv19, data[i,3])
@@ -450,26 +450,26 @@ pedigreeReduce = function(data, Codes){
     #(046358/CI6621)/054530-B
     for(i in (1:nrow(data))){
       if(!grepl(data[i,3], pattern ="\\.DH")){
-        #if(!str_detect(data[i,3], pattern =conv2)){
-        #if(!str_detect(data[i,3], pattern =conv3)){
-        if(!str_detect(data[i,3], pattern =conv4)){
+        #if(!stringr::str_detect(data[i,3], pattern =conv2)){
+        #if(!stringr::str_detect(data[i,3], pattern =conv3)){
+        if(!stringr::str_detect(data[i,3], pattern =conv4)){
           if(!grepl(data[i,3], pattern ="\\*")){
             if(lengths(regmatches(data[i,3], gregexpr("/", data[i,3]))) >= 2){
-              if(!str_detect(data[i,3], pattern =conv7)){
+              if(!stringr::str_detect(data[i,3], pattern =conv7)){
                 if(!grepl(data[i,3], pattern ="\\(wx")){
                   if(!grepl(data[i,3], pattern ="\\(wx")){
-                    if(!str_detect(data[i,3], pattern ="\\(GA21")){
-                      #if(!str_detect(data[i,3], pattern = conv1.1)){
+                    if(!stringr::str_detect(data[i,3], pattern ="\\(GA21")){
+                      #if(!stringr::str_detect(data[i,3], pattern = conv1.1)){
                       if(!grepl(data[i,3], pattern ="\\:")){
-                        if(!str_detect(data[i,3], pattern ="\\.")){
-                          if(str_detect(data[i,3], pattern = conv19.1)){
-                            if(!str_detect(data[i,3], pattern = conv19.2)){
+                        if(!stringr::str_detect(data[i,3], pattern ="\\.")){
+                          if(stringr::str_detect(data[i,3], pattern = conv19.1)){
+                            if(!stringr::str_detect(data[i,3], pattern = conv19.2)){
 
-                              if(!str_detect(data[i,3], pattern = conv11.1)){
-                                if(!str_detect(data[i,3], pattern = conv6)){
+                              if(!stringr::str_detect(data[i,3], pattern = conv11.1)){
+                                if(!stringr::str_detect(data[i,3], pattern = conv6)){
 
 
-                                  if(str_detect(data[i,3], pattern = conv19.1)){
+                                  if(stringr::str_detect(data[i,3], pattern = conv19.1)){
                                     data[i,23] = "Proccessed" # add a period for using wildcards
 
                                     replacement = str_match(pattern=conv19.1, data[i,3])
@@ -481,26 +481,26 @@ pedigreeReduce = function(data, Codes){
     #I9011-B/LH200//FX8091)-B-B-048
     for(i in (1:nrow(data))){
       if(!grepl(data[i,3], pattern ="\\.DH")){
-        #if(!str_detect(data[i,3], pattern =conv2)){
-        #if(!str_detect(data[i,3], pattern =conv3)){
-        if(!str_detect(data[i,3], pattern =conv4)){
+        #if(!stringr::str_detect(data[i,3], pattern =conv2)){
+        #if(!stringr::str_detect(data[i,3], pattern =conv3)){
+        if(!stringr::str_detect(data[i,3], pattern =conv4)){
           if(!grepl(data[i,3], pattern ="\\*")){
             if(lengths(regmatches(data[i,3], gregexpr("/", data[i,3]))) >= 2){
-              if(!str_detect(data[i,3], pattern =conv7)){
+              if(!stringr::str_detect(data[i,3], pattern =conv7)){
                 if(!grepl(data[i,3], pattern ="\\(wx")){
                   if(!grepl(data[i,3], pattern ="\\(wx")){
-                    if(!str_detect(data[i,3], pattern ="\\(GA21")){
-                      #if(!str_detect(data[i,3], pattern = conv1.1)){
+                    if(!stringr::str_detect(data[i,3], pattern ="\\(GA21")){
+                      #if(!stringr::str_detect(data[i,3], pattern = conv1.1)){
                       if(!grepl(data[i,3], pattern ="\\:")){
-                        if(!str_detect(data[i,3], pattern ="\\.")){
-                          if(str_detect(data[i,3], pattern = conv19.2)){
-                            if(!str_detect(data[i,3], pattern = conv19.1)){
+                        if(!stringr::str_detect(data[i,3], pattern ="\\.")){
+                          if(stringr::str_detect(data[i,3], pattern = conv19.2)){
+                            if(!stringr::str_detect(data[i,3], pattern = conv19.1)){
 
-                              if(!str_detect(data[i,3], pattern = conv11.1)){
-                                if(!str_detect(data[i,3], pattern = conv6)){
+                              if(!stringr::str_detect(data[i,3], pattern = conv11.1)){
+                                if(!stringr::str_detect(data[i,3], pattern = conv6)){
 
 
-                                  if(str_detect(data[i,3], pattern = conv19.2)){
+                                  if(stringr::str_detect(data[i,3], pattern = conv19.2)){
                                     data[i,23] = "Proccessed" # add a period for using wildcards
 
                                     replacement = str_match(pattern=conv19.2, data[i,3])
@@ -512,28 +512,28 @@ pedigreeReduce = function(data, Codes){
     #I9011-B/LH200//FX8091)-B-B-048
     for(i in (1:nrow(data))){
       if(!grepl(data[i,3], pattern ="\\.DH")){
-        #if(!str_detect(data[i,3], pattern =conv2)){
-        #if(!str_detect(data[i,3], pattern =conv3)){
-        if(!str_detect(data[i,3], pattern =conv4)){
+        #if(!stringr::str_detect(data[i,3], pattern =conv2)){
+        #if(!stringr::str_detect(data[i,3], pattern =conv3)){
+        if(!stringr::str_detect(data[i,3], pattern =conv4)){
           if(!grepl(data[i,3], pattern ="\\*")){
             if(lengths(regmatches(data[i,3], gregexpr("/", data[i,3]))) >= 2){
-              if(!str_detect(data[i,3], pattern =conv7)){
+              if(!stringr::str_detect(data[i,3], pattern =conv7)){
                 if(!grepl(data[i,3], pattern ="\\(wx")){
                   if(!grepl(data[i,3], pattern ="\\(wx")){
-                    if(!str_detect(data[i,3], pattern ="\\(GA21")){
-                      #if(!str_detect(data[i,3], pattern = conv1.1)){
+                    if(!stringr::str_detect(data[i,3], pattern ="\\(GA21")){
+                      #if(!stringr::str_detect(data[i,3], pattern = conv1.1)){
                       if(!grepl(data[i,3], pattern ="\\:")){
-                        if(!str_detect(data[i,3], pattern ="\\.")){
-                          if(str_detect(data[i,3], pattern = conv19.3)){
-                            if(!str_detect(data[i,3], pattern = conv19.1)){
-                              if(!str_detect(data[i,3], pattern = conv19.2)){
-                                if(!str_detect(data[i,3], pattern = conv19)){
+                        if(!stringr::str_detect(data[i,3], pattern ="\\.")){
+                          if(stringr::str_detect(data[i,3], pattern = conv19.3)){
+                            if(!stringr::str_detect(data[i,3], pattern = conv19.1)){
+                              if(!stringr::str_detect(data[i,3], pattern = conv19.2)){
+                                if(!stringr::str_detect(data[i,3], pattern = conv19)){
 
-                                  if(!str_detect(data[i,3], pattern = conv11.1)){
-                                    if(!str_detect(data[i,3], pattern = conv6)){
+                                  if(!stringr::str_detect(data[i,3], pattern = conv11.1)){
+                                    if(!stringr::str_detect(data[i,3], pattern = conv6)){
 
 
-                                      if(str_detect(data[i,3], pattern = conv19.3)){
+                                      if(stringr::str_detect(data[i,3], pattern = conv19.3)){
                                         data[i,23] = "Proccessed" # add a period for using wildcards
 
                                         replacement = str_match(pattern=conv19.3, data[i,3])
@@ -545,26 +545,26 @@ pedigreeReduce = function(data, Codes){
     #(056460/CI6621)/(I10516/CI6621)-B-10
     for(i in (1:nrow(data))){
       if(!grepl(data[i,3], pattern ="\\.DH")){
-        #if(!str_detect(data[i,3], pattern =conv2)){
-        #if(!str_detect(data[i,3], pattern =conv3)){
-        if(!str_detect(data[i,3], pattern =conv4)){
+        #if(!stringr::str_detect(data[i,3], pattern =conv2)){
+        #if(!stringr::str_detect(data[i,3], pattern =conv3)){
+        if(!stringr::str_detect(data[i,3], pattern =conv4)){
           if(!grepl(data[i,3], pattern ="\\*")){
             if(lengths(regmatches(data[i,3], gregexpr("/", data[i,3]))) >= 3){
-              if(!str_detect(data[i,3], pattern =conv7)){
+              if(!stringr::str_detect(data[i,3], pattern =conv7)){
                 if(!grepl(data[i,3], pattern ="\\(wx")){
                   if(!grepl(data[i,3], pattern ="\\(wx")){
-                    if(!str_detect(data[i,3], pattern ="\\(GA21")){
-                      #if(!str_detect(data[i,3], pattern = conv1.1)){
+                    if(!stringr::str_detect(data[i,3], pattern ="\\(GA21")){
+                      #if(!stringr::str_detect(data[i,3], pattern = conv1.1)){
                       if(!grepl(data[i,3], pattern ="\\:")){
-                        if(!str_detect(data[i,3], pattern ="\\.")){
-                          if(str_detect(data[i,3], pattern = conv20)){
-                            if(!str_detect(data[i,3], pattern = conv11.1)){
-                              if(!str_detect(data[i,3], pattern = conv6)){
-                                #if(!str_detect(data[i,3], pattern = conv5)){
-                                #if(!str_detect(data[i,3], pattern = conv3)){
+                        if(!stringr::str_detect(data[i,3], pattern ="\\.")){
+                          if(stringr::str_detect(data[i,3], pattern = conv20)){
+                            if(!stringr::str_detect(data[i,3], pattern = conv11.1)){
+                              if(!stringr::str_detect(data[i,3], pattern = conv6)){
+                                #if(!stringr::str_detect(data[i,3], pattern = conv5)){
+                                #if(!stringr::str_detect(data[i,3], pattern = conv3)){
 
 
-                                if(str_detect(data[i,3], pattern = conv20)){
+                                if(stringr::str_detect(data[i,3], pattern = conv20)){
                                   data[i,23] = "Proccessed" # add a period for using wildcards
 
                                   replacement = str_match(pattern=conv20, data[i,3])
@@ -577,12 +577,12 @@ pedigreeReduce = function(data, Codes){
 
     data$Matched = ifelse(data$PEDIGREE != data$match, T, F)
     # # #
-    dataF = data %>% filter(Matched== F) %>% filter(Proccessed != "Proccessed") %>%
-      filter(!grepl(".Male",PEDIGREE)) %>% filter(!grepl("\\:",PEDIGREE)) %>% filter(!grepl(".Female",PEDIGREE))
+    dataF = data %>% dplyr::filter(Matched== F) %>% dplyr::filter(Proccessed != "Proccessed") %>%
+      dplyr::filter(!grepl(".Male",PEDIGREE)) %>% dplyr::filter(!grepl("\\:",PEDIGREE)) %>% dplyr::filter(!grepl(".Female",PEDIGREE))
 
 
     # # #
-    dataPros = data %>% filter(Proccessed == "Proccessed")
+    dataPros = data %>% dplyr::filter(Proccessed == "Proccessed")
     nrow(dataPros)
     nrow(dataPros) / nrow(data)
 
@@ -743,17 +743,17 @@ pedigreeReduce = function(data, Codes){
 
               if(!grepl(data[i,3], pattern ="\\(wx")){
                 if(!grepl(data[i,3], pattern ="\\:")){
-                  #if(str_detect(data[i,3], pattern ="\\.")){
-                  #if(!str_detect(data[i,3], pattern =convDH13)){
-                  #if(!str_detect(data[i,3], pattern =convDH14)){
-                  #if(!str_detect(data[i,3], pattern =convDH12)){
-                  #if(!str_detect(data[i,3], pattern =convDH15)){
-                  #if(!str_detect(data[i,3], pattern =convDH16)){
-                  if(!str_detect(data[i,3], pattern =convDH17)){
-                    if(str_detect(data[i,3], pattern =convDH18)){
+                  #if(stringr::str_detect(data[i,3], pattern ="\\.")){
+                  #if(!stringr::str_detect(data[i,3], pattern =convDH13)){
+                  #if(!stringr::str_detect(data[i,3], pattern =convDH14)){
+                  #if(!stringr::str_detect(data[i,3], pattern =convDH12)){
+                  #if(!stringr::str_detect(data[i,3], pattern =convDH15)){
+                  #if(!stringr::str_detect(data[i,3], pattern =convDH16)){
+                  if(!stringr::str_detect(data[i,3], pattern =convDH17)){
+                    if(stringr::str_detect(data[i,3], pattern =convDH18)){
 
 
-                      if(str_detect(data[i,3], pattern = convDH18)){
+                      if(stringr::str_detect(data[i,3], pattern = convDH18)){
                         data[i,23] = "Proccessed" # add a period for using wildcards
 
                         replacement = str_match(pattern=convDH18, data[i,3])
@@ -764,25 +764,25 @@ pedigreeReduce = function(data, Codes){
 
     #(GEMS-0227/I9005)-B.DHB-063
     for(i in (1:nrow(data))){
-      if(str_detect(data[i,3], pattern ="\\DH")){
+      if(stringr::str_detect(data[i,3], pattern ="\\DH")){
         if(!grepl(data[i,3], pattern = "\\*")){
           if(lengths(regmatches(data[i,3], gregexpr("/", data[i,3]))) == 1){
             if(lengths(regmatches(data[i,3], gregexpr("\\)", data[i,3]))) >= 1){
               #if(lengths(regmatches(data[i,3], gregexpr("\\(", data[i,3]))) > 1){
               if(!grepl(data[i,3], pattern ="\\(wx")){
                 if(!grepl(data[i,3], pattern ="\\:")){
-                  #if(str_detect(data[i,3], pattern ="\\.")){
-                  if(!str_detect(data[i,3], pattern ="GEMS")){
-                    #if(!str_detect(data[i,3], pattern =convDH13)){
-                    # if(!str_detect(data[i,3], pattern =convDH14)){
-                    #if(!str_detect(data[i,3], pattern =convDH12)){
-                    # if(!str_detect(data[i,3], pattern =convDH15)){
-                    if(!str_detect(data[i,3], pattern =convDH16)){
-                      if(!str_detect(data[i,3], pattern =convDH17)){
-                        if(str_detect(data[i,3], pattern =convDH18.1)){
+                  #if(stringr::str_detect(data[i,3], pattern ="\\.")){
+                  if(!stringr::str_detect(data[i,3], pattern ="GEMS")){
+                    #if(!stringr::str_detect(data[i,3], pattern =convDH13)){
+                    # if(!stringr::str_detect(data[i,3], pattern =convDH14)){
+                    #if(!stringr::str_detect(data[i,3], pattern =convDH12)){
+                    # if(!stringr::str_detect(data[i,3], pattern =convDH15)){
+                    if(!stringr::str_detect(data[i,3], pattern =convDH16)){
+                      if(!stringr::str_detect(data[i,3], pattern =convDH17)){
+                        if(stringr::str_detect(data[i,3], pattern =convDH18.1)){
 
 
-                          if(str_detect(data[i,3], pattern = convDH18.1)){
+                          if(stringr::str_detect(data[i,3], pattern = convDH18.1)){
                             data[i,23] = "Proccessed" # add a period for using wildcards
 
                             replacement = str_match(pattern=convDH18.1, data[i,3])
@@ -799,17 +799,17 @@ pedigreeReduce = function(data, Codes){
 
               if(!grepl(data[i,3], pattern ="\\(wx")){
                 if(!grepl(data[i,3], pattern ="\\:")){
-                  #if(str_detect(data[i,3], pattern ="\\.")){
-                  #if(!str_detect(data[i,3], pattern =convDH13)){
-                  #if(!str_detect(data[i,3], pattern =convDH14)){
-                  #if(!str_detect(data[i,3], pattern =convDH12)){
-                  #if(!str_detect(data[i,3], pattern =convDH15)){
-                  #if(!str_detect(data[i,3], pattern =convDH16)){
-                  if(!str_detect(data[i,3], pattern =convDH17)){
-                    if(str_detect(data[i,3], pattern =convDH30)){
+                  #if(stringr::str_detect(data[i,3], pattern ="\\.")){
+                  #if(!stringr::str_detect(data[i,3], pattern =convDH13)){
+                  #if(!stringr::str_detect(data[i,3], pattern =convDH14)){
+                  #if(!stringr::str_detect(data[i,3], pattern =convDH12)){
+                  #if(!stringr::str_detect(data[i,3], pattern =convDH15)){
+                  #if(!stringr::str_detect(data[i,3], pattern =convDH16)){
+                  if(!stringr::str_detect(data[i,3], pattern =convDH17)){
+                    if(stringr::str_detect(data[i,3], pattern =convDH30)){
 
 
-                      if(str_detect(data[i,3], pattern = convDH30)){
+                      if(stringr::str_detect(data[i,3], pattern = convDH30)){
                         data[i,23] = "Proccessed" # add a period for using wildcards
 
                         replacement = str_match(pattern=convDH30, data[i,3])
@@ -820,7 +820,7 @@ pedigreeReduce = function(data, Codes){
 
     #(GEMS-0227/I9005)-B.DHB-063
     for(i in (1:nrow(data))){
-      if(str_detect(data[i,3], pattern ="\\DH")){
+      if(stringr::str_detect(data[i,3], pattern ="\\DH")){
         if(!grepl(data[i,3], pattern = "\\*")){
           if(lengths(regmatches(data[i,3], gregexpr("/", data[i,3]))) == 1){
             if(lengths(regmatches(data[i,3], gregexpr("\\)", data[i,3]))) == 0){
@@ -828,18 +828,18 @@ pedigreeReduce = function(data, Codes){
 
                 if(!grepl(data[i,3], pattern ="\\(wx")){
                   if(!grepl(data[i,3], pattern ="\\:")){
-                    #if(str_detect(data[i,3], pattern ="\\.")){
-                    if(!str_detect(data[i,3], pattern ="GEMS")){
-                      #if(!str_detect(data[i,3], pattern =convDH13)){
-                      # if(!str_detect(data[i,3], pattern =convDH14)){
-                      #if(!str_detect(data[i,3], pattern =convDH12)){
-                      # if(!str_detect(data[i,3], pattern =convDH15)){
-                      if(!str_detect(data[i,3], pattern =convDH16)){
-                        if(!str_detect(data[i,3], pattern =convDH17)){
-                          if(str_detect(data[i,3], pattern =convDH30.1)){
+                    #if(stringr::str_detect(data[i,3], pattern ="\\.")){
+                    if(!stringr::str_detect(data[i,3], pattern ="GEMS")){
+                      #if(!stringr::str_detect(data[i,3], pattern =convDH13)){
+                      # if(!stringr::str_detect(data[i,3], pattern =convDH14)){
+                      #if(!stringr::str_detect(data[i,3], pattern =convDH12)){
+                      # if(!stringr::str_detect(data[i,3], pattern =convDH15)){
+                      if(!stringr::str_detect(data[i,3], pattern =convDH16)){
+                        if(!stringr::str_detect(data[i,3], pattern =convDH17)){
+                          if(stringr::str_detect(data[i,3], pattern =convDH30.1)){
 
 
-                            if(str_detect(data[i,3], pattern = convDH30.1)){
+                            if(stringr::str_detect(data[i,3], pattern = convDH30.1)){
                               data[i,23] = "Proccessed" # add a period for using wildcards
 
                               replacement = str_match(pattern=convDH30.1, data[i,3])
@@ -855,16 +855,16 @@ pedigreeReduce = function(data, Codes){
           if(lengths(regmatches(data[i,3], gregexpr("/", data[i,3]))) == 2){
             if(!grepl(data[i,3], pattern ="\\(wx")){
               if(!grepl(data[i,3], pattern ="\\:")){
-                if(str_detect(data[i,3], pattern ="\\.")){
-                  if(!str_detect(data[i,3], pattern ="GEMS")){
+                if(stringr::str_detect(data[i,3], pattern ="\\.")){
+                  if(!stringr::str_detect(data[i,3], pattern ="GEMS")){
 
-                    #if(!str_detect(data[i,3], pattern =convDH13)){
-                    if(!str_detect(data[i,3], pattern =convDH14)){
-                      if(str_detect(data[i,3], pattern =convDH12)){
-                        if(!str_detect(data[i,3], pattern =convDH16)){
+                    #if(!stringr::str_detect(data[i,3], pattern =convDH13)){
+                    if(!stringr::str_detect(data[i,3], pattern =convDH14)){
+                      if(stringr::str_detect(data[i,3], pattern =convDH12)){
+                        if(!stringr::str_detect(data[i,3], pattern =convDH16)){
 
 
-                          if(str_detect(data[i,3], pattern = convDH12)){
+                          if(stringr::str_detect(data[i,3], pattern = convDH12)){
                             data[i,23] = "Proccessed" # add a period for using wildcards
 
                             replacement = str_match(pattern=convDH12, data[i,3])
@@ -882,19 +882,19 @@ pedigreeReduce = function(data, Codes){
           if(lengths(regmatches(data[i,3], gregexpr("/", data[i,3]))) == 3){
             if(!grepl(data[i,3], pattern ="\\(wx")){
               if(!grepl(data[i,3], pattern ="\\(wx")){
-                if(!str_detect(data[i,3], pattern ="\\(GA21")){
+                if(!stringr::str_detect(data[i,3], pattern ="\\(GA21")){
                   if(!grepl(data[i,3], pattern ="\\:")){
-                    if(str_detect(data[i,3], pattern ="\\.")){
-                      if(str_detect(data[i,3], pattern =convDH13)){
-                        if(!str_detect(data[i,3], pattern ="GEMS")){
+                    if(stringr::str_detect(data[i,3], pattern ="\\.")){
+                      if(stringr::str_detect(data[i,3], pattern =convDH13)){
+                        if(!stringr::str_detect(data[i,3], pattern ="GEMS")){
 
-                          #if(!str_detect(data[i,3], pattern =convDH14)){
-                          #if(!str_detect(data[i,3], pattern =convDH12)){
-                          #if(!str_detect(data[i,3], pattern =convDH15)){
+                          #if(!stringr::str_detect(data[i,3], pattern =convDH14)){
+                          #if(!stringr::str_detect(data[i,3], pattern =convDH12)){
+                          #if(!stringr::str_detect(data[i,3], pattern =convDH15)){
 
 
 
-                          if(str_detect(data[i,3], pattern = convDH13)){
+                          if(stringr::str_detect(data[i,3], pattern = convDH13)){
                             data[i,23] = "Proccessed" # add a period for using wildcards
 
                             replacement = str_match(pattern=convDH13, data[i,3])
@@ -911,18 +911,18 @@ pedigreeReduce = function(data, Codes){
           if(lengths(regmatches(data[i,3], gregexpr("/", data[i,3]))) == 2){
             if(!grepl(data[i,3], pattern ="\\(wx")){
               if(!grepl(data[i,3], pattern ="\\(wx")){
-                if(!str_detect(data[i,3], pattern ="\\(GA21")){
+                if(!stringr::str_detect(data[i,3], pattern ="\\(GA21")){
                   if(!grepl(data[i,3], pattern ="\\:")){
                     if(grepl(data[i,3], pattern ="\\.")){
-                      #if(!str_detect(data[i,3], pattern =convDH13)){
-                      if(str_detect(data[i,3], pattern =convDH14)){
-                        #if(!str_detect(data[i,3], pattern =convDH12)){
-                        if(!str_detect(data[i,3], pattern =convDH17)){
-                          if(!str_detect(data[i,3], pattern ="GEMS")){
+                      #if(!stringr::str_detect(data[i,3], pattern =convDH13)){
+                      if(stringr::str_detect(data[i,3], pattern =convDH14)){
+                        #if(!stringr::str_detect(data[i,3], pattern =convDH12)){
+                        if(!stringr::str_detect(data[i,3], pattern =convDH17)){
+                          if(!stringr::str_detect(data[i,3], pattern ="GEMS")){
 
 
 
-                            if(str_detect(data[i,3], pattern = convDH14)){
+                            if(stringr::str_detect(data[i,3], pattern = convDH14)){
                               data[i,23] = "Proccessed" # add a period for using wildcards
 
                               replacement = str_match(pattern=convDH14, data[i,3])
@@ -942,14 +942,14 @@ pedigreeReduce = function(data, Codes){
                 if(!grepl(data[i,3], pattern ="\\(GA21")){
                   if(!grepl(data[i,3], pattern ="\\:")){
                     if(grepl(data[i,3], pattern ="\\.")){
-                      #if(!str_detect(data[i,3], pattern =convDH13)){
-                      #if(!str_detect(data[i,3], pattern =convDH14)){
-                      #if(!str_detect(data[i,3], pattern =convDH12)){
-                      if(str_detect(data[i,3], pattern =convDH15)){
+                      #if(!stringr::str_detect(data[i,3], pattern =convDH13)){
+                      #if(!stringr::str_detect(data[i,3], pattern =convDH14)){
+                      #if(!stringr::str_detect(data[i,3], pattern =convDH12)){
+                      if(stringr::str_detect(data[i,3], pattern =convDH15)){
                         if(!grepl(data[i,3], pattern ="GEMS")){
 
 
-                          if(str_detect(data[i,3], pattern = convDH15)){
+                          if(stringr::str_detect(data[i,3], pattern = convDH15)){
                             data[i,23] = "Proccessed" # add a period for using wildcards
 
                             replacement = str_match(pattern=convDH15, data[i,3])
@@ -961,12 +961,12 @@ pedigreeReduce = function(data, Codes){
 
     data$Matched = ifelse(data$PEDIGREE != data$match, T, F)
     # # #
-    dataF = data %>% filter(Matched== F) %>% filter(Proccessed != "Proccessed") %>%
-      filter(!grepl(".Male",PEDIGREE)) %>% filter(!grepl("\\:",PEDIGREE)) %>% filter(!grepl(".Female",PEDIGREE))
+    dataF = data %>% dplyr::filter(Matched== F) %>% dplyr::filter(Proccessed != "Proccessed") %>%
+      dplyr::filter(!grepl(".Male",PEDIGREE)) %>% dplyr::filter(!grepl("\\:",PEDIGREE)) %>% dplyr::filter(!grepl(".Female",PEDIGREE))
 
 
     # # #
-    dataPros = data %>% filter(Proccessed == "Proccessed")
+    dataPros = data %>% dplyr::filter(Proccessed == "Proccessed")
     nrow(dataPros)
     print(nrow(dataPros) / nrow(data))
     rm(bind.data)
@@ -976,9 +976,9 @@ pedigreeReduce = function(data, Codes){
 
   }
   else{
-    cores=detectCores()
-    cl = makeCluster(cores[1]-1,outfile="")
-    registerDoParallel(cl)
+    cores=parallel::detectCores()
+    cl = parallel::makeCluster(cores[1]-1,outfile="")
+    doParallel::registerDoParallel(cl)
 
     data = data
     data$match = gsub(data$match, pattern = "HX1", replacement = "Hx1")
@@ -1065,22 +1065,22 @@ pedigreeReduce = function(data, Codes){
 
     cov1=function(data){
       #for(i in (1:nrow(data))){
-      if(!str_detect(data[,3], pattern = "\\.DH")){
-        #if(!str_detect(data[,3], pattern = conv1.1)){
-        if(!str_detect(data[,3], pattern = conv3)){
-          if(!str_detect(data[,3], pattern = conv4)){
+      if(!stringr::str_detect(data[,3], pattern = "\\.DH")){
+        #if(!stringr::str_detect(data[,3], pattern = conv1.1)){
+        if(!stringr::str_detect(data[,3], pattern = conv3)){
+          if(!stringr::str_detect(data[,3], pattern = conv4)){
             if(!grepl(data[,3], pattern ="\\*")){
-              if(!str_detect(data[,3], pattern =conv7)){
+              if(!stringr::str_detect(data[,3], pattern =conv7)){
                 if(!grepl(data[,3], pattern ="\\(wx")){
                   if(!grepl(data[,3], pattern ="\\(wx")){
-                    if(!str_detect(data[,3], pattern ="\\(GA21")){
+                    if(!stringr::str_detect(data[,3], pattern ="\\(GA21")){
                       if(!grepl(data[,3], pattern ="\\:")){
-                        if(!str_detect(data[,3], pattern ="\\.")){
+                        if(!stringr::str_detect(data[,3], pattern ="\\.")){
 
 
                           if(lengths(regmatches(data[,3], gregexpr("/", data[,3]))) == 1){
 
-                            if(str_detect(data[,3], pattern = conv1)){
+                            if(stringr::str_detect(data[,3], pattern = conv1)){
                               data[,23] = "Proccessed" # add a period for using wildcards
 
                               replacement = str_match(pattern = conv1, data[,3])
@@ -1096,18 +1096,18 @@ pedigreeReduce = function(data, Codes){
     }
 
     for(i in (1:nrow(data))){
-      if(!str_detect(data[i,3], pattern = "\\.DH")){
-        if(!str_detect(data[i,3], pattern = conv3)){
-          if(!str_detect(data[i,3], pattern = conv4)){
+      if(!stringr::str_detect(data[i,3], pattern = "\\.DH")){
+        if(!stringr::str_detect(data[i,3], pattern = conv3)){
+          if(!stringr::str_detect(data[i,3], pattern = conv4)){
             if(!grepl(data[i,3], pattern ="\\*")){
               if(!grepl(data[i,3], pattern ="\\:")){
-                if(!str_detect(data[i,3], pattern =conv7)){
+                if(!stringr::str_detect(data[i,3], pattern =conv7)){
                   if(!grepl(data[i,3], pattern ="\\(wx")){
                     if(!grepl(data[i,3], pattern ="\\(wx")){
-                      if(!str_detect(data[i,3], pattern ="\\(GA21")){
-                        #if(!str_detect(data[i,3], pattern = conv1.1)){
+                      if(!stringr::str_detect(data[i,3], pattern ="\\(GA21")){
+                        #if(!stringr::str_detect(data[i,3], pattern = conv1.1)){
                         if(!grepl(data[i,3], pattern ="\\:")){
-                          if(!str_detect(data[i,3], pattern ="\\.")){
+                          if(!stringr::str_detect(data[i,3], pattern ="\\.")){
 
 
                             if(lengths(regmatches(data[i,3], gregexpr("/", data[i,3]))) ==1){
@@ -1117,7 +1117,7 @@ pedigreeReduce = function(data, Codes){
 
                               if(!is.na(replacement)){
 
-                                if(str_detect(data[i,3], pattern = fixed(replacement[1]))){
+                                if(stringr::str_detect(data[i,3], pattern = fixed(replacement[1]))){
                                   data[i,23] = "Proccessed" # add a period for using wildcards
 
                                   data[i,8] = replacement[1] # add a period for using wildcards
@@ -1129,26 +1129,26 @@ pedigreeReduce = function(data, Codes){
 
     #BDA015/BDA032//BHH069)-B-093-1-1
     for(i in (1:nrow(data))){
-      if(!str_detect(data[i,3], pattern = "\\.DH")){
-        if(!str_detect(data[i,3], pattern = conv4)){
-          #if(str_detect(data[i,3], pattern =conv2)){
-          if(!str_detect(data[i,3], pattern =conv3.1)){
-            if(str_detect(data[i,3], pattern =conv3)){
-              if(!str_detect(data[i,3], pattern =conv7)){
+      if(!stringr::str_detect(data[i,3], pattern = "\\.DH")){
+        if(!stringr::str_detect(data[i,3], pattern = conv4)){
+          #if(stringr::str_detect(data[i,3], pattern =conv2)){
+          if(!stringr::str_detect(data[i,3], pattern =conv3.1)){
+            if(stringr::str_detect(data[i,3], pattern =conv3)){
+              if(!stringr::str_detect(data[i,3], pattern =conv7)){
                 if(!grepl(data[i,3], pattern ="\\(wx")){
                   if(!grepl(data[i,3], pattern ="\\(wx")){
-                    if(!str_detect(data[i,3], pattern ="\\(GA21")){
-                      #if(!str_detect(data[i,3], pattern = conv1.1)){
+                    if(!stringr::str_detect(data[i,3], pattern ="\\(GA21")){
+                      #if(!stringr::str_detect(data[i,3], pattern = conv1.1)){
                       if(!grepl(data[i,3], pattern ="\\:")){
-                        if(!str_detect(data[i,3], pattern ="\\.")){
-                          #if(!str_detect(data[i,3], pattern = conv3.2)){
-                          #if(!str_detect(data[i,3], pattern = conv3.3)){
+                        if(!stringr::str_detect(data[i,3], pattern ="\\.")){
+                          #if(!stringr::str_detect(data[i,3], pattern = conv3.2)){
+                          #if(!stringr::str_detect(data[i,3], pattern = conv3.3)){
                           if(!grepl(data[i,3], pattern = "\\*")){
 
 
                             if(lengths(regmatches(data[i,3], gregexpr("/", data[i,3]))) ==2 ){
 
-                              if(str_detect(data[i,3], pattern = conv3)){
+                              if(stringr::str_detect(data[i,3], pattern = conv3)){
                                 data[i,23] = "Proccessed" # add a period for using wildcards
 
                                 replacement = str_match(pattern = conv3, data[i,3])
@@ -1159,25 +1159,25 @@ pedigreeReduce = function(data, Codes){
 
     #(I11063/FF6224)-B-B)/(I11063/FF6788)-14-03
     for(i in (1:nrow(data))){
-      if(!str_detect(data[i,3], pattern = "\\.DH")){
-        if(!str_detect(data[i,3], pattern = conv4)){
-          #if(str_detect(data[i,3], pattern =conv2)){
-          if(str_detect(data[i,3], pattern =conv3.1)){
-            if(!str_detect(data[i,3], pattern =conv7)){
+      if(!stringr::str_detect(data[i,3], pattern = "\\.DH")){
+        if(!stringr::str_detect(data[i,3], pattern = conv4)){
+          #if(stringr::str_detect(data[i,3], pattern =conv2)){
+          if(stringr::str_detect(data[i,3], pattern =conv3.1)){
+            if(!stringr::str_detect(data[i,3], pattern =conv7)){
               if(!grepl(data[i,3], pattern ="\\(wx")){
                 if(!grepl(data[i,3], pattern ="\\(wx")){
-                  if(!str_detect(data[i,3], pattern ="\\(GA21")){
-                    #if(str_detect(data[i,3], pattern = conv1.1)){
+                  if(!stringr::str_detect(data[i,3], pattern ="\\(GA21")){
+                    #if(stringr::str_detect(data[i,3], pattern = conv1.1)){
                     if(!grepl(data[i,3], pattern ="\\:")){
-                      if(!str_detect(data[i,3], pattern ="\\.")){
-                        if(!str_detect(data[i,3], pattern = conv3.2)){
-                          if(!str_detect(data[i,3], pattern = conv3.3)){
+                      if(!stringr::str_detect(data[i,3], pattern ="\\.")){
+                        if(!stringr::str_detect(data[i,3], pattern = conv3.2)){
+                          if(!stringr::str_detect(data[i,3], pattern = conv3.3)){
                             if(!grepl(data[i,3], pattern = "\\*")){
 
 
                               if(lengths(regmatches(data[i,3], gregexpr("/", data[i,3]))) >=3 ){
 
-                                if(str_detect(data[i,3], pattern = conv3.1)){
+                                if(stringr::str_detect(data[i,3], pattern = conv3.1)){
                                   data[i,23] = "Proccessed" # add a period for using wildcards
 
                                   replacement = str_match(pattern = conv3.1, data[i,3])
@@ -1189,24 +1189,24 @@ pedigreeReduce = function(data, Codes){
 
     #I10516/PHJ33//PHN82/I10516)-B-040-3-1-1-02
     for(i in (1:nrow(data))){
-      if(!str_detect(data[i,3], pattern = "\\.DH")){
-        if(str_detect(data[i,3], pattern = conv4)){
+      if(!stringr::str_detect(data[i,3], pattern = "\\.DH")){
+        if(stringr::str_detect(data[i,3], pattern = conv4)){
           if(lengths(regmatches(data[i,3], gregexpr("/", data[i,3]))) >=3){
-            if(!str_detect(data[i,3], pattern =conv7)){
-              if(!str_detect(data[i,3], pattern =conv4.1)){
+            if(!stringr::str_detect(data[i,3], pattern =conv7)){
+              if(!stringr::str_detect(data[i,3], pattern =conv4.1)){
                 if(!grepl(data[i,3], pattern ="\\(wx")){
                   if(!grepl(data[i,3], pattern ="\\(wx")){
-                    if(!str_detect(data[i,3], pattern ="\\(GA21")){
-                      if(!str_detect(data[i,3], pattern = conv1.1)){
-                        if(!str_detect(data[i,3], pattern = conv8)){
+                    if(!stringr::str_detect(data[i,3], pattern ="\\(GA21")){
+                      if(!stringr::str_detect(data[i,3], pattern = conv1.1)){
+                        if(!stringr::str_detect(data[i,3], pattern = conv8)){
                           if(!grepl(data[i,3], pattern ="\\:")){
-                            if(!str_detect(data[i,3], pattern = conv9)){
-                              if(!str_detect(data[i,3], pattern ="\\.")){
+                            if(!stringr::str_detect(data[i,3], pattern = conv9)){
+                              if(!stringr::str_detect(data[i,3], pattern ="\\.")){
 
 
-                                #if(!str_detect(data[i,3], pattern =conv3)){
+                                #if(!stringr::str_detect(data[i,3], pattern =conv3)){
 
-                                if(str_detect(data[i,3], pattern = conv4)){
+                                if(stringr::str_detect(data[i,3], pattern = conv4)){
                                   data[i,23] = "Proccessed" # add a period for using wildcards
 
                                   replacement = str_match(pattern = conv4, data[i,3])
@@ -1221,23 +1221,23 @@ pedigreeReduce = function(data, Codes){
 
     #(PHAW6/PHN82//PHAW6/PHJ33)-B-039-1)/BRP043)-B-18
     for(i in (1:nrow(data))){
-      if(!str_detect(data[i,3], pattern = "\\.DH")){
-        #if(str_detect(data[i,3], pattern = conv4)){
+      if(!stringr::str_detect(data[i,3], pattern = "\\.DH")){
+        #if(stringr::str_detect(data[i,3], pattern = conv4)){
         if(lengths(regmatches(data[i,3], gregexpr("/", data[i,3]))) >=3){
-          if(!str_detect(data[i,3], pattern =conv7)){
-            if(str_detect(data[i,3], pattern =conv4.1)){
+          if(!stringr::str_detect(data[i,3], pattern =conv7)){
+            if(stringr::str_detect(data[i,3], pattern =conv4.1)){
               if(!grepl(data[i,3], pattern ="\\(wx")){
                 if(!grepl(data[i,3], pattern ="\\(wx")){
-                  if(!str_detect(data[i,3], pattern ="\\(GA21")){
-                    #if(!str_detect(data[i,3], pattern =conv3)){
-                    #if(!str_detect(data[i,3], pattern = conv1.1)){
+                  if(!stringr::str_detect(data[i,3], pattern ="\\(GA21")){
+                    #if(!stringr::str_detect(data[i,3], pattern =conv3)){
+                    #if(!stringr::str_detect(data[i,3], pattern = conv1.1)){
                     if(!grepl(data[i,3], pattern ="\\:")){
-                      if(!str_detect(data[i,3], pattern = conv9)){
-                        if(!str_detect(data[i,3], pattern ="\\.")){
+                      if(!stringr::str_detect(data[i,3], pattern = conv9)){
+                        if(!stringr::str_detect(data[i,3], pattern ="\\.")){
 
 
 
-                          if(str_detect(data[i,3], pattern = conv4.1)){
+                          if(stringr::str_detect(data[i,3], pattern = conv4.1)){
                             data[i,23] = "Proccessed" # add a period for using wildcards
 
                             replacement = str_match(pattern = conv4.1, data[i,3])
@@ -1248,22 +1248,22 @@ pedigreeReduce = function(data, Codes){
 
     #(PHAW6/PHN82//PHAW6/PHJ33)-B-039-1)/BRP043)-B-18
     for(i in (1:nrow(data))){
-      if(!str_detect(data[i,3], pattern = "\\.DH")){
-        if(!str_detect(data[i,3], pattern = conv4)){
+      if(!stringr::str_detect(data[i,3], pattern = "\\.DH")){
+        if(!stringr::str_detect(data[i,3], pattern = conv4)){
           if(!lengths(regmatches(data[i,3], gregexpr("/", data[i,3]))) >=3){
-            if(!str_detect(data[i,3], pattern =conv7)){
-              if(!str_detect(data[i,3], pattern =conv4.1)){
+            if(!stringr::str_detect(data[i,3], pattern =conv7)){
+              if(!stringr::str_detect(data[i,3], pattern =conv4.1)){
                 if(!grepl(data[i,3], pattern ="\\(wx")){
                   if(!grepl(data[i,3], pattern ="\\(wx")){
-                    if(!str_detect(data[i,3], pattern ="\\(GA21")){
-                      #if(!str_detect(data[i,3], pattern =conv3)){
-                      if(str_detect(data[i,3], pattern = conv1.1)){
+                    if(!stringr::str_detect(data[i,3], pattern ="\\(GA21")){
+                      #if(!stringr::str_detect(data[i,3], pattern =conv3)){
+                      if(stringr::str_detect(data[i,3], pattern = conv1.1)){
                         if(!grepl(data[i,3], pattern ="\\:")){
-                          if(!str_detect(data[i,3], pattern = conv9)){
-                            if(!str_detect(data[i,3], pattern ="\\.")){
+                          if(!stringr::str_detect(data[i,3], pattern = conv9)){
+                            if(!stringr::str_detect(data[i,3], pattern ="\\.")){
 
 
-                              if(str_detect(data[i,3], pattern = conv1.1)){
+                              if(stringr::str_detect(data[i,3], pattern = conv1.1)){
                                 data[i,23] = "Proccessed" # add a period for using wildcards
 
                                 replacement = str_match(pattern = conv1.1, data[i,3])
@@ -1275,21 +1275,21 @@ pedigreeReduce = function(data, Codes){
     #LH195*2/DK2FACC)-B-B-B-0081-01-1-B
     for(i in (1:nrow(data))){
       if(!grepl(data[i,3], pattern ="\\.DH")){
-        #if(!str_detect(data[i,3], pattern =conv2)){
-        if(!str_detect(data[i,3], pattern =conv3)){
-          if(!str_detect(data[i,3], pattern =conv4)){
-            if(str_detect(data[i,3], pattern ="\\*")){
+        #if(!stringr::str_detect(data[i,3], pattern =conv2)){
+        if(!stringr::str_detect(data[i,3], pattern =conv3)){
+          if(!stringr::str_detect(data[i,3], pattern =conv4)){
+            if(stringr::str_detect(data[i,3], pattern ="\\*")){
               if(lengths(regmatches(data[i,3], gregexpr("/", data[i,3]))) ==1){
-                if(!str_detect(data[i,3], pattern =conv7)){
+                if(!stringr::str_detect(data[i,3], pattern =conv7)){
                   if(!grepl(data[i,3], pattern ="\\(wx")){
                     if(!grepl(data[i,3], pattern ="\\(wx")){
-                      if(!str_detect(data[i,3], pattern ="\\(GA21")){
-                        #if(!str_detect(data[i,3], pattern = conv1.1)){
+                      if(!stringr::str_detect(data[i,3], pattern ="\\(GA21")){
+                        #if(!stringr::str_detect(data[i,3], pattern = conv1.1)){
                         if(!grepl(data[i,3], pattern ="\\:")){
-                          if(!str_detect(data[i,3], pattern ="\\.")){
+                          if(!stringr::str_detect(data[i,3], pattern ="\\.")){
 
 
-                            if(str_detect(data[i,3], pattern = conv5)){
+                            if(stringr::str_detect(data[i,3], pattern = conv5)){
                               data[i,23] = "Proccessed" # add a period for using wildcards
 
                               replacement = str_match(pattern=conv5, data[i,3])
@@ -1302,23 +1302,23 @@ pedigreeReduce = function(data, Codes){
     #((065125/054245)/RS710-39.09)/065125-1-4-4
     for(i in (1:nrow(data))){
       if(!grepl(data[i,3], pattern ="\\.DH")){
-        #if(!str_detect(data[i,3], pattern =conv2)){
-        if(!str_detect(data[i,3], pattern =conv3)){
-          if(!str_detect(data[i,3], pattern =conv4)){
+        #if(!stringr::str_detect(data[i,3], pattern =conv2)){
+        if(!stringr::str_detect(data[i,3], pattern =conv3)){
+          if(!stringr::str_detect(data[i,3], pattern =conv4)){
             if(!grepl(data[i,3], pattern ="\\*")){
               if(lengths(regmatches(data[i,3], gregexpr("/", data[i,3]))) >= 3){
-                if(!str_detect(data[i,3], pattern =conv7)){
+                if(!stringr::str_detect(data[i,3], pattern =conv7)){
                   if(!grepl(data[i,3], pattern ="\\(wx")){
                     if(!grepl(data[i,3], pattern ="\\(wx")){
-                      if(!str_detect(data[i,3], pattern ="\\(GA21")){
-                        #if(!str_detect(data[i,3], pattern = conv1.1)){
+                      if(!stringr::str_detect(data[i,3], pattern ="\\(GA21")){
+                        #if(!stringr::str_detect(data[i,3], pattern = conv1.1)){
                         if(!grepl(data[i,3], pattern ="\\:")){
-                          if(str_detect(data[i,3], pattern ="\\.")){
-                            if(str_detect(data[i,3], pattern = conv11)){
-                              if(!str_detect(data[i,3], pattern = conv11.1)){
+                          if(stringr::str_detect(data[i,3], pattern ="\\.")){
+                            if(stringr::str_detect(data[i,3], pattern = conv11)){
+                              if(!stringr::str_detect(data[i,3], pattern = conv11.1)){
 
 
-                                if(str_detect(data[i,3], pattern = conv11)){
+                                if(stringr::str_detect(data[i,3], pattern = conv11)){
                                   data[i,23] = "Proccessed" # add a period for using wildcards
 
                                   replacement = str_match(pattern=conv11, data[i,3])
@@ -1330,24 +1330,24 @@ pedigreeReduce = function(data, Codes){
     #(046358/CI6621)/054530-B-45
     for(i in (1:nrow(data))){
       if(!grepl(data[i,3], pattern ="\\.DH")){
-        #if(!str_detect(data[i,3], pattern =conv2)){
-        #if(!str_detect(data[i,3], pattern =conv3)){
-        if(!str_detect(data[i,3], pattern =conv4)){
+        #if(!stringr::str_detect(data[i,3], pattern =conv2)){
+        #if(!stringr::str_detect(data[i,3], pattern =conv3)){
+        if(!stringr::str_detect(data[i,3], pattern =conv4)){
           if(!grepl(data[i,3], pattern ="\\*")){
             if(lengths(regmatches(data[i,3], gregexpr("/", data[i,3]))) >= 2){
-              if(!str_detect(data[i,3], pattern =conv7)){
+              if(!stringr::str_detect(data[i,3], pattern =conv7)){
                 if(!grepl(data[i,3], pattern ="\\(wx")){
                   if(!grepl(data[i,3], pattern ="\\(wx")){
-                    if(!str_detect(data[i,3], pattern ="\\(GA21")){
-                      #if(!str_detect(data[i,3], pattern = conv1.1)){
+                    if(!stringr::str_detect(data[i,3], pattern ="\\(GA21")){
+                      #if(!stringr::str_detect(data[i,3], pattern = conv1.1)){
                       if(!grepl(data[i,3], pattern ="\\:")){
-                        if(!str_detect(data[i,3], pattern ="\\.")){
-                          if(str_detect(data[i,3], pattern = conv19)){
-                            if(!str_detect(data[i,3], pattern = conv11.1)){
-                              if(!str_detect(data[i,3], pattern = conv6)){
+                        if(!stringr::str_detect(data[i,3], pattern ="\\.")){
+                          if(stringr::str_detect(data[i,3], pattern = conv19)){
+                            if(!stringr::str_detect(data[i,3], pattern = conv11.1)){
+                              if(!stringr::str_detect(data[i,3], pattern = conv6)){
 
 
-                                if(str_detect(data[i,3], pattern = conv19)){
+                                if(stringr::str_detect(data[i,3], pattern = conv19)){
                                   data[i,23] = "Proccessed" # add a period for using wildcards
 
                                   replacement = str_match(pattern=conv19, data[i,3])
@@ -1359,26 +1359,26 @@ pedigreeReduce = function(data, Codes){
     #(046358/CI6621)/054530-B
     for(i in (1:nrow(data))){
       if(!grepl(data[i,3], pattern ="\\.DH")){
-        #if(!str_detect(data[i,3], pattern =conv2)){
-        #if(!str_detect(data[i,3], pattern =conv3)){
-        if(!str_detect(data[i,3], pattern =conv4)){
+        #if(!stringr::str_detect(data[i,3], pattern =conv2)){
+        #if(!stringr::str_detect(data[i,3], pattern =conv3)){
+        if(!stringr::str_detect(data[i,3], pattern =conv4)){
           if(!grepl(data[i,3], pattern ="\\*")){
             if(lengths(regmatches(data[i,3], gregexpr("/", data[i,3]))) >= 2){
-              if(!str_detect(data[i,3], pattern =conv7)){
+              if(!stringr::str_detect(data[i,3], pattern =conv7)){
                 if(!grepl(data[i,3], pattern ="\\(wx")){
                   if(!grepl(data[i,3], pattern ="\\(wx")){
-                    if(!str_detect(data[i,3], pattern ="\\(GA21")){
-                      #if(!str_detect(data[i,3], pattern = conv1.1)){
+                    if(!stringr::str_detect(data[i,3], pattern ="\\(GA21")){
+                      #if(!stringr::str_detect(data[i,3], pattern = conv1.1)){
                       if(!grepl(data[i,3], pattern ="\\:")){
-                        if(!str_detect(data[i,3], pattern ="\\.")){
-                          if(str_detect(data[i,3], pattern = conv19.1)){
-                            if(!str_detect(data[i,3], pattern = conv19.2)){
+                        if(!stringr::str_detect(data[i,3], pattern ="\\.")){
+                          if(stringr::str_detect(data[i,3], pattern = conv19.1)){
+                            if(!stringr::str_detect(data[i,3], pattern = conv19.2)){
 
-                              if(!str_detect(data[i,3], pattern = conv11.1)){
-                                if(!str_detect(data[i,3], pattern = conv6)){
+                              if(!stringr::str_detect(data[i,3], pattern = conv11.1)){
+                                if(!stringr::str_detect(data[i,3], pattern = conv6)){
 
 
-                                  if(str_detect(data[i,3], pattern = conv19.1)){
+                                  if(stringr::str_detect(data[i,3], pattern = conv19.1)){
                                     data[i,23] = "Proccessed" # add a period for using wildcards
 
                                     replacement = str_match(pattern=conv19.1, data[i,3])
@@ -1390,26 +1390,26 @@ pedigreeReduce = function(data, Codes){
     #I9011-B/LH200//FX8091)-B-B-048
     for(i in (1:nrow(data))){
       if(!grepl(data[i,3], pattern ="\\.DH")){
-        #if(!str_detect(data[i,3], pattern =conv2)){
-        #if(!str_detect(data[i,3], pattern =conv3)){
-        if(!str_detect(data[i,3], pattern =conv4)){
+        #if(!stringr::str_detect(data[i,3], pattern =conv2)){
+        #if(!stringr::str_detect(data[i,3], pattern =conv3)){
+        if(!stringr::str_detect(data[i,3], pattern =conv4)){
           if(!grepl(data[i,3], pattern ="\\*")){
             if(lengths(regmatches(data[i,3], gregexpr("/", data[i,3]))) >= 2){
-              if(!str_detect(data[i,3], pattern =conv7)){
+              if(!stringr::str_detect(data[i,3], pattern =conv7)){
                 if(!grepl(data[i,3], pattern ="\\(wx")){
                   if(!grepl(data[i,3], pattern ="\\(wx")){
-                    if(!str_detect(data[i,3], pattern ="\\(GA21")){
-                      #if(!str_detect(data[i,3], pattern = conv1.1)){
+                    if(!stringr::str_detect(data[i,3], pattern ="\\(GA21")){
+                      #if(!stringr::str_detect(data[i,3], pattern = conv1.1)){
                       if(!grepl(data[i,3], pattern ="\\:")){
-                        if(!str_detect(data[i,3], pattern ="\\.")){
-                          if(str_detect(data[i,3], pattern = conv19.2)){
-                            if(!str_detect(data[i,3], pattern = conv19.1)){
+                        if(!stringr::str_detect(data[i,3], pattern ="\\.")){
+                          if(stringr::str_detect(data[i,3], pattern = conv19.2)){
+                            if(!stringr::str_detect(data[i,3], pattern = conv19.1)){
 
-                              if(!str_detect(data[i,3], pattern = conv11.1)){
-                                if(!str_detect(data[i,3], pattern = conv6)){
+                              if(!stringr::str_detect(data[i,3], pattern = conv11.1)){
+                                if(!stringr::str_detect(data[i,3], pattern = conv6)){
 
 
-                                  if(str_detect(data[i,3], pattern = conv19.2)){
+                                  if(stringr::str_detect(data[i,3], pattern = conv19.2)){
                                     data[i,23] = "Proccessed" # add a period for using wildcards
 
                                     replacement = str_match(pattern=conv19.2, data[i,3])
@@ -1421,28 +1421,28 @@ pedigreeReduce = function(data, Codes){
     #I9011-B/LH200//FX8091)-B-B-048
     for(i in (1:nrow(data))){
       if(!grepl(data[i,3], pattern ="\\.DH")){
-        #if(!str_detect(data[i,3], pattern =conv2)){
-        #if(!str_detect(data[i,3], pattern =conv3)){
-        if(!str_detect(data[i,3], pattern =conv4)){
+        #if(!stringr::str_detect(data[i,3], pattern =conv2)){
+        #if(!stringr::str_detect(data[i,3], pattern =conv3)){
+        if(!stringr::str_detect(data[i,3], pattern =conv4)){
           if(!grepl(data[i,3], pattern ="\\*")){
             if(lengths(regmatches(data[i,3], gregexpr("/", data[i,3]))) >= 2){
-              if(!str_detect(data[i,3], pattern =conv7)){
+              if(!stringr::str_detect(data[i,3], pattern =conv7)){
                 if(!grepl(data[i,3], pattern ="\\(wx")){
                   if(!grepl(data[i,3], pattern ="\\(wx")){
-                    if(!str_detect(data[i,3], pattern ="\\(GA21")){
-                      #if(!str_detect(data[i,3], pattern = conv1.1)){
+                    if(!stringr::str_detect(data[i,3], pattern ="\\(GA21")){
+                      #if(!stringr::str_detect(data[i,3], pattern = conv1.1)){
                       if(!grepl(data[i,3], pattern ="\\:")){
-                        if(!str_detect(data[i,3], pattern ="\\.")){
-                          if(str_detect(data[i,3], pattern = conv19.3)){
-                            if(!str_detect(data[i,3], pattern = conv19.1)){
-                              if(!str_detect(data[i,3], pattern = conv19.2)){
-                                if(!str_detect(data[i,3], pattern = conv19)){
+                        if(!stringr::str_detect(data[i,3], pattern ="\\.")){
+                          if(stringr::str_detect(data[i,3], pattern = conv19.3)){
+                            if(!stringr::str_detect(data[i,3], pattern = conv19.1)){
+                              if(!stringr::str_detect(data[i,3], pattern = conv19.2)){
+                                if(!stringr::str_detect(data[i,3], pattern = conv19)){
 
-                                  if(!str_detect(data[i,3], pattern = conv11.1)){
-                                    if(!str_detect(data[i,3], pattern = conv6)){
+                                  if(!stringr::str_detect(data[i,3], pattern = conv11.1)){
+                                    if(!stringr::str_detect(data[i,3], pattern = conv6)){
 
 
-                                      if(str_detect(data[i,3], pattern = conv19.3)){
+                                      if(stringr::str_detect(data[i,3], pattern = conv19.3)){
                                         data[i,23] = "Proccessed" # add a period for using wildcards
 
                                         replacement = str_match(pattern=conv19.3, data[i,3])
@@ -1454,26 +1454,26 @@ pedigreeReduce = function(data, Codes){
     #(056460/CI6621)/(I10516/CI6621)-B-10
     for(i in (1:nrow(data))){
       if(!grepl(data[i,3], pattern ="\\.DH")){
-        #if(!str_detect(data[i,3], pattern =conv2)){
-        #if(!str_detect(data[i,3], pattern =conv3)){
-        if(!str_detect(data[i,3], pattern =conv4)){
+        #if(!stringr::str_detect(data[i,3], pattern =conv2)){
+        #if(!stringr::str_detect(data[i,3], pattern =conv3)){
+        if(!stringr::str_detect(data[i,3], pattern =conv4)){
           if(!grepl(data[i,3], pattern ="\\*")){
             if(lengths(regmatches(data[i,3], gregexpr("/", data[i,3]))) >= 3){
-              if(!str_detect(data[i,3], pattern =conv7)){
+              if(!stringr::str_detect(data[i,3], pattern =conv7)){
                 if(!grepl(data[i,3], pattern ="\\(wx")){
                   if(!grepl(data[i,3], pattern ="\\(wx")){
-                    if(!str_detect(data[i,3], pattern ="\\(GA21")){
-                      #if(!str_detect(data[i,3], pattern = conv1.1)){
+                    if(!stringr::str_detect(data[i,3], pattern ="\\(GA21")){
+                      #if(!stringr::str_detect(data[i,3], pattern = conv1.1)){
                       if(!grepl(data[i,3], pattern ="\\:")){
-                        if(!str_detect(data[i,3], pattern ="\\.")){
-                          if(str_detect(data[i,3], pattern = conv20)){
-                            if(!str_detect(data[i,3], pattern = conv11.1)){
-                              if(!str_detect(data[i,3], pattern = conv6)){
-                                #if(!str_detect(data[i,3], pattern = conv5)){
-                                #if(!str_detect(data[i,3], pattern = conv3)){
+                        if(!stringr::str_detect(data[i,3], pattern ="\\.")){
+                          if(stringr::str_detect(data[i,3], pattern = conv20)){
+                            if(!stringr::str_detect(data[i,3], pattern = conv11.1)){
+                              if(!stringr::str_detect(data[i,3], pattern = conv6)){
+                                #if(!stringr::str_detect(data[i,3], pattern = conv5)){
+                                #if(!stringr::str_detect(data[i,3], pattern = conv3)){
 
 
-                                if(str_detect(data[i,3], pattern = conv20)){
+                                if(stringr::str_detect(data[i,3], pattern = conv20)){
                                   data[i,23] = "Proccessed" # add a period for using wildcards
 
                                   replacement = str_match(pattern=conv20, data[i,3])
@@ -1486,12 +1486,12 @@ pedigreeReduce = function(data, Codes){
 
     data$Matched = ifelse(data$pedigree != data$match, T, F)
     # # #
-    dataF = data %>% filter(Matched== F) %>% filter(proccessed != "Proccessed") %>%
-      filter(!grepl(".Male",pedigree)) %>% filter(!grepl("\\:",pedigree)) %>% filter(!grepl(".Female",pedigree))
+    dataF = data %>% dplyr::filter(Matched== F) %>% dplyr::filter(proccessed != "Proccessed") %>%
+      dplyr::filter(!grepl(".Male",pedigree)) %>% dplyr::filter(!grepl("\\:",pedigree)) %>% dplyr::filter(!grepl(".Female",pedigree))
 
 
     # # #
-    dataPros = data %>% filter(proccessed == "Proccessed")
+    dataPros = data %>% dplyr::filter(proccessed == "Proccessed")
     nrow(dataPros)
     nrow(dataPros) / nrow(data)
 
@@ -1652,17 +1652,17 @@ pedigreeReduce = function(data, Codes){
 
               if(!grepl(data[i,3], pattern ="\\(wx")){
                 if(!grepl(data[i,3], pattern ="\\:")){
-                  #if(str_detect(data[i,3], pattern ="\\.")){
-                  #if(!str_detect(data[i,3], pattern =convDH13)){
-                  #if(!str_detect(data[i,3], pattern =convDH14)){
-                  #if(!str_detect(data[i,3], pattern =convDH12)){
-                  #if(!str_detect(data[i,3], pattern =convDH15)){
-                  #if(!str_detect(data[i,3], pattern =convDH16)){
-                  if(!str_detect(data[i,3], pattern =convDH17)){
-                    if(str_detect(data[i,3], pattern =convDH18)){
+                  #if(stringr::str_detect(data[i,3], pattern ="\\.")){
+                  #if(!stringr::str_detect(data[i,3], pattern =convDH13)){
+                  #if(!stringr::str_detect(data[i,3], pattern =convDH14)){
+                  #if(!stringr::str_detect(data[i,3], pattern =convDH12)){
+                  #if(!stringr::str_detect(data[i,3], pattern =convDH15)){
+                  #if(!stringr::str_detect(data[i,3], pattern =convDH16)){
+                  if(!stringr::str_detect(data[i,3], pattern =convDH17)){
+                    if(stringr::str_detect(data[i,3], pattern =convDH18)){
 
 
-                      if(str_detect(data[i,3], pattern = convDH18)){
+                      if(stringr::str_detect(data[i,3], pattern = convDH18)){
                         data[i,23] = "Proccessed" # add a period for using wildcards
 
                         replacement = str_match(pattern=convDH18, data[i,3])
@@ -1673,25 +1673,25 @@ pedigreeReduce = function(data, Codes){
 
     #(GEMS-0227/I9005)-B.DHB-063
     for(i in (1:nrow(data))){
-      if(str_detect(data[i,3], pattern ="\\DH")){
+      if(stringr::str_detect(data[i,3], pattern ="\\DH")){
         if(!grepl(data[i,3], pattern = "\\*")){
           if(lengths(regmatches(data[i,3], gregexpr("/", data[i,3]))) == 1){
             if(lengths(regmatches(data[i,3], gregexpr("\\)", data[i,3]))) >= 1){
               #if(lengths(regmatches(data[i,3], gregexpr("\\(", data[i,3]))) > 1){
               if(!grepl(data[i,3], pattern ="\\(wx")){
                 if(!grepl(data[i,3], pattern ="\\:")){
-                  #if(str_detect(data[i,3], pattern ="\\.")){
-                  if(!str_detect(data[i,3], pattern ="GEMS")){
-                    #if(!str_detect(data[i,3], pattern =convDH13)){
-                    # if(!str_detect(data[i,3], pattern =convDH14)){
-                    #if(!str_detect(data[i,3], pattern =convDH12)){
-                    # if(!str_detect(data[i,3], pattern =convDH15)){
-                    if(!str_detect(data[i,3], pattern =convDH16)){
-                      if(!str_detect(data[i,3], pattern =convDH17)){
-                        if(str_detect(data[i,3], pattern =convDH18.1)){
+                  #if(stringr::str_detect(data[i,3], pattern ="\\.")){
+                  if(!stringr::str_detect(data[i,3], pattern ="GEMS")){
+                    #if(!stringr::str_detect(data[i,3], pattern =convDH13)){
+                    # if(!stringr::str_detect(data[i,3], pattern =convDH14)){
+                    #if(!stringr::str_detect(data[i,3], pattern =convDH12)){
+                    # if(!stringr::str_detect(data[i,3], pattern =convDH15)){
+                    if(!stringr::str_detect(data[i,3], pattern =convDH16)){
+                      if(!stringr::str_detect(data[i,3], pattern =convDH17)){
+                        if(stringr::str_detect(data[i,3], pattern =convDH18.1)){
 
 
-                          if(str_detect(data[i,3], pattern = convDH18.1)){
+                          if(stringr::str_detect(data[i,3], pattern = convDH18.1)){
                             data[i,23] = "Proccessed" # add a period for using wildcards
 
                             replacement = str_match(pattern=convDH18.1, data[i,3])
@@ -1708,17 +1708,17 @@ pedigreeReduce = function(data, Codes){
 
               if(!grepl(data[i,3], pattern ="\\(wx")){
                 if(!grepl(data[i,3], pattern ="\\:")){
-                  #if(str_detect(data[i,3], pattern ="\\.")){
-                  #if(!str_detect(data[i,3], pattern =convDH13)){
-                  #if(!str_detect(data[i,3], pattern =convDH14)){
-                  #if(!str_detect(data[i,3], pattern =convDH12)){
-                  #if(!str_detect(data[i,3], pattern =convDH15)){
-                  #if(!str_detect(data[i,3], pattern =convDH16)){
-                  if(!str_detect(data[i,3], pattern =convDH17)){
-                    if(str_detect(data[i,3], pattern =convDH30)){
+                  #if(stringr::str_detect(data[i,3], pattern ="\\.")){
+                  #if(!stringr::str_detect(data[i,3], pattern =convDH13)){
+                  #if(!stringr::str_detect(data[i,3], pattern =convDH14)){
+                  #if(!stringr::str_detect(data[i,3], pattern =convDH12)){
+                  #if(!stringr::str_detect(data[i,3], pattern =convDH15)){
+                  #if(!stringr::str_detect(data[i,3], pattern =convDH16)){
+                  if(!stringr::str_detect(data[i,3], pattern =convDH17)){
+                    if(stringr::str_detect(data[i,3], pattern =convDH30)){
 
 
-                      if(str_detect(data[i,3], pattern = convDH30)){
+                      if(stringr::str_detect(data[i,3], pattern = convDH30)){
                         data[i,23] = "Proccessed" # add a period for using wildcards
 
                         replacement = str_match(pattern=convDH30, data[i,3])
@@ -1729,7 +1729,7 @@ pedigreeReduce = function(data, Codes){
 
     #(GEMS-0227/I9005)-B.DHB-063
     for(i in (1:nrow(data))){
-      if(str_detect(data[i,3], pattern ="\\DH")){
+      if(stringr::str_detect(data[i,3], pattern ="\\DH")){
         if(!grepl(data[i,3], pattern = "\\*")){
           if(lengths(regmatches(data[i,3], gregexpr("/", data[i,3]))) == 1){
             if(lengths(regmatches(data[i,3], gregexpr("\\)", data[i,3]))) == 0){
@@ -1737,18 +1737,18 @@ pedigreeReduce = function(data, Codes){
 
                 if(!grepl(data[i,3], pattern ="\\(wx")){
                   if(!grepl(data[i,3], pattern ="\\:")){
-                    #if(str_detect(data[i,3], pattern ="\\.")){
-                    if(!str_detect(data[i,3], pattern ="GEMS")){
-                      #if(!str_detect(data[i,3], pattern =convDH13)){
-                      # if(!str_detect(data[i,3], pattern =convDH14)){
-                      #if(!str_detect(data[i,3], pattern =convDH12)){
-                      # if(!str_detect(data[i,3], pattern =convDH15)){
-                      if(!str_detect(data[i,3], pattern =convDH16)){
-                        if(!str_detect(data[i,3], pattern =convDH17)){
-                          if(str_detect(data[i,3], pattern =convDH30.1)){
+                    #if(stringr::str_detect(data[i,3], pattern ="\\.")){
+                    if(!stringr::str_detect(data[i,3], pattern ="GEMS")){
+                      #if(!stringr::str_detect(data[i,3], pattern =convDH13)){
+                      # if(!stringr::str_detect(data[i,3], pattern =convDH14)){
+                      #if(!stringr::str_detect(data[i,3], pattern =convDH12)){
+                      # if(!stringr::str_detect(data[i,3], pattern =convDH15)){
+                      if(!stringr::str_detect(data[i,3], pattern =convDH16)){
+                        if(!stringr::str_detect(data[i,3], pattern =convDH17)){
+                          if(stringr::str_detect(data[i,3], pattern =convDH30.1)){
 
 
-                            if(str_detect(data[i,3], pattern = convDH30.1)){
+                            if(stringr::str_detect(data[i,3], pattern = convDH30.1)){
                               data[i,23] = "Proccessed" # add a period for using wildcards
 
                               replacement = str_match(pattern=convDH30.1, data[i,3])
@@ -1764,16 +1764,16 @@ pedigreeReduce = function(data, Codes){
           if(lengths(regmatches(data[i,3], gregexpr("/", data[i,3]))) == 2){
             if(!grepl(data[i,3], pattern ="\\(wx")){
               if(!grepl(data[i,3], pattern ="\\:")){
-                if(str_detect(data[i,3], pattern ="\\.")){
-                  if(!str_detect(data[i,3], pattern ="GEMS")){
+                if(stringr::str_detect(data[i,3], pattern ="\\.")){
+                  if(!stringr::str_detect(data[i,3], pattern ="GEMS")){
 
-                    #if(!str_detect(data[i,3], pattern =convDH13)){
-                    if(!str_detect(data[i,3], pattern =convDH14)){
-                      if(str_detect(data[i,3], pattern =convDH12)){
-                        if(!str_detect(data[i,3], pattern =convDH16)){
+                    #if(!stringr::str_detect(data[i,3], pattern =convDH13)){
+                    if(!stringr::str_detect(data[i,3], pattern =convDH14)){
+                      if(stringr::str_detect(data[i,3], pattern =convDH12)){
+                        if(!stringr::str_detect(data[i,3], pattern =convDH16)){
 
 
-                          if(str_detect(data[i,3], pattern = convDH12)){
+                          if(stringr::str_detect(data[i,3], pattern = convDH12)){
                             data[i,23] = "Proccessed" # add a period for using wildcards
 
                             replacement = str_match(pattern=convDH12, data[i,3])
@@ -1791,19 +1791,19 @@ pedigreeReduce = function(data, Codes){
           if(lengths(regmatches(data[i,3], gregexpr("/", data[i,3]))) == 3){
             if(!grepl(data[i,3], pattern ="\\(wx")){
               if(!grepl(data[i,3], pattern ="\\(wx")){
-                if(!str_detect(data[i,3], pattern ="\\(GA21")){
+                if(!stringr::str_detect(data[i,3], pattern ="\\(GA21")){
                   if(!grepl(data[i,3], pattern ="\\:")){
-                    if(str_detect(data[i,3], pattern ="\\.")){
-                      if(str_detect(data[i,3], pattern =convDH13)){
-                        if(!str_detect(data[i,3], pattern ="GEMS")){
+                    if(stringr::str_detect(data[i,3], pattern ="\\.")){
+                      if(stringr::str_detect(data[i,3], pattern =convDH13)){
+                        if(!stringr::str_detect(data[i,3], pattern ="GEMS")){
 
-                          #if(!str_detect(data[i,3], pattern =convDH14)){
-                          #if(!str_detect(data[i,3], pattern =convDH12)){
-                          #if(!str_detect(data[i,3], pattern =convDH15)){
+                          #if(!stringr::str_detect(data[i,3], pattern =convDH14)){
+                          #if(!stringr::str_detect(data[i,3], pattern =convDH12)){
+                          #if(!stringr::str_detect(data[i,3], pattern =convDH15)){
 
 
 
-                          if(str_detect(data[i,3], pattern = convDH13)){
+                          if(stringr::str_detect(data[i,3], pattern = convDH13)){
                             data[i,23] = "Proccessed" # add a period for using wildcards
 
                             replacement = str_match(pattern=convDH13, data[i,3])
@@ -1820,18 +1820,18 @@ pedigreeReduce = function(data, Codes){
           if(lengths(regmatches(data[i,3], gregexpr("/", data[i,3]))) == 2){
             if(!grepl(data[i,3], pattern ="\\(wx")){
               if(!grepl(data[i,3], pattern ="\\(wx")){
-                if(!str_detect(data[i,3], pattern ="\\(GA21")){
+                if(!stringr::str_detect(data[i,3], pattern ="\\(GA21")){
                   if(!grepl(data[i,3], pattern ="\\:")){
                     if(grepl(data[i,3], pattern ="\\.")){
-                      #if(!str_detect(data[i,3], pattern =convDH13)){
-                      if(str_detect(data[i,3], pattern =convDH14)){
-                        #if(!str_detect(data[i,3], pattern =convDH12)){
-                        if(!str_detect(data[i,3], pattern =convDH17)){
-                          if(!str_detect(data[i,3], pattern ="GEMS")){
+                      #if(!stringr::str_detect(data[i,3], pattern =convDH13)){
+                      if(stringr::str_detect(data[i,3], pattern =convDH14)){
+                        #if(!stringr::str_detect(data[i,3], pattern =convDH12)){
+                        if(!stringr::str_detect(data[i,3], pattern =convDH17)){
+                          if(!stringr::str_detect(data[i,3], pattern ="GEMS")){
 
 
 
-                            if(str_detect(data[i,3], pattern = convDH14)){
+                            if(stringr::str_detect(data[i,3], pattern = convDH14)){
                               data[i,23] = "Proccessed" # add a period for using wildcards
 
                               replacement = str_match(pattern=convDH14, data[i,3])
@@ -1851,14 +1851,14 @@ pedigreeReduce = function(data, Codes){
                 if(!grepl(data[i,3], pattern ="\\(GA21")){
                   if(!grepl(data[i,3], pattern ="\\:")){
                     if(grepl(data[i,3], pattern ="\\.")){
-                      #if(!str_detect(data[i,3], pattern =convDH13)){
-                      #if(!str_detect(data[i,3], pattern =convDH14)){
-                      #if(!str_detect(data[i,3], pattern =convDH12)){
-                      if(str_detect(data[i,3], pattern =convDH15)){
+                      #if(!stringr::str_detect(data[i,3], pattern =convDH13)){
+                      #if(!stringr::str_detect(data[i,3], pattern =convDH14)){
+                      #if(!stringr::str_detect(data[i,3], pattern =convDH12)){
+                      if(stringr::str_detect(data[i,3], pattern =convDH15)){
                         if(!grepl(data[i,3], pattern ="GEMS")){
 
 
-                          if(str_detect(data[i,3], pattern = convDH15)){
+                          if(stringr::str_detect(data[i,3], pattern = convDH15)){
                             data[i,23] = "Proccessed" # add a period for using wildcards
 
                             replacement = str_match(pattern=convDH15, data[i,3])
@@ -1870,12 +1870,12 @@ pedigreeReduce = function(data, Codes){
 
     data$Matched = ifelse(data$pedigree != data$match, T, F)
     # # #
-    dataF = data %>% filter(Matched== F) %>% filter(proccessed != "Proccessed") %>%
-      filter(!grepl(".Male",pedigree)) %>% filter(!grepl("\\:",pedigree)) %>% filter(!grepl(".Female",pedigree))
+    dataF = data %>% dplyr::filter(Matched== F) %>% dplyr::filter(proccessed != "Proccessed") %>%
+      dplyr::filter(!grepl(".Male",pedigree)) %>% dplyr::filter(!grepl("\\:",pedigree)) %>% dplyr::filter(!grepl(".Female",pedigree))
 
 
     # # #
-    dataPros = data %>% filter(proccessed == "Proccessed")
+    dataPros = data %>% dplyr::filter(proccessed == "Proccessed")
     nrow(dataPros)
     print(nrow(dataPros) / nrow(data))
 
@@ -1916,29 +1916,29 @@ pedigreeReduce = function(data, Codes){
 
     #BDA015/BDA032//BHH069)-B-093-1-1	?error
     # for(i in (1:nrow(data))){
-    #   if(!str_detect(data[i,3], pattern = "\\.DH")){
-    #     if(!str_detect(data[i,3], pattern = conv4)){
-    #       #if(str_detect(data[i,3], pattern =conv3)){
+    #   if(!stringr::str_detect(data[i,3], pattern = "\\.DH")){
+    #     if(!stringr::str_detect(data[i,3], pattern = conv4)){
+    #       #if(stringr::str_detect(data[i,3], pattern =conv3)){
     #       if(lengths(regmatches(data[i,3], gregexpr("/", data[i,3]))) ==2 ){
     #
     #         replacement = str_match(pattern = conv3, data[i,3])
     #
     #         if(!is.na(replacement)){
-    #           if(str_detect(data[i,3], pattern = fixed(replacement[1]))){
+    #           if(stringr::str_detect(data[i,3], pattern = fixed(replacement[1]))){
     #             data[i,10] = replacement[1] # add a period for using wildcards
     #             data[i,3] = replacement[1] # add a period for using wildcards
     #
     #           }} }}}}
 
     rm(bind.data)
-    stopCluster(cl)
+    parallel::stopCluster(cl)
     return(data.frame(data))
   }
 }
 #
 # data$Matched = ifelse(data$pedigree != data$match, T, F)
 # # #
-# dataF = data %>% filter(Matched== T)
+# dataF = data %>% dplyr::filter(Matched== T)
 #
 
 # #DH material######################################################
@@ -1980,9 +1980,9 @@ pedigreeReduce = function(data, Codes){
 #
 # for(i in (1:nrow(data))){
 #   if(grepl(data[i,3], pattern ="\\.DH")){
-#     if(str_detect(data[i,3], pattern = patterns.04)){
-#       if(!str_detect(data[i,3], pattern = patterns.06)){
-#         if(!str_detect(data[i,3], pattern = patterns.07)){
+#     if(stringr::str_detect(data[i,3], pattern = patterns.04)){
+#       if(!stringr::str_detect(data[i,3], pattern = patterns.06)){
+#         if(!stringr::str_detect(data[i,3], pattern = patterns.07)){
 #
 #           replacement = str_match(pattern = patterns.04, data[i,3])
 #           data[i,3] = replacement[1] # add a period for using wildcards
@@ -1993,10 +1993,10 @@ pedigreeReduce = function(data, Codes){
 # #CI6621/054530)-B.DH089-1-B-B-B
 # for(i in (1:nrow(data))){
 #   if(grepl(data[i,3], pattern ="\\.DH")){
-#     if(str_detect(data[i,3], pattern = patterns.05)){
-#       if(!str_detect(data[i,3], pattern = patterns.04)){
-#         if(!str_detect(data[i,3], pattern = patterns.06)){
-#           if(!str_detect(data[i,3], pattern = patterns.07)){
+#     if(stringr::str_detect(data[i,3], pattern = patterns.05)){
+#       if(!stringr::str_detect(data[i,3], pattern = patterns.04)){
+#         if(!stringr::str_detect(data[i,3], pattern = patterns.06)){
+#           if(!stringr::str_detect(data[i,3], pattern = patterns.07)){
 #
 #             replacement = str_match(pattern = patterns.05, data[i,3])
 #             data[i,3] = replacement[1] # add a period for using wildcards
@@ -2004,11 +2004,11 @@ pedigreeReduce = function(data, Codes){
 #
 # #(046358/LH185)/(046358/I10516).DH-029
 # for(i in (1:nrow(data))){
-#   if(str_detect(data[i,3], pattern = "\\.DH")){
-#     if(!str_detect(data[i,3], pattern = patterns.05)){
-#       if(!str_detect(data[i,3], pattern = patterns.04)){
-#         if(!str_detect(data[i,3], pattern = patterns.06)){
-#           if(str_detect(data[i,3], pattern = patterns.07)){
+#   if(stringr::str_detect(data[i,3], pattern = "\\.DH")){
+#     if(!stringr::str_detect(data[i,3], pattern = patterns.05)){
+#       if(!stringr::str_detect(data[i,3], pattern = patterns.04)){
+#         if(!stringr::str_detect(data[i,3], pattern = patterns.06)){
+#           if(stringr::str_detect(data[i,3], pattern = patterns.07)){
 #
 #             replacement = str_match(pattern = patterns.07, data[i,3])
 #             data[i,3] = replacement[1] # add a period for using wildcards
@@ -2024,14 +2024,14 @@ pedigreeReduce = function(data, Codes){
 # #patterns.25=paste0("^[\\(]{0,1}[\\(]{0,1}",dhStringped,"/",dhStringped,"[\\)]{0,1}/",dhStringperiod,"\\)/",bcString,"(?:-[[:alnum:]]+){2}")
 #
 # # for(i in (1:nrow(data))){
-# #   if(!str_detect(data[i,3], pattern = "\\.DH")){
-# #     if(!str_detect(data[i,3], pattern =patterns30)){
-# #       if(!str_detect(data[i,3], pattern = patterns.25)){
-# #         if(!str_detect(data[i,3], pattern = patterns.26)){
-# #           if(!str_detect(data[i,3], pattern = patterns.05)){
-# #             if(!str_detect(data[i,3], pattern = patterns.04)){
-# #               if(!str_detect(data[i,3], pattern = patterns.06)){
-# #                 if(str_detect(data[i,3], pattern = patterns.26)){
+# #   if(!stringr::str_detect(data[i,3], pattern = "\\.DH")){
+# #     if(!stringr::str_detect(data[i,3], pattern =patterns30)){
+# #       if(!stringr::str_detect(data[i,3], pattern = patterns.25)){
+# #         if(!stringr::str_detect(data[i,3], pattern = patterns.26)){
+# #           if(!stringr::str_detect(data[i,3], pattern = patterns.05)){
+# #             if(!stringr::str_detect(data[i,3], pattern = patterns.04)){
+# #               if(!stringr::str_detect(data[i,3], pattern = patterns.06)){
+# #                 if(stringr::str_detect(data[i,3], pattern = patterns.26)){
 # #
 # #                 replacement = str_match(pattern = patterns.26, data[i,3])
 # #                 data[i,3] = replacement[1] # add a period for using wildcards
@@ -2045,12 +2045,12 @@ pedigreeReduce = function(data, Codes){
 # #((MM501D/CI6621)/I10516-57.1)/I10516-4-1-1 #BC2S3
 #
 # for(i in (1:nrow(data))){
-#   if(!str_detect(data[i,3], pattern =patterns30)){
-#     if(str_detect(data[i,3], pattern = patterns.25)){
-#       if(!str_detect(data[i,3], pattern = patterns.05)){
-#         if(!str_detect(data[i,3], pattern = patterns.04)){
-#           if(!str_detect(data[i,3], pattern = patterns.06)){
-#             if(!str_detect(data[i,3], pattern = patterns.07)){
+#   if(!stringr::str_detect(data[i,3], pattern =patterns30)){
+#     if(stringr::str_detect(data[i,3], pattern = patterns.25)){
+#       if(!stringr::str_detect(data[i,3], pattern = patterns.05)){
+#         if(!stringr::str_detect(data[i,3], pattern = patterns.04)){
+#           if(!stringr::str_detect(data[i,3], pattern = patterns.06)){
+#             if(!stringr::str_detect(data[i,3], pattern = patterns.07)){
 #
 #               replacement = str_match(pattern = patterns.25, data[i,3])
 #               data[i,3] = replacement[1] # add a period for using wildcards
@@ -2063,13 +2063,13 @@ pedigreeReduce = function(data, Codes){
 # #(046358/LH185)/(046358/CI6621)-B-24-1 #F4
 #
 # for(i in (1:nrow(data))){
-#   if(!str_detect(data[i,3], pattern = "\\.DH")){
-#     if(!str_detect(data[i,3], pattern =patterns30)){
-#       if(!str_detect(data[i,3], pattern = patterns.25)){
-#         if(str_detect(data[i,3], pattern = patterns.26)){
-#           if(!str_detect(data[i,3], pattern = patterns.05)){
-#             if(!str_detect(data[i,3], pattern = patterns.04)){
-#               if(!str_detect(data[i,3], pattern = patterns.06)){
+#   if(!stringr::str_detect(data[i,3], pattern = "\\.DH")){
+#     if(!stringr::str_detect(data[i,3], pattern =patterns30)){
+#       if(!stringr::str_detect(data[i,3], pattern = patterns.25)){
+#         if(stringr::str_detect(data[i,3], pattern = patterns.26)){
+#           if(!stringr::str_detect(data[i,3], pattern = patterns.05)){
+#             if(!stringr::str_detect(data[i,3], pattern = patterns.04)){
+#               if(!stringr::str_detect(data[i,3], pattern = patterns.06)){
 #
 #                 replacement = str_match(pattern = patterns.26, data[i,3])
 #                 data[i,3] = replacement[1] # add a period for using wildcards
@@ -2078,13 +2078,13 @@ pedigreeReduce = function(data, Codes){
 # #(046358/LH185)/(046358/I10516).DH-014 #DH1
 #
 # for(i in (1:nrow(data))){
-#   if(str_detect(data[i,3], pattern = "\\.DH")){
-#     if(!str_detect(data[i,3], pattern =patterns30)){
-#       if(!str_detect(data[i,3], pattern = patterns.25)){
-#         if(str_detect(data[i,3], pattern = patterns.27)){
-#           if(!str_detect(data[i,3], pattern = patterns.05)){
-#             if(!str_detect(data[i,3], pattern = patterns.04)){
-#               if(!str_detect(data[i,3], pattern = patterns.06)){
+#   if(stringr::str_detect(data[i,3], pattern = "\\.DH")){
+#     if(!stringr::str_detect(data[i,3], pattern =patterns30)){
+#       if(!stringr::str_detect(data[i,3], pattern = patterns.25)){
+#         if(stringr::str_detect(data[i,3], pattern = patterns.27)){
+#           if(!stringr::str_detect(data[i,3], pattern = patterns.05)){
+#             if(!stringr::str_detect(data[i,3], pattern = patterns.04)){
+#               if(!stringr::str_detect(data[i,3], pattern = patterns.06)){
 #
 #                 replacement = str_match(pattern = patterns.27, data[i,3])
 #                 data[i,3] = replacement[1] # add a period for using wildcards
@@ -2096,14 +2096,14 @@ pedigreeReduce = function(data, Codes){
 #
 # #(2FACC/999165/065125)-06-5
 # for(i in (1:nrow(data))){
-#   if(!str_detect(data[i,3], pattern = "\\.DH")){
-#     if(!str_detect(data[i,3], pattern =patterns30)){
-#       if(!str_detect(data[i,3], pattern = patterns.25)){
-#         if(!str_detect(data[i,3], pattern = patterns.27)){
-#           if(!str_detect(data[i,3], pattern = patterns.05)){
-#             if(!str_detect(data[i,3], pattern = patterns.04)){
-#               if(!str_detect(data[i,3], pattern = patterns.06)){
-#                 if(str_detect(data[i,3], pattern = patterns.08)){
+#   if(!stringr::str_detect(data[i,3], pattern = "\\.DH")){
+#     if(!stringr::str_detect(data[i,3], pattern =patterns30)){
+#       if(!stringr::str_detect(data[i,3], pattern = patterns.25)){
+#         if(!stringr::str_detect(data[i,3], pattern = patterns.27)){
+#           if(!stringr::str_detect(data[i,3], pattern = patterns.05)){
+#             if(!stringr::str_detect(data[i,3], pattern = patterns.04)){
+#               if(!stringr::str_detect(data[i,3], pattern = patterns.06)){
+#                 if(stringr::str_detect(data[i,3], pattern = patterns.08)){
 #
 #                   replacement = str_match(pattern = patterns.08, data[i,3])
 #                   data[i,3] = replacement[1] # add a period for using wildcards
@@ -2116,9 +2116,9 @@ pedigreeReduce = function(data, Codes){
 # #(BR52051:S172641)-B-018-B #F4
 #
 # for(i in (1:nrow(data))){
-#   if(str_detect(data[i,3], pattern = ":")){
-#     #if(str_detect(data[i,3], pattern =digitDH)){
-#     if(str_detect(data[i,3], pattern = patterns.20)){
+#   if(stringr::str_detect(data[i,3], pattern = ":")){
+#     #if(stringr::str_detect(data[i,3], pattern =digitDH)){
+#     if(stringr::str_detect(data[i,3], pattern = patterns.20)){
 #       replacement = str_match(pattern = patterns.20, data[i,3])
 #       data[i,3] = replacement[1] # add a period for using wildcards
 #     }}  }
@@ -2164,71 +2164,71 @@ pedigreeReduce = function(data, Codes){
 
 # # for(i in (1:nrow(data))){
 # #   if(!grepl(data[i,3], pattern ="\\.DH")){
-# #     if(str_detect(data[i,3], pattern = conv2)){
-# #       if(!str_detect(data[i,3], pattern =conv1)){
-# #         if(!str_detect(data[i,3], pattern =conv3)){
-# #           if(!str_detect(data[i,3], pattern =conv4)){
-# #             if(!str_detect(data[i,3], pattern =conv5)){
-# #               if(!str_detect(data[i,3], pattern =conv6)){
-# #                 if(!str_detect(data[i,3], pattern =conv7)){
-# #                   if(!str_detect(data[i,3], pattern =conv8)){
-# #                     if(!str_detect(data[i,3], pattern =conv9)){
-# #                       if(!str_detect(data[i,3], pattern =conv10)){
-# #                         if(!str_detect(data[i,3], pattern =conv11)){
+# #     if(stringr::str_detect(data[i,3], pattern = conv2)){
+# #       if(!stringr::str_detect(data[i,3], pattern =conv1)){
+# #         if(!stringr::str_detect(data[i,3], pattern =conv3)){
+# #           if(!stringr::str_detect(data[i,3], pattern =conv4)){
+# #             if(!stringr::str_detect(data[i,3], pattern =conv5)){
+# #               if(!stringr::str_detect(data[i,3], pattern =conv6)){
+# #                 if(!stringr::str_detect(data[i,3], pattern =conv7)){
+# #                   if(!stringr::str_detect(data[i,3], pattern =conv8)){
+# #                     if(!stringr::str_detect(data[i,3], pattern =conv9)){
+# #                       if(!stringr::str_detect(data[i,3], pattern =conv10)){
+# #                         if(!stringr::str_detect(data[i,3], pattern =conv11)){
 # #       replacement = str_match(pattern= conv2,data[i,3])
 # #       data[i,3] = replacement
 # #     }}}}}}}}}}}}}
 # #
 # # for(i in (1:nrow(data))){
 # #   if(!grepl(data[i,3], pattern ="\\.DH")){
-# #     if(!str_detect(data[i,3], pattern =conv2)){
-# #       if(!str_detect(data[i,3], pattern =conv1)){
-# #         if(!str_detect(data[i,3], pattern =conv4)){
-# #           if(!str_detect(data[i,3], pattern =conv5)){
-# #             if(!str_detect(data[i,3], pattern =conv6)){
-# #               if(!str_detect(data[i,3], pattern =conv7)){
-# #                 if(!str_detect(data[i,3], pattern =conv8)){
-# #                   if(!str_detect(data[i,3], pattern =conv9)){
-# #                     if(!str_detect(data[i,3], pattern =conv10)){
-# #                       if(!str_detect(data[i,3], pattern =conv11)){
+# #     if(!stringr::str_detect(data[i,3], pattern =conv2)){
+# #       if(!stringr::str_detect(data[i,3], pattern =conv1)){
+# #         if(!stringr::str_detect(data[i,3], pattern =conv4)){
+# #           if(!stringr::str_detect(data[i,3], pattern =conv5)){
+# #             if(!stringr::str_detect(data[i,3], pattern =conv6)){
+# #               if(!stringr::str_detect(data[i,3], pattern =conv7)){
+# #                 if(!stringr::str_detect(data[i,3], pattern =conv8)){
+# #                   if(!stringr::str_detect(data[i,3], pattern =conv9)){
+# #                     if(!stringr::str_detect(data[i,3], pattern =conv10)){
+# #                       if(!stringr::str_detect(data[i,3], pattern =conv11)){
 # #     # add a period for using wildcards
-# #     if(str_detect(data[i,3], pattern = conv3)){
+# #     if(stringr::str_detect(data[i,3], pattern = conv3)){
 # #       replacement = str_match(pattern= conv3,data[i,3])
 # #       data[i,3] = replacement# add a period for using wildcards
 # #     }}}}}}}}}}}}}
 # #
 # # for(i in (1:nrow(data))){
 # #   if(!grepl(data[i,3], pattern ="\\.DH")){
-# #     if(!str_detect(data[i,3], pattern =conv2)){
-# #       if(!str_detect(data[i,3], pattern =conv3)){
-# #         if(!str_detect(data[i,3], pattern =conv1)){
-# #           if(!str_detect(data[i,3], pattern =conv5)){
-# #             if(!str_detect(data[i,3], pattern =conv6)){
-# #               if(!str_detect(data[i,3], pattern =conv7)){
-# #                 if(!str_detect(data[i,3], pattern =conv8)){
-# #                   if(!str_detect(data[i,3], pattern =conv9)){
-# #                     if(!str_detect(data[i,3], pattern =conv10)){
-# #                       if(!str_detect(data[i,3], pattern =conv11)){
-# #     if(str_detect(data[i,3], pattern =  conv4)){
+# #     if(!stringr::str_detect(data[i,3], pattern =conv2)){
+# #       if(!stringr::str_detect(data[i,3], pattern =conv3)){
+# #         if(!stringr::str_detect(data[i,3], pattern =conv1)){
+# #           if(!stringr::str_detect(data[i,3], pattern =conv5)){
+# #             if(!stringr::str_detect(data[i,3], pattern =conv6)){
+# #               if(!stringr::str_detect(data[i,3], pattern =conv7)){
+# #                 if(!stringr::str_detect(data[i,3], pattern =conv8)){
+# #                   if(!stringr::str_detect(data[i,3], pattern =conv9)){
+# #                     if(!stringr::str_detect(data[i,3], pattern =conv10)){
+# #                       if(!stringr::str_detect(data[i,3], pattern =conv11)){
+# #     if(stringr::str_detect(data[i,3], pattern =  conv4)){
 # #       replacement = str_match(pattern= conv4,data[i,3])
 # #       data[i,3] = replacement # add a period for using wildcards
 # #     }}}}}}}}}}}}}
 # #
 # # for(i in (1:nrow(data))){
-# #   if(!str_detect(data[i,3], pattern =patterns.4way)){
-# #     if(!str_detect(data[i,3], pattern =conv2)){
-# #       if(!str_detect(data[i,3], pattern =conv3)){
-# #         if(!str_detect(data[i,3], pattern =conv4)){
-# #           if(!str_detect(data[i,3], pattern =conv1)){
-# #             if(!str_detect(data[i,3], pattern =conv6)){
-# #               if(!str_detect(data[i,3], pattern =conv7)){
-# #                 if(!str_detect(data[i,3], pattern =conv8)){
-# #                   if(!str_detect(data[i,3], pattern =conv9)){
-# #                     if(!str_detect(data[i,3], pattern =conv10)){
-# #                       if(!str_detect(data[i,3], pattern =conv11)){
+# #   if(!stringr::str_detect(data[i,3], pattern =patterns.4way)){
+# #     if(!stringr::str_detect(data[i,3], pattern =conv2)){
+# #       if(!stringr::str_detect(data[i,3], pattern =conv3)){
+# #         if(!stringr::str_detect(data[i,3], pattern =conv4)){
+# #           if(!stringr::str_detect(data[i,3], pattern =conv1)){
+# #             if(!stringr::str_detect(data[i,3], pattern =conv6)){
+# #               if(!stringr::str_detect(data[i,3], pattern =conv7)){
+# #                 if(!stringr::str_detect(data[i,3], pattern =conv8)){
+# #                   if(!stringr::str_detect(data[i,3], pattern =conv9)){
+# #                     if(!stringr::str_detect(data[i,3], pattern =conv10)){
+# #                       if(!stringr::str_detect(data[i,3], pattern =conv11)){
 # #
 # #     if(!grepl(data[i,3], pattern ="\\.DH")){
-# #       if(str_detect(data[i,3], pattern =  conv5)){
+# #       if(stringr::str_detect(data[i,3], pattern =  conv5)){
 # #         replacement = str_match(pattern= conv5,data[i,3])
 # #         data[i,3] = replacement # add a period for using wildcards
 # #       }}}}}}}}}}}}}}
@@ -2243,38 +2243,38 @@ pedigreeReduce = function(data, Codes){
 #
 #
 # for(i in (1:nrow(data))){
-#   if(!str_detect(data[i,3], pattern =patterns.4way)){
-#     if(!str_detect(data[i,3], pattern =conv2)){
-#       if(!str_detect(data[i,3], pattern =conv3)){
-#         if(!str_detect(data[i,3], pattern =conv4)){
-#           if(!str_detect(data[i,3], pattern =conv5)){
-#             if(!str_detect(data[i,3], pattern =conv1)){
-#               if(!str_detect(data[i,3], pattern =conv7)){
-#                 if(!str_detect(data[i,3], pattern =conv8)){
-#                   if(!str_detect(data[i,3], pattern =conv9)){
-#                     if(!str_detect(data[i,3], pattern =conv10)){
-#                       if(!str_detect(data[i,3], pattern =conv11)){
+#   if(!stringr::str_detect(data[i,3], pattern =patterns.4way)){
+#     if(!stringr::str_detect(data[i,3], pattern =conv2)){
+#       if(!stringr::str_detect(data[i,3], pattern =conv3)){
+#         if(!stringr::str_detect(data[i,3], pattern =conv4)){
+#           if(!stringr::str_detect(data[i,3], pattern =conv5)){
+#             if(!stringr::str_detect(data[i,3], pattern =conv1)){
+#               if(!stringr::str_detect(data[i,3], pattern =conv7)){
+#                 if(!stringr::str_detect(data[i,3], pattern =conv8)){
+#                   if(!stringr::str_detect(data[i,3], pattern =conv9)){
+#                     if(!stringr::str_detect(data[i,3], pattern =conv10)){
+#                       if(!stringr::str_detect(data[i,3], pattern =conv11)){
 #                         if(!grepl(data[i,3], pattern ="\\.DH")){
-#                           if(str_detect(data[i,3], pattern = conv6)){
+#                           if(stringr::str_detect(data[i,3], pattern = conv6)){
 #                             replacement = str_match(pattern=conv6, data[i,3])
 #                             data[i,3] = replacement # add a period for using wildcards
 #                           }}}}}}}}}}}}}}
 #
 # #((PHV78/PHG47)/3IIH6)-B-002-1
 # # for(i in (1:nrow(data))){
-# #   if(!str_detect(data[i,3], pattern =patterns.4way)){
-# #     if(!str_detect(data[i,3], pattern =conv2)){
-# #       if(!str_detect(data[i,3], pattern =conv3)){
-# #         if(!str_detect(data[i,3], pattern =conv4)){
-# #           if(!str_detect(data[i,3], pattern =conv5)){
-# #             if(!str_detect(data[i,3], pattern =conv6)){
-# #               if(!str_detect(data[i,3], pattern =conv1)){
-# #                 if(!str_detect(data[i,3], pattern =conv8)){
-# #                   if(!str_detect(data[i,3], pattern =conv9)){
-# #                     if(!str_detect(data[i,3], pattern =conv10)){
-# #                       if(!str_detect(data[i,3], pattern =conv11)){
+# #   if(!stringr::str_detect(data[i,3], pattern =patterns.4way)){
+# #     if(!stringr::str_detect(data[i,3], pattern =conv2)){
+# #       if(!stringr::str_detect(data[i,3], pattern =conv3)){
+# #         if(!stringr::str_detect(data[i,3], pattern =conv4)){
+# #           if(!stringr::str_detect(data[i,3], pattern =conv5)){
+# #             if(!stringr::str_detect(data[i,3], pattern =conv6)){
+# #               if(!stringr::str_detect(data[i,3], pattern =conv1)){
+# #                 if(!stringr::str_detect(data[i,3], pattern =conv8)){
+# #                   if(!stringr::str_detect(data[i,3], pattern =conv9)){
+# #                     if(!stringr::str_detect(data[i,3], pattern =conv10)){
+# #                       if(!stringr::str_detect(data[i,3], pattern =conv11)){
 # #     if(!grepl(data[i,3], pattern ="\\.DH")){
-# #       if(str_detect(data[i,3], pattern = conv7)){
+# #       if(stringr::str_detect(data[i,3], pattern = conv7)){
 # #         replacement = str_match(pattern=conv7, data[i,3])
 # #         data[i,3] = replacement # add a period for using wildcards
 # #       }}}}}}}}}}}}}}
@@ -2282,17 +2282,17 @@ pedigreeReduce = function(data, Codes){
 # # #DSR065125/(065125/I11063))-B-084-B
 # # for(i in (1:nrow(data))){
 # #   if(!grepl(data[i,3], pattern ="\\.DH")){
-# #     if(!str_detect(data[i,3], pattern =conv2)){
-# #       if(!str_detect(data[i,3], pattern =conv3)){
-# #         if(!str_detect(data[i,3], pattern =conv4)){
-# #           if(!str_detect(data[i,3], pattern =conv5)){
-# #             if(!str_detect(data[i,3], pattern =conv6)){
-# #               if(!str_detect(data[i,3], pattern =conv7)){
-# #                 if(!str_detect(data[i,3], pattern =conv1)){
-# #                   if(!str_detect(data[i,3], pattern =conv9)){
-# #                     if(!str_detect(data[i,3], pattern =conv10)){
-# #                       if(!str_detect(data[i,3], pattern =conv11)){
-# #     if(str_detect(data[i,3], pattern = conv8)){
+# #     if(!stringr::str_detect(data[i,3], pattern =conv2)){
+# #       if(!stringr::str_detect(data[i,3], pattern =conv3)){
+# #         if(!stringr::str_detect(data[i,3], pattern =conv4)){
+# #           if(!stringr::str_detect(data[i,3], pattern =conv5)){
+# #             if(!stringr::str_detect(data[i,3], pattern =conv6)){
+# #               if(!stringr::str_detect(data[i,3], pattern =conv7)){
+# #                 if(!stringr::str_detect(data[i,3], pattern =conv1)){
+# #                   if(!stringr::str_detect(data[i,3], pattern =conv9)){
+# #                     if(!stringr::str_detect(data[i,3], pattern =conv10)){
+# #                       if(!stringr::str_detect(data[i,3], pattern =conv11)){
+# #     if(stringr::str_detect(data[i,3], pattern = conv8)){
 # #       replacement = str_match(pattern=conv8,data[i,3])
 # #       data[i,3] = replacement # add a period for using wildcards
 # #     }}}}}}}}}}}}}
@@ -2300,37 +2300,37 @@ pedigreeReduce = function(data, Codes){
 # # #FF6224/BJH104-B-B)/I12003)-B-149-B
 # # for(i in (1:nrow(data))){
 # #   if(!grepl(data[i,3], pattern ="\\.DH")){
-# #     if(str_detect(data[i,3], pattern = conv9)){
-# #       if(!str_detect(data[i,3], pattern =conv2)){
-# #         if(!str_detect(data[i,3], pattern =conv3)){
-# #           if(!str_detect(data[i,3], pattern =conv4)){
-# #             if(!str_detect(data[i,3], pattern =conv5)){
-# #               if(!str_detect(data[i,3], pattern =conv6)){
-# #                 if(!str_detect(data[i,3], pattern =conv7)){
-# #                   if(!str_detect(data[i,3], pattern =conv8)){
-# #                     if(!str_detect(data[i,3], pattern =conv1)){
-# #                       if(!str_detect(data[i,3], pattern =conv10)){
-# #                         if(!str_detect(data[i,3], pattern =conv11)){
+# #     if(stringr::str_detect(data[i,3], pattern = conv9)){
+# #       if(!stringr::str_detect(data[i,3], pattern =conv2)){
+# #         if(!stringr::str_detect(data[i,3], pattern =conv3)){
+# #           if(!stringr::str_detect(data[i,3], pattern =conv4)){
+# #             if(!stringr::str_detect(data[i,3], pattern =conv5)){
+# #               if(!stringr::str_detect(data[i,3], pattern =conv6)){
+# #                 if(!stringr::str_detect(data[i,3], pattern =conv7)){
+# #                   if(!stringr::str_detect(data[i,3], pattern =conv8)){
+# #                     if(!stringr::str_detect(data[i,3], pattern =conv1)){
+# #                       if(!stringr::str_detect(data[i,3], pattern =conv10)){
+# #                         if(!stringr::str_detect(data[i,3], pattern =conv11)){
 # #       replacement = str_match(pattern=conv9,data[i,3])
 # #       data[i,3] = replacement # add a period for using wildcards
 # #     }}}}}}}}}}}}}
 # #
 # # #(65125/I10001)/I12003)-B-B-32-1-1-B
 # # for(i in (1:nrow(data))){
-# #   if(!str_detect(data[i,3], pattern =patterns.4way)){
+# #   if(!stringr::str_detect(data[i,3], pattern =patterns.4way)){
 # #
 # #     if(!grepl(data[i,3], pattern ="\\.DH")){
-# #       if(!str_detect(data[i,3], pattern =conv2)){
-# #       if(!str_detect(data[i,3], pattern =conv3)){
-# #         if(!str_detect(data[i,3], pattern =conv4)){
-# #           if(!str_detect(data[i,3], pattern =conv5)){
-# #             if(!str_detect(data[i,3], pattern =conv6)){
-# #               if(!str_detect(data[i,3], pattern =conv7)){
-# #                 if(!str_detect(data[i,3], pattern =conv8)){
-# #                   if(!str_detect(data[i,3], pattern =conv9)){
-# #                     if(!str_detect(data[i,3], pattern =conv1)){
-# #                       if(!str_detect(data[i,3], pattern =conv11)){
-# #       if(str_detect(data[i,3], pattern = conv10)){
+# #       if(!stringr::str_detect(data[i,3], pattern =conv2)){
+# #       if(!stringr::str_detect(data[i,3], pattern =conv3)){
+# #         if(!stringr::str_detect(data[i,3], pattern =conv4)){
+# #           if(!stringr::str_detect(data[i,3], pattern =conv5)){
+# #             if(!stringr::str_detect(data[i,3], pattern =conv6)){
+# #               if(!stringr::str_detect(data[i,3], pattern =conv7)){
+# #                 if(!stringr::str_detect(data[i,3], pattern =conv8)){
+# #                   if(!stringr::str_detect(data[i,3], pattern =conv9)){
+# #                     if(!stringr::str_detect(data[i,3], pattern =conv1)){
+# #                       if(!stringr::str_detect(data[i,3], pattern =conv11)){
+# #       if(stringr::str_detect(data[i,3], pattern = conv10)){
 # #         replacement = str_match(pattern= conv10,data[i,3])
 # #         data[i,3] = replacement # add a period for using wildcards
 # #       }}}}}}}}}}}}}}
@@ -2338,30 +2338,30 @@ pedigreeReduce = function(data, Codes){
 # #BDA015/BDA032//BHH069)-B-093-1-1
 # for(i in (1:nrow(data))){
 #   if(!grepl(data[i,3], pattern ="\\.DH")){
-#     if(!str_detect(data[i,3], pattern =conv2)){
-#       if(!str_detect(data[i,3], pattern =conv3)){
-#         if(!str_detect(data[i,3], pattern =conv4)){
-#           if(!str_detect(data[i,3], pattern =conv5)){
-#             if(!str_detect(data[i,3], pattern =conv6)){
-#               if(!str_detect(data[i,3], pattern =conv7)){
-#                 if(!str_detect(data[i,3], pattern =conv8)){
-#                   if(!str_detect(data[i,3], pattern =conv9)){
-#                     if(!str_detect(data[i,3], pattern =conv10)){
-#                       if(!str_detect(data[i,3], pattern =conv1)){
-#                         if(str_detect(data[i,3], pattern = conv11)){
+#     if(!stringr::str_detect(data[i,3], pattern =conv2)){
+#       if(!stringr::str_detect(data[i,3], pattern =conv3)){
+#         if(!stringr::str_detect(data[i,3], pattern =conv4)){
+#           if(!stringr::str_detect(data[i,3], pattern =conv5)){
+#             if(!stringr::str_detect(data[i,3], pattern =conv6)){
+#               if(!stringr::str_detect(data[i,3], pattern =conv7)){
+#                 if(!stringr::str_detect(data[i,3], pattern =conv8)){
+#                   if(!stringr::str_detect(data[i,3], pattern =conv9)){
+#                     if(!stringr::str_detect(data[i,3], pattern =conv10)){
+#                       if(!stringr::str_detect(data[i,3], pattern =conv1)){
+#                         if(stringr::str_detect(data[i,3], pattern = conv11)){
 #                           replacement = str_match(pattern=conv11, data[i,3])
 #                           data[i,3] = replacement # add a period for using wildcards
 #                         }}}  }}}}}}}}}}
 #
 #
 # for(i in (1:nrow(data))){
-#   if(!str_detect(data[i,3], pattern =patterns.4way)){
+#   if(!stringr::str_detect(data[i,3], pattern =patterns.4way)){
 #     if(!grepl(data[i,3], pattern ="\\.DH")){
-#       if(!str_detect(data[i,3], pattern =conv4)){
-#         if(!str_detect(data[i,3], pattern =conv3)){
-#           #if(!str_detect(data[i,3], pattern =conv5)){
+#       if(!stringr::str_detect(data[i,3], pattern =conv4)){
+#         if(!stringr::str_detect(data[i,3], pattern =conv3)){
+#           #if(!stringr::str_detect(data[i,3], pattern =conv5)){
 #
-#           if(str_detect(data[i,3], pattern = conv2)){
+#           if(stringr::str_detect(data[i,3], pattern = conv2)){
 #             replacement = str_match(pattern=conv2, data[i,3])
 #             data[i,3] = replacement # add a period for using wildcards
 #           }}} }}}#}

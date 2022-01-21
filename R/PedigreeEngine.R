@@ -91,46 +91,46 @@
 pcSelector = function(commericalType, altCommericalType,BV.MC.Entry.data=BV.MC.Entry.data,s0,s1,s2,s3,s4,s5,
                       season0,season1,season2,season3,season4,season5){
   BV.MC.Entry.data=data.frame(BV.MC.Entry.data)
-  Book.Season = BV.MC.Entry.data$Book.Season
-  Entry.Book.Name = BV.MC.Entry.data$Entry.Book.Name
+  #Book.Season = BV.MC.Entry.data$Book.Season
+  #Entry.Book.Name = BV.MC.Entry.data$Entry.Book.Name
 
-  if(s0){BV.MC.Entry.filterProps0 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season0,"S: Corn")) %>% filter(grepl(commericalType, Entry.Book.Name))
-  BV.MC.Entry.filterProp0 <- BV.MC.Entry.data %>%filter(`Book.Season`== paste0(season0,"S: Corn")) %>%  filter(grepl(altCommericalType, Entry.Book.Name))
+  if(s0){BV.MC.Entry.filterProps0 <- BV.MC.Entry.data %>% dplyr::filter(`Book.Season`== paste0(season0,"S: Corn")) %>% dplyr::filter(grepl(commericalType, `Entry.Book.Name`))
+  BV.MC.Entry.filterProp0 <- BV.MC.Entry.data %>%dplyr::filter(`Book.Season`== paste0(season0,"S: Corn")) %>%  dplyr::filter(grepl(altCommericalType, `Entry.Book.Name`))
 
   BV.MC.Entry.filterProp00 = rbind(BV.MC.Entry.filterProps0,
                                    BV.MC.Entry.filterProp0)
   }
 
-  if(s1){BV.MC.Entry.filterProps1 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season1,"S: Corn")) %>% filter(grepl(commericalType, Entry.Book.Name))
-  BV.MC.Entry.filterProp1 <- BV.MC.Entry.data %>%filter(`Book.Season`== paste0(season1,"S: Corn")) %>%  filter(grepl(altCommericalType, Entry.Book.Name))
+  if(s1){BV.MC.Entry.filterProps1 <- BV.MC.Entry.data %>% dplyr::filter(`Book.Season`== paste0(season1,"S: Corn")) %>% dplyr::filter(grepl(commericalType, Entry.Book.Name))
+  BV.MC.Entry.filterProp1 <- BV.MC.Entry.data %>%dplyr::filter(`Book.Season`== paste0(season1,"S: Corn")) %>%  dplyr::filter(grepl(altCommericalType, Entry.Book.Name))
 
   BV.MC.Entry.filterProp10 = rbind(BV.MC.Entry.filterProps1,
                                    BV.MC.Entry.filterProp1)
   }
 
-  if(s2){BV.MC.Entry.filterProps2 <- BV.MC.Entry.data %>%filter(`Book.Season`== paste0(season2,"S: Corn")) %>%  filter(grepl(commericalType, Entry.Book.Name))
-  BV.MC.Entry.filterProp2 <- BV.MC.Entry.data %>%filter(`Book.Season`== paste0(season2,"S: Corn")) %>%  filter(grepl(altCommericalType, Entry.Book.Name))
+  if(s2){BV.MC.Entry.filterProps2 <- BV.MC.Entry.data %>%dplyr::filter(`Book.Season`== paste0(season2,"S: Corn")) %>%  dplyr::filter(grepl(commericalType, Entry.Book.Name))
+  BV.MC.Entry.filterProp2 <- BV.MC.Entry.data %>%dplyr::filter(`Book.Season`== paste0(season2,"S: Corn")) %>%  dplyr::filter(grepl(altCommericalType, Entry.Book.Name))
 
   BV.MC.Entry.filterProp20 = rbind(BV.MC.Entry.filterProps2,
                                    BV.MC.Entry.filterProp2)
   }
 
-  if(s3){BV.MC.Entry.filterProps3 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season3,"S: Corn")) %>% filter(grepl(commericalType, Entry.Book.Name))
-  BV.MC.Entry.filterProp3 <- BV.MC.Entry.data %>%filter(`Book.Season`== paste0(season3,"S: Corn")) %>%  filter(grepl(altCommericalType, Entry.Book.Name))
+  if(s3){BV.MC.Entry.filterProps3 <- BV.MC.Entry.data %>% dplyr::filter(`Book.Season`== paste0(season3,"S: Corn")) %>% dplyr::filter(grepl(commericalType, Entry.Book.Name))
+  BV.MC.Entry.filterProp3 <- BV.MC.Entry.data %>%dplyr::filter(`Book.Season`== paste0(season3,"S: Corn")) %>%  dplyr::filter(grepl(altCommericalType, Entry.Book.Name))
 
   BV.MC.Entry.filterProp30 = rbind(BV.MC.Entry.filterProps3,
                                    BV.MC.Entry.filterProp3)
   }
 
-  if(s4){BV.MC.Entry.filterProps4 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season4,"S: Corn")) %>% filter(grepl(commericalType, Entry.Book.Name))
-  BV.MC.Entry.filterProp4 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season4,"S: Corn")) %>%filter(grepl(altCommericalType, Entry.Book.Name))
+  if(s4){BV.MC.Entry.filterProps4 <- BV.MC.Entry.data %>% dplyr::filter(`Book.Season`== paste0(season4,"S: Corn")) %>% dplyr::filter(grepl(commericalType, Entry.Book.Name))
+  BV.MC.Entry.filterProp4 <- BV.MC.Entry.data %>% dplyr::filter(`Book.Season`== paste0(season4,"S: Corn")) %>% dplyr::filter(grepl(altCommericalType, Entry.Book.Name))
 
   BV.MC.Entry.filterProp40 = rbind(BV.MC.Entry.filterProps4,
                                    BV.MC.Entry.filterProp4)
   }
 
-  if(s5){BV.MC.Entry.filterProps5 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season5,"S: Corn")) %>%filter(grepl(commericalType, Entry.Book.Name))
-  BV.MC.Entry.filterProp5 <- BV.MC.Entry.data %>%filter(`Book.Season`== paste0(season5,"S: Corn")) %>% filter(grepl(altCommericalType, Entry.Book.Name))
+  if(s5){BV.MC.Entry.filterProps5 <- BV.MC.Entry.data %>% dplyr::filter(`Book.Season`== paste0(season5,"S: Corn")) %>% dplyr::filter(grepl(commericalType, Entry.Book.Name))
+  BV.MC.Entry.filterProp5 <- BV.MC.Entry.data %>%dplyr::filter(`Book.Season`== paste0(season5,"S: Corn")) %>% dplyr::filter(grepl(altCommericalType, Entry.Book.Name))
 
   BV.MC.Entry.filterProp50 = rbind(BV.MC.Entry.filterProps5,
                                    BV.MC.Entry.filterProp5)
@@ -158,46 +158,47 @@ pcSelector = function(commericalType, altCommericalType,BV.MC.Entry.data=BV.MC.E
 levelSelector = function(level,BV.MC.Entry.data=BV.MC.Entry.data,s0,s1,s2,s3,s4,s5,
                          season0,season1,season2,season3,season4,season5){
   BV.MC.Entry.data=data.frame(BV.MC.Entry.data)
-  cat("A")
-  cat(colnames(BV.MC.Entry.data))
-  Book.Season = BV.MC.Entry.data$Book.Season
-  Entry.Book.Name = BV.MC.Entry.data$Entry.Book.Name
-
-  if(s0){BV.MC.Entry.filterAs0 <- BV.MC.Entry.data %>% filter(paste0(season0,"S: Corn") == `Book.Season`) %>% filter(grepl(paste0(season0,paste0(level) ),Entry.Book.Name))}
-  if(s0){BV.MC.Entry.filterAs0.1 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season0,"S: Corn")) %>% filter(grepl(paste0(season0-10,level),Entry.Book.Name)) %>%
-    filter(!grepl(paste0("Prop"),substr(Entry.Book.Name,1,4)))}
-  if(s0){BV.MC.Entry.filterAs0.2 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season0,"S: Corn")) %>% filter(grepl(paste0("Group ",level),Entry.Book.Name))}
-
-
-  if(s1){BV.MC.Entry.filterAs1 <- BV.MC.Entry.data %>% filter(paste0(season1,"S: Corn") == `Book.Season`) %>% filter(grepl(paste0(season1,paste0(level) ),Entry.Book.Name))}
-  if(s1){BV.MC.Entry.filterAs1.1 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season1,"S: Corn")) %>% filter(grepl(paste0(season1-10,level),Entry.Book.Name)) %>%
-    filter(!grepl(paste0("Prop"),substr(Entry.Book.Name,1,4)))}
-  if(s1){BV.MC.Entry.filterAs1.2 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season1,"S: Corn")) %>% filter(grepl(paste0("Group ",level),Entry.Book.Name))}
+  #cat("A")
+  #cat(colnames(BV.MC.Entry.data))
+  #Book.Season = BV.MC.Entry.data$Book.Season
+  #cat("B")
+  #Entry.Book.Name = BV.MC.Entry.data$Entry.Book.Name
+  #cat("C")
+  if(s0){BV.MC.Entry.filterAs0 <- BV.MC.Entry.data %>% dplyr::filter(paste0(season0,"S: Corn") == `Book.Season`) %>% dplyr::filter(grepl(paste0(season0,paste0(level) ),`Entry.Book.Name`))}
+  if(s0){BV.MC.Entry.filterAs0.1 <- BV.MC.Entry.data %>% dplyr::filter(`Book.Season`== paste0(season0,"S: Corn")) %>% dplyr::filter(grepl(paste0(season0-10,level),`Entry.Book.Name`)) %>%
+    dplyr::filter(!grepl(paste0("Prop"),substr(`Entry.Book.Name`,1,4)))}
+  if(s0){BV.MC.Entry.filterAs0.2 <- BV.MC.Entry.data %>% dplyr::filter(`Book.Season`== paste0(season0,"S: Corn")) %>% dplyr::filter(grepl(paste0("Group ",level),`Entry.Book.Name`))}
 
 
-  if(s2){BV.MC.Entry.filterAs2 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season2,"S: Corn")) %>% filter(grepl(paste0(season2,level),Entry.Book.Name))}
-  if(s2){BV.MC.Entry.filterAs2.1 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season2,"S: Corn")) %>%filter(grepl(paste0(season2-10,level),Entry.Book.Name))%>%
-    filter(!grepl(paste0("Prop"),substr(Entry.Book.Name,1,4)))}
-  if(s2){BV.MC.Entry.filterAs2.2 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season2,"S: Corn")) %>% filter(grepl(paste0("Group ",level),Entry.Book.Name))}
+  if(s1){BV.MC.Entry.filterAs1 <- BV.MC.Entry.data %>% dplyr::filter(paste0(season1,"S: Corn") == `Book.Season`) %>% dplyr::filter(grepl(paste0(season1,paste0(level) ),Entry.Book.Name))}
+  if(s1){BV.MC.Entry.filterAs1.1 <- BV.MC.Entry.data %>% dplyr::filter(`Book.Season`== paste0(season1,"S: Corn")) %>% dplyr::filter(grepl(paste0(season1-10,level),Entry.Book.Name)) %>%
+    dplyr::filter(!grepl(paste0("Prop"),substr(Entry.Book.Name,1,4)))}
+  if(s1){BV.MC.Entry.filterAs1.2 <- BV.MC.Entry.data %>% dplyr::filter(`Book.Season`== paste0(season1,"S: Corn")) %>% dplyr::filter(grepl(paste0("Group ",level),Entry.Book.Name))}
 
 
-  if(s3){BV.MC.Entry.filterAs3 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season3,"S: Corn")) %>% filter(grepl(paste0(level),substr(Entry.Book.Name,1,1)))}
-  if(s3){BV.MC.Entry.filterAs3.1 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season3,"S: Corn")) %>%filter(grepl(paste0(season3-10,level),Entry.Book.Name))%>%
-    filter(!grepl(paste0("Prop"),substr(Entry.Book.Name,1,4)))}
-  if(s3){BV.MC.Entry.filterAs3.2 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season3,"S: Corn")) %>% filter(grepl(paste0("Group ",level),Entry.Book.Name))}
+  if(s2){BV.MC.Entry.filterAs2 <- BV.MC.Entry.data %>% dplyr::filter(`Book.Season`== paste0(season2,"S: Corn")) %>% dplyr::filter(grepl(paste0(season2,level),Entry.Book.Name))}
+  if(s2){BV.MC.Entry.filterAs2.1 <- BV.MC.Entry.data %>% dplyr::filter(`Book.Season`== paste0(season2,"S: Corn")) %>% dplyr::filter(grepl(paste0(season2-10,level),Entry.Book.Name))%>%
+    dplyr::filter(!grepl(paste0("Prop"),substr(Entry.Book.Name,1,4)))}
+  if(s2){BV.MC.Entry.filterAs2.2 <- BV.MC.Entry.data %>% dplyr::filter(`Book.Season`== paste0(season2,"S: Corn")) %>% dplyr::filter(grepl(paste0("Group ",level),Entry.Book.Name))}
 
 
-  if(s4){BV.MC.Entry.filterAs4 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season4,"S: Corn")) %>% filter(grepl(paste0(level),substr(Entry.Book.Name,1,1)))}
-  if(s4){BV.MC.Entry.filterAs4.1 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season4,"S: Corn")) %>% filter(grepl(paste0(season4-10,level),Entry.Book.Name))%>%
-    filter(!grepl(paste0("Prop"),substr(Entry.Book.Name,1,4)))}
-  if(s4){BV.MC.Entry.filterAs4.2 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season4,"S: Corn")) %>% filter(grepl(paste0("Group ",level),Entry.Book.Name))}
+  if(s3){BV.MC.Entry.filterAs3 <- BV.MC.Entry.data %>% dplyr::filter(`Book.Season`== paste0(season3,"S: Corn")) %>% dplyr::filter(grepl(paste0(level),substr(Entry.Book.Name,1,1)))}
+  if(s3){BV.MC.Entry.filterAs3.1 <- BV.MC.Entry.data %>% dplyr::filter(`Book.Season`== paste0(season3,"S: Corn")) %>% dplyr::filter(grepl(paste0(season3-10,level),Entry.Book.Name))%>%
+    dplyr::filter(!grepl(paste0("Prop"),substr(Entry.Book.Name,1,4)))}
+  if(s3){BV.MC.Entry.filterAs3.2 <- BV.MC.Entry.data %>% dplyr::filter(`Book.Season`== paste0(season3,"S: Corn")) %>% dplyr::filter(grepl(paste0("Group ",level),Entry.Book.Name))}
 
 
-  if(s5){BV.MC.Entry.filterAs5 <- BV.MC.Entry.data %>% filter(`Book.Season`== paste0(season5,"S: Corn")) %>% filter(grepl(paste0(level),substr(Entry.Book.Name,1,1))) %>%
-    filter(Entry.Book.Name != "Agrivida - Nash", Entry.Book.Name != "Agrivida - Crehan", Entry.Book.Name != "AT Herb")}
-  if(s5){BV.MC.Entry.filterAs5.1 <- BV.MC.Entry.data %>%filter(`Book.Season`== paste0(season5,"S: Corn")) %>% filter(grepl(paste0(season5-10,level),Entry.Book.Name))%>%
-    filter(!grepl(paste0("Prop"),substr(Entry.Book.Name,1,4)))}
-  if(s5){BV.MC.Entry.filterAs5.2 <- BV.MC.Entry.data %>%filter(`Book.Season`== paste0(season5,"S: Corn")) %>% filter(grepl(paste0("Group ",level),Entry.Book.Name))}
+  if(s4){BV.MC.Entry.filterAs4 <- BV.MC.Entry.data %>% dplyr::filter(`Book.Season`== paste0(season4,"S: Corn")) %>% dplyr::filter(grepl(paste0(level),substr(Entry.Book.Name,1,1)))}
+  if(s4){BV.MC.Entry.filterAs4.1 <- BV.MC.Entry.data %>% dplyr::filter(`Book.Season`== paste0(season4,"S: Corn")) %>% dplyr::filter(grepl(paste0(season4-10,level),Entry.Book.Name))%>%
+    dplyr::filter(!grepl(paste0("Prop"),substr(Entry.Book.Name,1,4)))}
+  if(s4){BV.MC.Entry.filterAs4.2 <- BV.MC.Entry.data %>% dplyr::filter(`Book.Season`== paste0(season4,"S: Corn")) %>% dplyr::filter(grepl(paste0("Group ",level),Entry.Book.Name))}
+
+
+  if(s5){BV.MC.Entry.filterAs5 <- BV.MC.Entry.data %>% dplyr::filter(`Book.Season`== paste0(season5,"S: Corn")) %>% dplyr::filter(grepl(paste0(level),substr(Entry.Book.Name,1,1))) %>%
+    dplyr::filter(Entry.Book.Name != "Agrivida - Nash", Entry.Book.Name != "Agrivida - Crehan", Entry.Book.Name != "AT Herb")}
+  if(s5){BV.MC.Entry.filterAs5.1 <- BV.MC.Entry.data %>%dplyr::filter(`Book.Season`== paste0(season5,"S: Corn")) %>% dplyr::filter(grepl(paste0(season5-10,level),Entry.Book.Name))%>%
+    dplyr::filter(!grepl(paste0("Prop"),substr(Entry.Book.Name,1,4)))}
+  if(s5){BV.MC.Entry.filterAs5.2 <- BV.MC.Entry.data %>%dplyr::filter(`Book.Season`== paste0(season5,"S: Corn")) %>% dplyr::filter(grepl(paste0("Group ",level),Entry.Book.Name))}
   #BV.MC.Entry.filterAs5.1=BV.MC.Entry.filterAs5.1[c(1:),]
 
   BV.MC.Entry.filterA = rbind(if(s0){BV.MC.Entry.filterAs0},
@@ -225,6 +226,7 @@ levelSelector = function(level,BV.MC.Entry.data=BV.MC.Entry.data,s0,s1,s2,s3,s4,
      BV.MC.Entry.filterAs4.1,BV.MC.Entry.filterAs4.2,BV.MC.Entry.filterAs5,BV.MC.Entry.filterAs5.1,BV.MC.Entry.filterAs5.2,
      BV.MC.Entry.filterA,BV.MC.Entry.filterAs0,BV.MC.Entry.filterAs0.1,BV.MC.Entry.filterAs0.2)
   invisible(gc())
+  #cat("D")
   #dim(BV.MC.Entry.filterA)
   return(BV.MC.Entry.filter)
 }
@@ -528,7 +530,6 @@ pedigreeEngine = function(ws,
                                               BV.MC.Entry.data.AB$unique_male_id)
 
   ##########################################
-
   BV.MC.Entry.data.AB = BV.MC.Entry.data.AB %>% tidyr::separate(`Ped.Column`,sep="[/]",
                                                                 c("unique_femalepedcol_id","unique_malepedcol_id"),
                                                                 #extra="merge",
@@ -554,10 +555,10 @@ pedigreeEngine = function(ws,
   BV.MC.Entry.data.AB.checkfilter = BV.MC.Entry.data.AB %>% tidyr::separate(`Pedigree`,sep="[/]",
                                                                             c("unique_femalecheck_id","unique_malecheck_id"),
                                                                             #extra="merge",
-                                                                            remove=F) %>% filter(unique_female_id=="")
+                                                                            remove=F) %>% dplyr::filter(unique_female_id=="")
 
   #gets variaty checks without pedigree
-  BV.MC.Entry.data.AB.checkfilter.variety = BV.MC.Entry.data.AB.checkfilter %>% filter(is.na(unique_malecheck_id))
+  BV.MC.Entry.data.AB.checkfilter.variety = BV.MC.Entry.data.AB.checkfilter %>% dplyr::filter(is.na(unique_malecheck_id))
   BV.MC.Entry.data.AB.checkfilter.variety.duplciate=BV.MC.Entry.data.AB.checkfilter.variety[!duplicated(BV.MC.Entry.data.AB.checkfilter.variety$Pedigree),]
   #BV.MC.Entry.data.AB.checkfilter.variety.duplciate$Pedigree#shows variety checks that need a pedigree
   BV.MC.Entry.data.AB.save = BV.MC.Entry.data.AB
@@ -565,8 +566,8 @@ pedigreeEngine = function(ws,
   #attached a male and Female.Pedigree to missing variety without pedigree
   vdp = 'R:/Breeding/MT_TP/Models/Data/Department Data/Variety.male.female.xlsx'
 
-  BV.MC.Entry.data.AB.NAcountMale = BV.MC.Entry.data.AB %>% filter(is.na(unique_male_id))
-  BV.MC.Entry.data.AB.NAcountFemale = BV.MC.Entry.data.AB %>% filter(is.na(unique_female_id))
+  BV.MC.Entry.data.AB.NAcountMale = BV.MC.Entry.data.AB %>% dplyr::filter(is.na(unique_male_id))
+  BV.MC.Entry.data.AB.NAcountFemale = BV.MC.Entry.data.AB %>% dplyr::filter(is.na(unique_female_id))
 
   dim(BV.MC.Entry.data.AB.NAcountMale)
   dim(BV.MC.Entry.data.AB.NAcountFemale)
@@ -591,6 +592,10 @@ pedigreeEngine = function(ws,
 
   BV.MC.Entry.data.AB = left_join(BV.MC.Entry.data.AB,Variety.checknames,by= c("Pedigree"="Variety"))
 
+
+
+
+
   #remove spaces in all mathcing columns
   BV.MC.Entry.data.AB$unique_female_id <- gsub("[[:space:]]", "", BV.MC.Entry.data.AB$unique_female_id)
   BV.MC.Entry.data.AB$unique_male_id <- gsub("[[:space:]]", "", BV.MC.Entry.data.AB$unique_male_id)
@@ -611,6 +616,7 @@ pedigreeEngine = function(ws,
                                               BV.MC.Entry.data.AB$unique_male_id)
   #merge the variety with pedigree into unique column
   ##############################################3
+
   colnames(Variety.checknames)[c(2,3,4)] = c("Female.check2Variety","Male.check2variety","")
 
   BV.MC.Entry.data.AB = left_join(BV.MC.Entry.data.AB,Variety.checknames,by= c("Variety"="Variety"))
@@ -633,7 +639,8 @@ pedigreeEngine = function(ws,
   BV.MC.Entry.data.AB$unique_male_id = ifelse(is.na(BV.MC.Entry.data.AB$unique_male_id),
                                               as.character(BV.MC.Entry.data.AB$Male.check2variety),
                                               BV.MC.Entry.data.AB$unique_male_id)
-
+  BV.MC.Entry.data.AB.save = BV.MC.Entry.data.AB
+  BV.MC.Entry.data.AB=BV.MC.Entry.data.AB.save
   ########################################################
   BV.MC.Entry.data.AB$unique_female_id = ifelse(is.na(BV.MC.Entry.data.AB$unique_female_id),
                                                 as.character(BV.MC.Entry.data.AB$unique_femalecheck_id),
@@ -649,9 +656,10 @@ pedigreeEngine = function(ws,
                                               as.character(BV.MC.Entry.data.AB$unique_malecheck_id),
                                               BV.MC.Entry.data.AB$unique_male_id)
 
+  if(!InventoryPedigree){
   BV.MC.Entry.data.AB = BV.MC.Entry.data.AB[ !which(BV.MC.Entry.data.AB$Variety == "" & BV.MC.Entry.data.AB$Pedigree == "" & BV.MC.Entry.data.AB$`Hybrid.ID` == ""), ]
-
-  #BV.MC.Entry.data.AB = BV.MC.Entry.data.AB %>% filter(Entry.Book.Name != "INBRED-GW_Prop", Entry.Book.Name != "B163-RAGT-95-100")
+  }
+  #BV.MC.Entry.data.AB = BV.MC.Entry.data.AB %>% dplyr::filter(Entry.Book.Name != "INBRED-GW_Prop", Entry.Book.Name != "B163-RAGT-95-100")
   ###################################################
   BV.MC.Entry.data.AB = BV.MC.Entry.data.AB %>% tidyr::separate(`Variety`,sep="[/]",
                                                                 c("unique_female3pedigree_id","unique_male3pedigree_id"),
@@ -678,7 +686,7 @@ pedigreeEngine = function(ws,
 
 
 
-  BV.MC.Entry.data.AB.checkfilter.variety = BV.MC.Entry.data.AB %>% filter(is.na(unique_male_id))
+  BV.MC.Entry.data.AB.checkfilter.variety = BV.MC.Entry.data.AB %>% dplyr::filter(is.na(unique_male_id))
   BV.MC.Entry.data.AB.checkfilter.variety$unique_female_id = ifelse(BV.MC.Entry.data.AB.checkfilter.variety$unique_female_id=="",
                                                                     paste0(BV.MC.Entry.data.AB.checkfilter.variety$Variety,".Female"),
                                                                     BV.MC.Entry.data.AB.checkfilter.variety$unique_female_id      )
@@ -726,7 +734,7 @@ pedigreeEngine = function(ws,
 
   #BV.MC.Entry.data.AB[ind, 39:40] <- BV.MC.Entry.data.AB.checkfilter.variety[39:40]
 
-  BV.MC.Entry.data.AB.checkfilter.variety = BV.MC.Entry.data.AB %>% filter(is.na(unique_male_id))
+  BV.MC.Entry.data.AB.checkfilter.variety = BV.MC.Entry.data.AB %>% dplyr::filter(is.na(unique_male_id))
 
 
   BV.MC.Entry.data.AB.checkfilter.variety.duplciate.ped=BV.MC.Entry.data.AB.checkfilter.variety[!duplicated(BV.MC.Entry.data.AB.checkfilter.variety$Pedigree),]
@@ -738,7 +746,7 @@ pedigreeEngine = function(ws,
   dim(pedigreeToAdd); dim(varietyToAdd)
 
   ####################################################Female
-  BV.MC.Entry.data.AB.checkfilter.variety = BV.MC.Entry.data.AB %>% filter(is.na(unique_female_id))
+  BV.MC.Entry.data.AB.checkfilter.variety = BV.MC.Entry.data.AB %>% dplyr::filter(is.na(unique_female_id))
 
   BV.MC.Entry.data.AB.checkfilter.variety$unique_female_id = ifelse(BV.MC.Entry.data.AB.checkfilter.variety$unique_female_id=="",
                                                                     paste0(BV.MC.Entry.data.AB.checkfilter.variety$Variety,".Female"),
@@ -782,7 +790,7 @@ pedigreeEngine = function(ws,
 
   #BV.MC.Entry.data.AB[ind, 39:40] <- BV.MC.Entry.data.AB.checkfilter.variety[39:40]
 
-  BV.MC.Entry.data.AB.checkfilter.variety = BV.MC.Entry.data.AB %>% filter(is.na(unique_male_id))
+  BV.MC.Entry.data.AB.checkfilter.variety = BV.MC.Entry.data.AB %>% dplyr::filter(is.na(unique_male_id))
 
 
   BV.MC.Entry.data.AB.checkfilter.variety.duplciate.ped=BV.MC.Entry.data.AB.checkfilter.variety[!duplicated(BV.MC.Entry.data.AB.checkfilter.variety$Pedigree),]
@@ -829,7 +837,7 @@ pedigreeEngine = function(ws,
   # cat("H")
 
   #source("R:/Breeding/MT_TP/Models/R-Scripts/pedAdjustment.R")
-  newData = PedAdjust( data = BV.MC.Entry.data.AB, doReduceNonCodes=doReduceNonCodes  )
+  newData = PedAdjust( data = BV.MC.Entry.data.AB, doReduceNonCodes = doReduceNonCodes )
 
   nrow(newData)
 
@@ -837,7 +845,7 @@ pedigreeEngine = function(ws,
   nrow(newDataRmDups)
 
   newData$changed = ifelse(newData$pedigree != newData$match, T, F)
-  newData.changed = newData %>% filter(changed==T)
+  newData.changed = newData %>% dplyr::filter(changed==T)
 
   nrow(newData.changed)
 
@@ -849,8 +857,12 @@ pedigreeEngine = function(ws,
   #IMPORT REVIEWED MALE AND Female.PedigreeS
   ##########################################
   #BV.MC<-read.xlsx(paste0(wdp,'linked.male.female.nestedpeds.update.xlsx'),1,na.strings ="")#all varieties to build the model
+  if(InventoryPedigree){
+    linked.peds = openxlsx::read.xlsx(paste0(wdp,"/linked.peds.xlsx"), 1 )
 
+  }else{
   linked.peds = openxlsx::read.xlsx(paste0("R:/Breeding/MT_TP/Models/Data/Department Data/linked.peds.updated.xlsx"), 1 )
+  }
   BV.MC = linked.peds
 
   # dim(linked.peds)
@@ -884,8 +896,8 @@ pedigreeEngine = function(ws,
   #
   cat("J")
 
-  #BV.MC.Male = BV.MC %>% filter(Gender == "Male")
-  #BV.MC.Female = BV.MC %>% filter(Gender == "FEMALE")
+  #BV.MC.Male = BV.MC %>% dplyr::filter(Gender == "Male")
+  #BV.MC.Female = BV.MC %>% dplyr::filter(Gender == "FEMALE")
   #BV.MC.Female$unique_female_id <- gsub("[[:space:]]", "", BV.MC.Female$unique_female_id)
   #BV.MC.Male$unique_male_id <- gsub("[[:space:]]", "", BV.MC.Male$unique_male_id)
 
@@ -918,13 +930,13 @@ pedigreeEngine = function(ws,
   #BV.MC.Female.Line_ID.entry <- left_join(BV.MC.Female.reduced.entry, BV.MC.Female.Line_ID, by=c("unique_female_id"="unique_female_id.1"),keep=T);dim(BV.MC.Female.Line_ID.entry)
 
 
-  BV.MC.Entry.data.AB.review.x = BV.MC.Entry.data.AB %>% filter(match.x == "")
-  BV.MC.Entry.data.AB.review.y = BV.MC.Entry.data.AB %>% filter(match.y == "")
+  BV.MC.Entry.data.AB.review.x = BV.MC.Entry.data.AB %>% dplyr::filter(match.x == "")
+  BV.MC.Entry.data.AB.review.y = BV.MC.Entry.data.AB %>% dplyr::filter(match.y == "")
   #cat(BV.MC.Entry.data.AB.review.x)
   #cat(BV.MC.Entry.data.AB.review.y)
 
-  BV.MC.Entry.data.AB.review.xna = BV.MC.Entry.data.AB %>% filter(is.na(match.x ))
-  BV.MC.Entry.data.AB.review.yna = BV.MC.Entry.data.AB %>% filter(is.na(match.y ))
+  BV.MC.Entry.data.AB.review.xna = BV.MC.Entry.data.AB %>% dplyr::filter(is.na(match.x ))
+  BV.MC.Entry.data.AB.review.yna = BV.MC.Entry.data.AB %>% dplyr::filter(is.na(match.y ))
   cat("Number of missing male lines is ",nrow(BV.MC.Entry.data.AB.review.xna) + nrow(BV.MC.Entry.data.AB.review.x),".\n")
   cat("Number of missing female lines is ",nrow(BV.MC.Entry.data.AB.review.yna) + nrow(BV.MC.Entry.data.AB.review.y),".\n")
 
@@ -1008,8 +1020,8 @@ pedigreeEngine = function(ws,
   #BV.MC.Entry.data.AB.DONE$VARIETY = as.factor(Variety)
   BV.MC.Entry.data.AB.DONE$MALE = as.factor(unique_male_ID)
   BV.MC.Entry.data.AB.DONE$FEMALE = as.factor(unique_female_ID)
-  #BV.HSIdentical.mt <- BV.HSIdentical %>% filter(loc == "Marshalltown") #filter only marshalltown lines
-  #BV.HSIdentical.olivia <- BV.HSIdentical %>% filter(loc == "Olivia") #filter only olivia lines
+  #BV.HSIdentical.mt <- BV.HSIdentical %>% dplyr::filter(loc == "Marshalltown") #filter only marshalltown lines
+  #BV.HSIdentical.olivia <- BV.HSIdentical %>% dplyr::filter(loc == "Olivia") #filter only olivia lines
   head(BV.MC.Entry.data.AB.DONE)
   dim(BV.MC.Entry.data.AB.DONE)
   #head(BV.HSIdentical.mt)

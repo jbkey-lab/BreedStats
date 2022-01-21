@@ -315,7 +315,7 @@ model3 =function(subsetSA=subsetSA, EBN=EBN, name=name, subsetSA.discard=subsetS
   counts.adjusted.index = order(counts.adjusted$Pedigree)
   counts.adjusted = counts.adjusted[counts.adjusted.index,]
 
-  Unique.Pedigree.re <-subsetSA.discard %>% filter(feature > 0, Plot.Discarded != "Yes" , Plot.Status != "3 - Bad") %>% select(Pedigree)
+  Unique.Pedigree.re <-subsetSA.discard %>% dplyr::filter(feature > 0, Plot.Discarded != "Yes" , Plot.Status != "3 - Bad") %>% select(Pedigree)
   Unique.Pedigree.re<-data.table(Unique.Pedigree.re)
   counts.adjusted.re <- Unique.Pedigree.re[, .(rowCount = .N), by = Pedigree ]; colnames(counts.adjusted.re)=c("Pedigree",paste0(name,"_Observations"))
   counts.adjusted.re.index = order(counts.adjusted.re$Pedigree)
@@ -654,7 +654,7 @@ spaEBN = function(year="21",fdp="R:/Breeding/MT_TP/Models/AL_Adjustments/",spaDF
 
       subsetSA.discard = subsetSA
 
-      subsetSA <- subsetSA %>% filter(Plot.Discarded != "Yes", Plot.Status != "3 - Bad"
+      subsetSA <- subsetSA %>% dplyr::filter(Plot.Discarded != "Yes", Plot.Status != "3 - Bad"
                                                       #                                                # Pedigree != "FILL", Variety != "FILL",
                                                       #                                                # Pedigree != "placeholder", Variety != "placeholder",
                                                       #                                                # Entry.Book.Name != "Filler", Entry.Book.Name != "INBRED-GW_Prop"
@@ -952,7 +952,7 @@ spaEBN = function(year="21",fdp="R:/Breeding/MT_TP/Models/AL_Adjustments/",spaDF
 
   AL.traits=AL.traits[,c(which(colnames(AL.traits)=="RecId"),which(colnames(AL.traits)!="RecId"))]
 
-  AL.traits <- Filter(function(x)!all(x==""), AL.traits)
+  AL.traits <- dplyr::filter(function(x)!all(x==""), AL.traits)
 
   AL.traits.index = order(AL.traits$Entry, AL.traits$EntryBookName, AL.traits$BookName)
 

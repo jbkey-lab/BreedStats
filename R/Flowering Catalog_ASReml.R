@@ -273,20 +273,20 @@ inbredChar = function(#dp = dp,
     mutate(unique_ped_id_DH = str_extract(digitDH, string = unique_ped_id) ) %>%
     #mutate(unique_ped_id_DH2 = gsub(".*?\\.(.*?)\\.*", x=unique_ped_id, value=T) ) %>%
     mutate(unique_DH = str_extract(digitDH, string=unique) ) %>%
-    filter(unique_nchar <= (unique_ped_id_nchar+15)  )
+    dplyr::filter(unique_nchar <= (unique_ped_id_nchar+15)  )
 
   linked.peds.beck2 = linked.peds.beck %>%
     mutate(unique_ped_id_DH_1 = ifelse((unique_ped_id_nchar < 10), as.matrix(grepl("\\/", x = unique )), F))
 
   linked.peds.beck3 =  linked.peds.beck2 %>%
     filter(  str_detect(unique, coll(unique_ped_id)  )  )  %>%
-    filter(unique_ped_id_DH_1 != TRUE)
+    dplyr::filter(unique_ped_id_DH_1 != TRUE)
   invisible(gc(reset=T)) #cleans memory "garbage collector"
 
   linked.peds.beck4 =   linked.peds.beck3 %>%
     mutate(DH_Match = ifelse(unique_ped_id_DH == unique_DH , TRUE,FALSE) ) %>%
     mutate(DH_Match = ifelse(is.na(DH_Match), TRUE, DH_Match)) %>%
-    filter(DH_Match != FALSE)
+    dplyr::filter(DH_Match != FALSE)
   invisible(gc(reset=T)) #cleans memory "garbage collector"
 
   linked.peds.beck4 = linked.peds.beck4 %>%
@@ -334,7 +334,7 @@ inbredChar = function(#dp = dp,
   BV.MC.Inbred = newData
   # rm(data,newData)
 
-  #BV.MC.Inbred.slash = BV.MC.Inbred %>% filter(grepl(, pattern="/") == TRUE)
+  #BV.MC.Inbred.slash = BV.MC.Inbred %>% dplyr::filter(grepl(, pattern="/") == TRUE)
 
   to_search_in <- data.table(linked.peds[!duplicated(linked.peds$match),c(3)])
   colnames(to_search_in)=c("unique")
@@ -367,7 +367,7 @@ inbredChar = function(#dp = dp,
     mutate(unique_ped_id_DH = str_extract(digitDH, string = unique_ped_id) ) %>%
     #mutate(unique_ped_id_DH2 = gsub(".*?\\.(.*?)\\.*", x=unique_ped_id, value=T) ) %>%
     mutate(unique_DH = str_extract(digitDH, string=unique) ) %>%
-    filter(unique_nchar <= (unique_ped_id_nchar+15)  )
+    dplyr::filter(unique_nchar <= (unique_ped_id_nchar+15)  )
 
   linked.peds.beck2 = linked.peds.beck %>%
     mutate(unique_ped_id_DH_1 = ifelse((unique_ped_id_nchar < 10), as.matrix(grepl("\\/", x = unique )), F))
@@ -375,14 +375,14 @@ inbredChar = function(#dp = dp,
 
   linked.peds.beck3 =  linked.peds.beck2 %>%
     filter(  str_detect(unique, coll(unique_ped_id)  )  )  %>%
-    filter(unique_ped_id_DH_1 != TRUE)
+    dplyr::filter(unique_ped_id_DH_1 != TRUE)
   rm(linked.peds.beck2)
   invisible(gc(reset=T)) #cleans memory "garbage collector"
 
   linked.peds.beck4 =   linked.peds.beck3 %>%
     mutate(DH_Match = ifelse(unique_ped_id_DH == unique_DH , TRUE, FALSE) ) %>%
     mutate(DH_Match = ifelse(is.na(DH_Match), TRUE, DH_Match)) %>%
-    filter(DH_Match != FALSE)
+    dplyr::filter(DH_Match != FALSE)
   invisible(gc(reset=T)) #cleans memory "garbage collector"
 
   linked.peds.beck4 = linked.peds.beck4 %>%
@@ -451,7 +451,7 @@ inbredChar = function(#dp = dp,
   # linked.line.peds = to_search_with.line %>%
   #   mutate(data = list(to_search_in.line)) %>%
   #   unnest(data) %>%
-  #   filter(str_detect(unique_line, fixed(unique))) %>% #comparing with  to in
+  #   dplyr::filter(str_detect(unique_line, fixed(unique))) %>% #comparing with  to in
   #   #select(unique_female,female.pedigree,unique_female_id) %>%
   #   group_by(unique) %>% #should be the fixed effect
   #   summarise(strings = str_c(unique_line, collapse = ", "))
@@ -502,13 +502,13 @@ inbredChar = function(#dp = dp,
                                                 27,41,33,45,46,48,37,47,1,21,24,36,38,40,39,43,31,32,34,
                                                 35,51,54,52,53,55,56)]
 
-  BV.MC.Entry.data.AB2020 = BV.MC.Entry.data.AB %>% filter(Book.Season == 2020)
-  #BV.MC.Entry.data.AB = BV.MC.Entry.data.AB %>% filter(Book.Season != 2020)
+  BV.MC.Entry.data.AB2020 = BV.MC.Entry.data.AB %>% dplyr::filter(Book.Season == 2020)
+  #BV.MC.Entry.data.AB = BV.MC.Entry.data.AB %>% dplyr::filter(Book.Season != 2020)
 
   # qualdatbyYear = read.csv(paste0(fdp))
   #
-  # qualdatbyYear2020 = qualdatbyYear %>% filter(Yr == 2020)
-  # qualdatbyYear = qualdatbyYear %>% filter(Yr != 2020)
+  # qualdatbyYear2020 = qualdatbyYear %>% dplyr::filter(Yr == 2020)
+  # qualdatbyYear = qualdatbyYear %>% dplyr::filter(Yr != 2020)
   #
   # #qualday <- left_join(qualdatbyYear, BV.MC.Entry.data.AB[,c(11,12,4,10,41)],
   # #                     by = c("Range"="Range", "Row"="Row", "Loc"="Field..", "EBN"="Entry.Book.Name"))
@@ -518,7 +518,7 @@ inbredChar = function(#dp = dp,
   # ##############################################
   # ##############################################
   # #qualdatbyYear <- qualdatbyYear %>% filter((Plot.Discarded) == "")
-  # qualdatbyYear <- qualdatbyYear %>% filter(EBN != "TP20S_Filler",
+  # qualdatbyYear <- qualdatbyYear %>% dplyr::filter(EBN != "TP20S_Filler",
   #                                           EBN != "FILL",
   #                                           EBN != "Filler")
   #
@@ -671,7 +671,7 @@ inbredChar = function(#dp = dp,
   counts <- qual.count[, .(rowCount = .N), by = LINE]; colnames(counts)=c("LINE","Observations")  #counts observations per InbName
   #counts.loc<-qual.count[, .(rowCount = .N), by = c("InbName","loc","yr")] #counts observations per InbName
 
-  #qualdat.singles <- counts %>% filter(Observations!=1);colnames(qualdat.singles) = c("LINE", "Observations") #filter only single values for model buliding
+  #qualdat.singles <- counts %>% dplyr::filter(Observations!=1);colnames(qualdat.singles) = c("LINE", "Observations") #filter only single values for model buliding
   #head(counts);tail(counts) #count the number of observations per InbName
 
 
@@ -701,9 +701,9 @@ inbredChar = function(#dp = dp,
   lines2020$EXP = as.factor(EBN)
   lines2020$LINE = as.factor(LINE)
 
-  qualdat.mt <- lines2020 %>% filter(Loc == "Marshalltown") #filter only marshalltown lines
-  qualdat.olivia <- lines2020 %>% filter(Loc == "Olivia") #filter only olivia lines
-  qualdat.atlanta <- lines2020 %>% filter(Loc == "Atlanta") #filter only olivia lines
+  qualdat.mt <- lines2020 %>% dplyr::filter(Loc == "Marshalltown") #filter only marshalltown lines
+  qualdat.olivia <- lines2020 %>% dplyr::filter(Loc == "Olivia") #filter only olivia lines
+  qualdat.atlanta <- lines2020 %>% dplyr::filter(Loc == "Atlanta") #filter only olivia lines
 
   # require(agricolae)
   # aggregate(lines2020[,c("Slk_50","Shd_50")], by=list(FIELD=lines2020$FIELD),skewness)#calculate skewness for each effect
@@ -714,7 +714,7 @@ inbredChar = function(#dp = dp,
   detach(lines2020)
   ##############################
   linesYear = lines2020 %>% filter( between(as.numeric(as.character(YEAR)), l_year, h_year))
-  #linesreploc = lines2020 %>% filter(YEAR == Current)
+  #linesreploc = lines2020 %>% dplyr::filter(YEAR == Current)
 
 
   qualdat.df = linesYear #choose your dataset for the model
@@ -809,7 +809,7 @@ inbredChar = function(#dp = dp,
       )
 
       dim(SP_data.filter)
-      #SP_data.filter = SP_data.filter %>% filter(feature > 0)
+      #SP_data.filter = SP_data.filter %>% dplyr::filter(feature > 0)
       #dim(SP_data.filter);head(SP_data.filter)
 
       SP_data.filter.counts<-data.table(SP_data.filter)#convert to a data.table for easier processing

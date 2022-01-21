@@ -140,7 +140,7 @@ HybridID = function(
     )
 
     dim(BV.HSIdentical.df)
-    #BV.HSIdentical.df = BV.HSIdentical.df %>% filter(feature > 0)
+    #BV.HSIdentical.df = BV.HSIdentical.df %>% dplyr::filter(feature > 0)
     dim(BV.HSIdentical.df);head(BV.HSIdentical.df)
 
 
@@ -151,10 +151,10 @@ HybridID = function(
     counts.adjusted.index = order(counts.adjusted$LINE)
     counts.adjusted = counts.adjusted[counts.adjusted.index,]
 
-    BV.HSIdentical.df = BV.HSIdentical.df %>% filter(Plot.Discarded != "Yes",
+    BV.HSIdentical.df = BV.HSIdentical.df %>% dplyr::filter(Plot.Discarded != "Yes",
                                                      Plot.Status != "3 - Bad" )
 
-    BV.HSIdentical.df.counts = BV.HSIdentical.df %>% filter(feature >= 0)
+    BV.HSIdentical.df.counts = BV.HSIdentical.df %>% dplyr::filter(feature >= 0)
     #Unique.Female.Pedigree <- as.matrix(BV.HSIdentical.df.counts[,"FEMALE"])
     Unique.Male.Pedigree <- as.matrix(BV.HSIdentical.df.counts[,"LINE"])
     Unique.Pedigree<-data.table(Unique.Male.Pedigree)
@@ -245,10 +245,10 @@ HybridID = function(
       BV.HSIdentical.blues <- setDT(data.frame(BV.HSIdentical.blues),keep.rownames=T)[]; colnames(BV.HSIdentical.blues)=c("LINE",paste0(name,"_BV")); word.remove.fem="LINE_"; word.remove.mal="MALE_"
       #BV.HSIdentical.blues$LINE = gsub(paste0(word.remove.fem,collapse = "|"), "", BV.HSIdentical.blues$LINE)
       #BV.HSIdentical.blues$LINE = gsub(paste0(word.remove.mal,collapse = "|"), "", BV.HSIdentical.blues$LINE)
-      BV.HSIdentical.blues.line <- BV.HSIdentical.blues %>% filter(grepl("LINE_", LINE));dim(BV.HSIdentical.blues.line);colnames(BV.HSIdentical.blues.line)[1]="LINE"
+      BV.HSIdentical.blues.line <- BV.HSIdentical.blues %>% dplyr::filter(grepl("LINE_", LINE));dim(BV.HSIdentical.blues.line);colnames(BV.HSIdentical.blues.line)[1]="LINE"
       BV.HSIdentical.blues.line$LINE = gsub(paste0(word.remove.fem,collapse = "|"), "", BV.HSIdentical.blues.line$LINE)
-      BV.HSIdentical.blues.field <- BV.HSIdentical.blues %>% filter(grepl("FIELD_", LINE));dim(BV.HSIdentical.blues.field)
-      BV.HSIdentical.blues.exp <- BV.HSIdentical.blues %>% filter(grepl("EXP_", LINE));dim(BV.HSIdentical.blues.exp)
+      BV.HSIdentical.blues.field <- BV.HSIdentical.blues %>% dplyr::filter(grepl("FIELD_", LINE));dim(BV.HSIdentical.blues.field)
+      BV.HSIdentical.blues.exp <- BV.HSIdentical.blues %>% dplyr::filter(grepl("EXP_", LINE));dim(BV.HSIdentical.blues.exp)
 
       #BV.HSIdentical.blues.female
       BV.HSIdentical.blues.export <- left_join(BV.HSIdentical.blues.line, BV.HSIdentical.df.gmean, by="LINE")
@@ -360,10 +360,10 @@ HybridID = function(
       BV.HSIdentical.blues <- setDT(data.frame(BV.HSIdentical.blues),keep.rownames=T)[]; colnames(BV.HSIdentical.blues)=c("LINE",paste0(name,"_BV")); word.remove.fem="LINE_"; word.remove.mal="MALE_"
       #BV.HSIdentical.blues$LINE = gsub(paste0(word.remove.fem,collapse = "|"), "", BV.HSIdentical.blues$LINE)
       #BV.HSIdentical.blues$LINE = gsub(paste0(word.remove.mal,collapse = "|"), "", BV.HSIdentical.blues$LINE)
-      BV.HSIdentical.blues.line <- BV.HSIdentical.blues %>% filter(grepl("LINE_", LINE));dim(BV.HSIdentical.blues.line);colnames(BV.HSIdentical.blues.line)[1]="LINE"
+      BV.HSIdentical.blues.line <- BV.HSIdentical.blues %>% dplyr::filter(grepl("LINE_", LINE));dim(BV.HSIdentical.blues.line);colnames(BV.HSIdentical.blues.line)[1]="LINE"
       BV.HSIdentical.blues.line$LINE = gsub(paste0(word.remove.fem,collapse = "|"), "", BV.HSIdentical.blues.line$LINE)
-      BV.HSIdentical.blues.field <- BV.HSIdentical.blues %>% filter(grepl("FIELD_", LINE));dim(BV.HSIdentical.blues.field)
-      BV.HSIdentical.blues.exp <- BV.HSIdentical.blues %>% filter(grepl("EXP_", LINE));dim(BV.HSIdentical.blues.exp)
+      BV.HSIdentical.blues.field <- BV.HSIdentical.blues %>% dplyr::filter(grepl("FIELD_", LINE));dim(BV.HSIdentical.blues.field)
+      BV.HSIdentical.blues.exp <- BV.HSIdentical.blues %>% dplyr::filter(grepl("EXP_", LINE));dim(BV.HSIdentical.blues.exp)
 
       #BV.HSIdentical.blues.female
       BV.HSIdentical.blues.export <- left_join(BV.HSIdentical.blues.line, BV.HSIdentical.df.gmean, by="LINE")
@@ -449,9 +449,9 @@ HybridID = function(
       sum.DIBV=print(summary(DIBV))
       Blup = ranef(DIBV)
       Blup=data.frame(Blup)
-      Blup = Blup %>% filter(grpvar != "MALE")
-      #Blup = Blup %>% filter(grpvar != "LINE")
-      Blup = Blup %>% filter(grpvar != "YEAR")
+      Blup = Blup %>% dplyr::filter(grpvar != "MALE")
+      #Blup = Blup %>% dplyr::filter(grpvar != "LINE")
+      Blup = Blup %>% dplyr::filter(grpvar != "YEAR")
 
       #Blup.index = order(Blup$condval, decreasing=T)
       #Blup = Blup[Blup.index,]

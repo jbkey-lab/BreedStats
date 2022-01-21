@@ -421,10 +421,10 @@ BV = function(fdp ,
       counts.adjusted.index = order(counts.adjusted$FEMALE)
       counts.adjusted = counts.adjusted[counts.adjusted.index,]
 
-      BV.HSIdentical.df = BV.HSIdentical.df %>% filter(Plot.Discarded != "Yes",
+      BV.HSIdentical.df = BV.HSIdentical.df %>% dplyr::filter(Plot.Discarded != "Yes",
                                                        Plot.Status != "3 - Bad" )
 
-      BV.HSIdentical.df.counts = BV.HSIdentical.df %>% filter(feature >= 0)
+      BV.HSIdentical.df.counts = BV.HSIdentical.df %>% dplyr::filter(feature >= 0)
       Unique.Female.Pedigree <- as.matrix(BV.HSIdentical.df.counts[,"FEMALE"])
       Unique.Male.Pedigree <- as.matrix(BV.HSIdentical.df.counts[,"MALE"])
       Unique.Pedigree <- rbind(Unique.Female.Pedigree, Unique.Male.Pedigree);Unique.Pedigree<-data.table(Unique.Pedigree)
@@ -468,7 +468,7 @@ BV = function(fdp ,
       invisible(gc(reset=T)) #cleans memory "garbage collector"
       cat(paste0("--------------------------------------",name,"--------------------------------------"), "\n")
       #asreml.options(dense = ~ vm(ainv))
-      #BV.HSIdentical.df.data = BV.HSIdentical.df %>% filter(feature>0)
+      #BV.HSIdentical.df.data = BV.HSIdentical.df %>% dplyr::filter(feature>0)
       if(doYear){
         cat("I", "\n")
         #memory.size(max=64071)

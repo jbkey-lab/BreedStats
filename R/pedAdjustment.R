@@ -242,36 +242,37 @@ PedAdjust = function(  data = BV.MC.Entry.data.AB,doReduceNonCodes  ){
   invisible(gc(reset=T)) #cleans memory "garbage collector"
   memory.limit(size=15071)
   digitDH = "((-)?B\\.DHB[0-9]*|(-)?B\\.DH[0-9]*|(-)?\\.DH-B[0-9]*|(-)?\\.DHB[0-9]*|(-)?\\.DH[0-9]*)"
-
+  cat("N")
   linked.peds.beck = to_search_with %>%
-    mutate(data = list(to_search_in) ) %>%
-    unnest(data) %>%
-    mutate(unique_ped_id_nchar = nchar(unique_ped_id) ) %>%
-    mutate(unique_nchar = nchar(unique) ) %>%
-    mutate(unique_ped_id_DH = str_extract(digitDH, string = unique_ped_id) ) %>%
-    #mutate(unique_ped_id_DH2 = gsub(".*?\\.(.*?)\\.*", x=unique_ped_id, value=T) ) %>%
-    mutate(unique_DH = str_extract(digitDH, string=unique) ) %>%
-    filter(unique_nchar <= (unique_ped_id_nchar+15)  )
+    plyr::mutate(data = list(to_search_in) ) %>%
+    tidyr::unnest(data) %>%
+    plyr::mutate(unique_ped_id_nchar = nchar(unique_ped_id) ) %>%
+    plyr::mutate(unique_nchar = nchar(unique) ) %>%
+    plyr::mutate(unique_ped_id_DH = (stringr::str_extract(digitDH, string = unique_ped_id) ) ) %>%
+    #plyr::mutate(unique_ped_id_DH2 = gsub(".*?\\.(.*?)\\.*", x=unique_ped_id, value=T) ) %>%
+    plyr::mutate(unique_DH = stringr::str_extract(digitDH, string=unique) ) %>%
+    dplyr::filter(unique_nchar <= (unique_ped_id_nchar+15)  )
 
   linked.peds.beck2 = linked.peds.beck %>%
-    mutate(unique_ped_id_DH_1 = ifelse((unique_ped_id_nchar < 10), as.matrix(grepl("\\/", x = unique )), F))
+    plyr::mutate(unique_ped_id_DH_1 = ifelse((unique_ped_id_nchar < 10), as.matrix(grepl("\\/", x = unique )), F))
 
   linked.peds.beck3 =  linked.peds.beck2 %>%
-    filter(  str_detect(unique, coll(unique_ped_id)  )  )  %>%
-    filter(unique_ped_id_DH_1 != TRUE)
+    dplyr::filter(  str_detect(unique, (stringr::coll(unique_ped_id)  ) ) )  %>%
+    dplyr::filter(unique_ped_id_DH_1 != TRUE)
   invisible(gc(reset=T)) #cleans memory "garbage collector"
 
   linked.peds.beck4 =   linked.peds.beck3 %>%
-    mutate(DH_Match = ifelse(unique_ped_id_DH == unique_DH , TRUE,FALSE) ) %>%
-    mutate(DH_Match = ifelse(is.na(DH_Match), TRUE, DH_Match)) %>%
-    filter(DH_Match != FALSE)
+    plyr::mutate(DH_Match = ifelse(unique_ped_id_DH == unique_DH , TRUE,FALSE) ) %>%
+    plyr::mutate(DH_Match = ifelse(is.na(DH_Match), TRUE, DH_Match)) %>%
+    dplyr::filter(DH_Match != FALSE)
   invisible(gc(reset=T)) #cleans memory "garbage collector"
 
   linked.peds.beck4 = linked.peds.beck4 %>%
-    select(Code,unique_ped_id,unique) %>%
-    group_by(Code,unique) %>%
-    summarise(strings = str_c(unique_ped_id, collapse = ", "))
+    dplyr::select(Code,unique_ped_id,unique) %>%
+    dplyr::group_by(Code,unique) %>%
+    dplyr::summarise(strings = (stringr::str_c(unique_ped_id, collapse = ", ")))
 
+  cat("M")
 
   rm(linked.peds.beck, linked.peds.beck2, linked.peds.beck3)
   invisible(gc(reset=T)) #cleans memory "garbage collector"
@@ -283,12 +284,12 @@ PedAdjust = function(  data = BV.MC.Entry.data.AB,doReduceNonCodes  ){
   rm(linked.peds.beck4)
 
 
-  linked.peds.beck = left_join(linked.peds.beck, BV.MC.Inbred[,c(2,3)], by=c("Code"="NEW.CODE"))
+  linked.peds.beck = dplyr::left_join(linked.peds.beck, BV.MC.Inbred[,c(2,3)], by=c("Code"="NEW.CODE"))
   linked.peds.beck = linked.peds.beck[,c(20,1:19)]
 
 
 
-  linked.peds = left_join(linked.peds[, c(1,2,3,4)], linked.peds.beck[, c(2,3)], by = c("match"="unique"))
+  linked.peds = dplyr::left_join(linked.peds[, c(1,2,3,4)], linked.peds.beck[, c(2,3)], by = c("match"="unique"))
   #bind.linked.female.peds[[length(bind.linked.female.peds)+1]] = linked.female.peds
   # rm(linked.female.peds, to_search_with.batch)
   # }
@@ -312,7 +313,7 @@ PedAdjust = function(  data = BV.MC.Entry.data.AB,doReduceNonCodes  ){
   BV.MC.Inbred = newData
   # rm(data,newData)
 
-  #BV.MC.Inbred.slash = BV.MC.Inbred %>% filter(grepl(, pattern="/") == TRUE)
+  #BV.MC.Inbred.slash = BV.MC.Inbred %>% dplyr::filter(grepl(, pattern="/") == TRUE)
 
   to_search_in <- data.table(linked.peds[!duplicated(linked.peds$match),c(3)])
   colnames(to_search_in)=c("unique")
@@ -336,37 +337,38 @@ PedAdjust = function(  data = BV.MC.Entry.data.AB,doReduceNonCodes  ){
 
 
   linked.peds = linked.peds.save
+  cat("O")
 
   linked.peds.beck = to_search_with %>%
-    mutate(data = list(to_search_in) ) %>%
-    unnest(data) %>%
-    mutate(unique_ped_id_nchar = nchar(unique_ped_id) ) %>%
-    mutate(unique_nchar = nchar(unique) ) %>%
-    mutate(unique_ped_id_DH = str_extract(digitDH, string = unique_ped_id) ) %>%
-    #mutate(unique_ped_id_DH2 = gsub(".*?\\.(.*?)\\.*", x=unique_ped_id, value=T) ) %>%
-    mutate(unique_DH = str_extract(digitDH, string=unique) ) %>%
-    filter(unique_nchar <= (unique_ped_id_nchar+15)  )
+    plyr::mutate(data = list(to_search_in) ) %>%
+    tidyr::unnest(data) %>%
+    plyr::mutate(unique_ped_id_nchar = nchar(unique_ped_id) ) %>%
+    plyr::mutate(unique_nchar = nchar(unique) ) %>%
+    plyr::mutate(unique_ped_id_DH = (stringr::str_extract(digitDH, string = unique_ped_id) )) %>%
+    #plyr::mutate(unique_ped_id_DH2 = gsub(".*?\\.(.*?)\\.*", x=unique_ped_id, value=T) ) %>%
+    plyr::mutate(unique_DH = stringr::str_extract(digitDH, string=unique) ) %>%
+    dplyr::filter(unique_nchar <= (unique_ped_id_nchar+15)  )
 
   linked.peds.beck2 = linked.peds.beck %>%
-    mutate(unique_ped_id_DH_1 = ifelse((unique_ped_id_nchar < 10), as.matrix(grepl("\\/", x = unique )), F))
+    plyr::mutate(unique_ped_id_DH_1 = ifelse((unique_ped_id_nchar < 10), as.matrix(grepl("\\/", x = unique )), F))
   rm(linked.peds.beck); invisible(gc(reset=T))
 
   linked.peds.beck3 =  linked.peds.beck2 %>%
-    filter(  str_detect(unique, coll(unique_ped_id)  )  )  %>%
-    filter(unique_ped_id_DH_1 != TRUE)
+    dplyr::filter(  str_detect(unique, (stringr::coll(unique_ped_id))  )  )  %>%
+    dplyr::filter(unique_ped_id_DH_1 != TRUE)
   rm(linked.peds.beck2)
   invisible(gc(reset=T)) #cleans memory "garbage collector"
 
   linked.peds.beck4 =   linked.peds.beck3 %>%
-    mutate(DH_Match = ifelse(unique_ped_id_DH == unique_DH , TRUE, FALSE) ) %>%
-    mutate(DH_Match = ifelse(is.na(DH_Match), TRUE, DH_Match)) %>%
-    filter(DH_Match != FALSE)
+    plyr::mutate(DH_Match = ifelse(unique_ped_id_DH == unique_DH , TRUE, FALSE) ) %>%
+    plyr::mutate(DH_Match = ifelse(is.na(DH_Match), TRUE, DH_Match)) %>%
+    dplyr::filter(DH_Match != FALSE)
   invisible(gc(reset=T)) #cleans memory "garbage collector"
 
   linked.peds.beck4 = linked.peds.beck4 %>%
-    select(Code,unique_ped_id,unique) %>%
-    group_by(Code,unique) %>%
-    summarise(strings = str_c(unique_ped_id, collapse = ", "))
+    dplyr::select(Code,unique_ped_id,unique) %>%
+    dplyr::group_by(Code,unique) %>%
+    dplyr::summarise(strings = (stringr::str_c(unique_ped_id, collapse = ", ")))
 
 
   rm(linked.peds.beck, linked.peds.beck2, linked.peds.beck3)
@@ -379,12 +381,12 @@ PedAdjust = function(  data = BV.MC.Entry.data.AB,doReduceNonCodes  ){
   rm(linked.peds.beck4)
 
 
-  linked.peds.beck = left_join(linked.peds.beck, BV.MC.Inbred[,c(2,3)], by=c("Code"="NEW.CODE"))
+  linked.peds.beck = dplyr::left_join(linked.peds.beck, BV.MC.Inbred[,c(2,3)], by=c("Code"="NEW.CODE"))
   linked.peds.beck = linked.peds.beck[,c(20,1:19)]
   colnames(linked.peds.beck)[2] = "CodeV2"
 
 
-  linked.peds = left_join(linked.peds[, c(1,2,3,4,5)], linked.peds.beck[, c(2,3)], by = c("match"="unique"))
+  linked.peds = dplyr::left_join(linked.peds[, c(1,2,3,4,5)], linked.peds.beck[, c(2,3)], by = c("match"="unique"))
   #bind.linked.female.peds[[length(bind.linked.female.peds)+1]] = linked.female.peds
   # rm(linked.female.peds, to_search_with.batch)
   # }
@@ -396,6 +398,7 @@ PedAdjust = function(  data = BV.MC.Entry.data.AB,doReduceNonCodes  ){
   linked.peds$Code = ifelse(is.na(linked.peds$Code ), as.character(linked.peds$CodeV2), linked.peds$Code)
 
 
+  cat("P")
 
 
   linked.peds = linked.peds[!duplicated(linked.peds$uniqued_id), ]
@@ -449,7 +452,7 @@ PedAdjust = function(  data = BV.MC.Entry.data.AB,doReduceNonCodes  ){
   patterns = patterns[[1]]
 
   #inbreds##################################################################3
-  match=str_detect(string = linked.peds$match, pattern = paste(patterns, collapse = "|"), negate=T)
+  match=stringr::str_detect(string = linked.peds$match, pattern = paste(patterns, collapse = "|"), negate=T)
   match=data.frame(match)
   for(i in 1:nrow(linked.peds)) {
     if(match[i,1]==TRUE){
@@ -508,7 +511,7 @@ PedAdjust = function(  data = BV.MC.Entry.data.AB,doReduceNonCodes  ){
 
   #source("R:/Breeding/MT_TP/Models/R-Scripts/greplPeds.R")
 
-if(doReduceNonCodes){
+  if(doReduceNonCodes){
   newData=pedigreeReduce(data=linked.peds, Codes=F)
 
   nrow(newData)
@@ -517,7 +520,7 @@ if(doReduceNonCodes){
   nrow(newDataRmDups)
 
   newData$changed = ifelse(newData$pedigree != newData$match, T, F)
-  newData.changed = newData %>% filter(changed==T)
+  newData.changed = newData %>% dplyr::filter(changed==T)
 
   nrow(newData.changed)
 
@@ -527,10 +530,10 @@ if(doReduceNonCodes){
 }
 
 
-
+cat("Done with adjusting Pedigrees")
 
   #linked.peds = newData
-  write.xlsx(linked.peds, paste0(wdp,"/","linked.peds.xlsx"), overwrite=T)
+  openxlsx::write.xlsx(linked.peds, paste0(wdp,"/","linked.peds.xlsx"), overwrite=T)
   #write.xlsx(linked.peds, paste0(wdp,"/","linked.peds.xlsx"), overwrite=T)
 
   #write.xlsx(linked.peds, paste0(fdp,"linked.peds.updated.xlsx"))
