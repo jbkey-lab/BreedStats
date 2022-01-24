@@ -175,15 +175,16 @@ xgblinearBV = function(){
   #final_grid2 <- expand.grid(nrounds = 450, eta = .5, lambda = .9, alpha=2)
 
   #final_grid3 <- expand.grid(nrounds = 500, eta = .7, lambda = .5, alpha=.9)
-  final_grid4 <- expand.grid(nrounds = c(1000), eta = 1, lambda = 0.0003, alpha=0.0003)
+  final_grid4 <- expand.grid(nrounds = c(1000,500,450), eta = 1, lambda = 0.0003, alpha=0.0003)
 
   # final_grid3 <- expand.grid(mstop = 500, maxdepth = 2, nu = 0.1)
   # final_grid4 <- expand.grid(committees = 10, neighbors = 20)
 
+  trainx2$norm = (trainx2$Yield - mean(trainx2$Yield))/(max(trainx2$Yield)-min(trainx2$Yield))
 
   models.list2 <- caretList(
-    x=trainx2[ , -1],
-    y=(trainx2[,1]),
+    x=trainx2[ , -c(1,8)],
+    y=(trainx2[,8]),
     continue_on_fail = T,
     trControl=trainControl(method="cv",
                            number=1, #1

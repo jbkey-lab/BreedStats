@@ -13,11 +13,12 @@ memory.limit(size=18071)
 
 #source("R:/Breeding/MT_TP/Models/R-Scripts/Spatial Analysis_ASReml.R")
 library(BreedStats)
-library(tidyverse)
-library(data.table)
-#library(asreml)
+#library(tidyverse)
+#library(data.table)
+library(asreml)
+library(DiGGer)
 
-spaDF = load_Data(x = "11_8_2021",simulate=T )
+spaDF = load_Data(x = "11_8_2021",simulate=F )
 
 
 

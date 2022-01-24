@@ -64,3 +64,23 @@ if(!(suppressWarnings(suppressMessages(require(magick, warn.conflicts = FALSE)))
   (suppressWarnings(suppressMessages(library(magick, warn.conflicts = FALSE))))
 }
 
+if(!(suppressWarnings(suppressMessages(require(devtools, warn.conflicts = FALSE))))){
+  install.packages("devtools")
+  (suppressWarnings(suppressMessages(library(devtools, warn.conflicts = FALSE))))
+}
+
+if(!(suppressWarnings(suppressMessages(require(asreml, warn.conflicts = FALSE))))){
+  install_github("/jbkey730/BreedStats/External Packages/asreml_4.1.0.160.zip")
+  (suppressWarnings(suppressMessages(library(asreml, warn.conflicts = FALSE))))
+}
+
+if(!(suppressWarnings(suppressMessages(require(DiGGer, warn.conflicts = FALSE))))){
+  install_github("/jbkey730/BreedStats/External Packages/DiGGer_1.0.5.zip")
+  (suppressWarnings(suppressMessages(library(DiGGer, warn.conflicts = FALSE))))
+}
+
+
+
+
+
+

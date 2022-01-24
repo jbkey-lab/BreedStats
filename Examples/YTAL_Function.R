@@ -13,9 +13,9 @@ library(BreedStats)
 library(tidyverse)
 library(data.table)
 
-cl=parallel::detectCores()
-cl <- makePSOCKcluster(cl)
-registerDoParallel(cl)
+cl= parallel::detectCores()
+cl <- parallel::makePSOCKcluster(cl)
+doParallel::registerDoParallel(cl)
 
 ######################################################################################################
 
