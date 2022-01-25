@@ -280,7 +280,7 @@ BV = function(fdp ,
                                      doReduceNonCodes=doReduceNonCodes)
     #BV.HSIdentical.df = BV.HSIdentical.df[,-c(2,3,4,5,6,7,8,22,23,24,17,18)]
     write.csv(BV.HSIdentical.df, paste0(wdp,"/BV.HSIdentical.df.csv"))
-    BV.HSIdentical.df = fread(paste0(wdp,"/BV.HSIdentical.df.csv"))
+    BV.HSIdentical.df = data.table::fread(paste0(wdp,"/BV.HSIdentical.df.csv"))
 
     cat(proc.time() - ptm )
     cat("Read in ASReml ready file", "\n")
@@ -296,7 +296,7 @@ BV = function(fdp ,
     ptm <- proc.time()
 
 
-    BV.HSIdentical.df = fread(paste0("R:/Breeding/MT_TP/Models/Data/Department Data","/BV.HSIdentical.df.csv"))
+    BV.HSIdentical.df = data.table::fread(paste0("R:/Breeding/MT_TP/Models/Data/Department Data","/BV.HSIdentical.df.csv"))
     #BV.HSIdentical.df = BV.HSIdentical.df[,-c(2,3,4,5,6,7,8,22,23,24,17,18)]
 
     cat("Read in ASReml ready file", "\n")
@@ -387,7 +387,7 @@ BV = function(fdp ,
     for(name in names){
 
       if( "feature" %in% colnames(BV.HSIdentical.df)){
-        BV.HSIdentical.df = BV.HSIdentical.df %>% select(-feature)
+        BV.HSIdentical.df = BV.HSIdentical.df %>% dplyr::select(-feature)
       }
       cat("H", "\n")
       nameCol = paste0(name)
@@ -632,18 +632,18 @@ BV = function(fdp ,
     #scuav = read.csv(paste0(wdp,"StandCnt..UAV._BV_",year,"S.csv"))
     #sink("Debugger.txt")
 
-    BV.traits.1 <- left_join(eval(as.name(paste0("Yield_BV_",folder,"S")))[,c(1,3,2,4,5,6,7)], eval(as.name(paste0("PCT.HOH_BV_",folder,"S")))[,c(1,3,2,4,5,6,7)], by=c("FEMALE"));dim(BV.traits.1)
-    BV.traits.2 <- left_join(BV.traits.1,eval(as.name(paste0("Y.M_BV_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("FEMALE"));dim(BV.traits.2)
-    BV.traits.3 <- left_join(BV.traits.2,eval(as.name(paste0("Plt.Height_BV_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("FEMALE"));dim(BV.traits.3)
-    BV.traits.4 <- left_join(BV.traits.3,eval(as.name(paste0("EarHt_BV_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("FEMALE"));dim(BV.traits.4)
-    BV.traits.5 <- left_join(BV.traits.4,eval(as.name(paste0("Test.WT_BV_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("FEMALE"));dim(BV.traits.5)
+    BV.traits.1 <- dplyr::left_join(eval(as.name(paste0("Yield_BV_",folder,"S")))[,c(1,3,2,4,5,6,7)], eval(as.name(paste0("PCT.HOH_BV_",folder,"S")))[,c(1,3,2,4,5,6,7)], by=c("FEMALE"));dim(BV.traits.1)
+    BV.traits.2 <- dplyr::left_join(BV.traits.1,eval(as.name(paste0("Y.M_BV_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("FEMALE"));dim(BV.traits.2)
+    BV.traits.3 <- dplyr::left_join(BV.traits.2,eval(as.name(paste0("Plt.Height_BV_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("FEMALE"));dim(BV.traits.3)
+    BV.traits.4 <- dplyr::left_join(BV.traits.3,eval(as.name(paste0("EarHt_BV_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("FEMALE"));dim(BV.traits.4)
+    BV.traits.5 <- dplyr::left_join(BV.traits.4,eval(as.name(paste0("Test.WT_BV_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("FEMALE"));dim(BV.traits.5)
     #BV.traits.6 <- left_join(BV.traits.5,rlec[,c(1,3,2,4,5,6,7)],by=c("FEMALE"));dim(BV.traits.6)
-    BV.traits.6 <- left_join(BV.traits.5,eval(as.name(paste0("RL.._BV_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("FEMALE"));dim(BV.traits.5)
-    BV.traits.7 <- left_join(BV.traits.6,eval(as.name(paste0("RL.Count_BV_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("FEMALE"));dim(BV.traits.6)
-    BV.traits.8 <- left_join(BV.traits.7,eval(as.name(paste0("SL.._BV_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("FEMALE"));dim(BV.traits.7)
-    BV.traits.9 <- left_join(BV.traits.8,eval(as.name(paste0("SL.Count_BV_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("FEMALE"));dim(BV.traits.8)
+    BV.traits.6 <- dplyr::left_join(BV.traits.5,eval(as.name(paste0("RL.._BV_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("FEMALE"));dim(BV.traits.5)
+    BV.traits.7 <- dplyr::left_join(BV.traits.6,eval(as.name(paste0("RL.Count_BV_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("FEMALE"));dim(BV.traits.6)
+    BV.traits.8 <- dplyr::left_join(BV.traits.7,eval(as.name(paste0("SL.._BV_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("FEMALE"));dim(BV.traits.7)
+    BV.traits.9 <- dplyr::left_join(BV.traits.8,eval(as.name(paste0("SL.Count_BV_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("FEMALE"));dim(BV.traits.8)
     #BV.traits.11 <- left_join(BV.traits.10,gse[,c(1,3,2,4,5,6,7)],by=c("FEMALE"));dim(BV.traits.11)
-    BV.traits <- left_join(BV.traits.9,eval(as.name(paste0("GS.Late_BV_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("FEMALE"));dim(BV.traits)
+    BV.traits <- dplyr::left_join(BV.traits.9,eval(as.name(paste0("GS.Late_BV_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("FEMALE"));dim(BV.traits)
     #BV.traits.11 <- left_join(BV.traits.10,eval(as.name(paste0("StandCnt..Final._BV_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("FEMALE"));dim(BV.traits.10)
     #BV.traits <- left_join(BV.traits.10,eval(as.name(paste0("StandCnt..UAV._BV_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("FEMALE"));colnames(BV.traits)[1]<-"INBRED";dim(BV.traits)
     #BV.traits.dup<-BV.traits[duplicated(BV.traits$INBRED),];dim(BV.traits.dup)
@@ -678,9 +678,9 @@ BV = function(fdp ,
     ped_info[,"match"] <- suppressWarnings(suppressMessages(plyr::revalue(as.character(ped_info[,"match"]), industryNames)))  #industry name to inbred name conversion
 
     group_and_concat <- ped_info %>%
-      select(uniqued_id, match, Gender) %>%
-      group_by(match) %>%
-      mutate(Prism_Mped_Fped_HId_Ped_IName_Var = paste(uniqued_id, collapse = " , "),
+      dplyr::select(uniqued_id, match, Gender) %>%
+      dplyr::group_by(match) %>%
+      dplyr::mutate(Prism_Mped_Fped_HId_Ped_IName_Var = paste(uniqued_id, collapse = " , "),
              HG = paste(Gender, collapse = " , "))
 
     group_and_concat$HG = gsub(group_and_concat$HG, pattern="/", replacement = " , ")
@@ -691,13 +691,13 @@ BV = function(fdp ,
 
     group_and_concat = group_and_concat[!duplicated(group_and_concat$match),]
 
-    BV.traits = left_join(BV.traits, group_and_concat[,c(2,4,6)], by=c("FEMALE"="match"))
+    BV.traits = dplyr::left_join(BV.traits, group_and_concat[,c(2,4,6)], by=c("FEMALE"="match"))
     #BV.traits$FEMALE = ifelse(is.na(BV.traits$pedigree) ,
     #                          BV.traits$FEMALE, BV.traits$pedigree)
 
     #BV.traits = BV.traits[,-c(68)]
 
-    write.xlsx(BV.traits, paste0(fdp,"/",folder,
+    openxlsx::write.xlsx(BV.traits, paste0(fdp,"/",folder,
                                  "/",".Traits.BV.",
                                  folder,
                                  if(A){print("A")},

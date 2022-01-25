@@ -1,6 +1,7 @@
 exportPattern("^[[:alpha:]]+")
 import(tidyverse)
-import(data.table)
+importFrom(data.table, fread)
+importFrom(data.table, data.table)
 importFrom(openxlsx, read.xlsx)
 importFrom(openxlsx, write.xlsx)
 importFrom(parallel, detectCores)

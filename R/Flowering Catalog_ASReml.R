@@ -37,12 +37,11 @@ inbredChar = function(#dp = dp,
   if(simulate){
     data("inbreddata")
     data("inbredgossdata")
-  }
-  else{
+  }else{
     hpd = hdp
     dpf=dpf
-    BV.MC.NUR<-fread(paste0(hdp))#all varieties to build the model
-    BV.MC.GOSS<-fread(paste0(gdp))#all varieties to build the model
+    BV.MC.NUR<-data.table::fread(paste0(hdp))#all varieties to build the model
+    BV.MC.GOSS<-data.table::fread(paste0(gdp))#all varieties to build the model
   }
   #doPedigreeChange = doPedigreeChange
   doAdjInbredData = doAdjInbredData
@@ -93,7 +92,7 @@ inbredChar = function(#dp = dp,
   BV.MC.Entry.data = BV.MC.Entry[,-c(1,4,6,11,16,17,18,26)]
   dim(BV.MC.Entry.data)
 
-  BV.MC.Entry.data <- BV.MC.Entry.data %>% filter(
+  BV.MC.Entry.data <- BV.MC.Entry.data %>% dplyr::filter(
     Plot.Discarded != "Yes",
     Plot.Status != "3 - Bad",
     Entry.Book.Name != "TP20S_Filler",
@@ -239,9 +238,9 @@ inbredChar = function(#dp = dp,
   linked.peds$match = linked.peds$pedigree
 
 
-  BV.MC.Inbred <- read.csv(paste0("R:/Breeding/MT_TP/Models/Data/Department Data/NEW LINE CODES.csv"))
+  BV.MC.Inbred <- openxlsx::read.xlsx(paste0("R:/Breeding/MT_TP/Models/Data/Department Data/NEW LINE CODES.xlsx"),1)
   BV.MC.Inbred$Pedigre_Backup = BV.MC.Inbred$PEDIGREE
-  BV.MC.Inbred = BV.MC.Inbred[,c(1:3,22,4:21)]
+  BV.MC.Inbred = BV.MC.Inbred[,c(1:3,21,4:20)]
 
   to_search_in <- data.table(linked.peds[!duplicated(linked.peds$match),c(3)])
   colnames(to_search_in)=c("unique")
@@ -266,33 +265,33 @@ inbredChar = function(#dp = dp,
   digitDH = "((-)?B\\.DHB[0-9]*|(-)?B\\.DH[0-9]*|(-)?\\.DH-B[0-9]*|(-)?\\.DHB[0-9]*|(-)?\\.DH[0-9]*)"
 
   linked.peds.beck = to_search_with %>%
-    mutate(data = list(to_search_in) ) %>%
-    unnest(data) %>%
-    mutate(unique_ped_id_nchar = nchar(unique_ped_id) ) %>%
-    mutate(unique_nchar = nchar(unique) ) %>%
-    mutate(unique_ped_id_DH = str_extract(digitDH, string = unique_ped_id) ) %>%
+    dplyr::mutate(data = list(to_search_in) ) %>%
+    tidyr::unnest(data) %>%
+    dplyr::mutate(unique_ped_id_nchar = nchar(unique_ped_id) ) %>%
+    dplyr::mutate(unique_nchar = nchar(unique) ) %>%
+    dplyr::mutate(unique_ped_id_DH = (stringr::str_extract(digitDH, string = unique_ped_id) ) )%>%
     #mutate(unique_ped_id_DH2 = gsub(".*?\\.(.*?)\\.*", x=unique_ped_id, value=T) ) %>%
-    mutate(unique_DH = str_extract(digitDH, string=unique) ) %>%
+    dplyr::mutate(unique_DH = (stringr::str_extract(digitDH, string=unique) ) )%>%
     dplyr::filter(unique_nchar <= (unique_ped_id_nchar+15)  )
 
   linked.peds.beck2 = linked.peds.beck %>%
-    mutate(unique_ped_id_DH_1 = ifelse((unique_ped_id_nchar < 10), as.matrix(grepl("\\/", x = unique )), F))
+    dplyr::mutate(unique_ped_id_DH_1 = ifelse((unique_ped_id_nchar < 10), as.matrix(grepl("\\/", x = unique )), F))
 
   linked.peds.beck3 =  linked.peds.beck2 %>%
-    filter(  str_detect(unique, coll(unique_ped_id)  )  )  %>%
+    dplyr::filter((stringr::str_detect(unique, (stringr::coll(unique_ped_id)  )  )))  %>%
     dplyr::filter(unique_ped_id_DH_1 != TRUE)
   invisible(gc(reset=T)) #cleans memory "garbage collector"
 
   linked.peds.beck4 =   linked.peds.beck3 %>%
-    mutate(DH_Match = ifelse(unique_ped_id_DH == unique_DH , TRUE,FALSE) ) %>%
-    mutate(DH_Match = ifelse(is.na(DH_Match), TRUE, DH_Match)) %>%
+    dplyr::mutate(DH_Match = ifelse(unique_ped_id_DH == unique_DH , TRUE,FALSE) ) %>%
+    dplyr::mutate(DH_Match = ifelse(is.na(DH_Match), TRUE, DH_Match)) %>%
     dplyr::filter(DH_Match != FALSE)
   invisible(gc(reset=T)) #cleans memory "garbage collector"
 
   linked.peds.beck4 = linked.peds.beck4 %>%
-    select(Code,unique_ped_id,unique) %>%
-    group_by(Code,unique) %>%
-    summarise(strings = str_c(unique_ped_id, collapse = ", "))
+    dplyr::select(Code,unique_ped_id,unique) %>%
+    dplyr::group_by(Code,unique) %>%
+    dplyr::summarise(strings = str_c(unique_ped_id, collapse = ", "))
 
 
   rm(linked.peds.beck, linked.peds.beck2, linked.peds.beck3)
@@ -305,12 +304,12 @@ inbredChar = function(#dp = dp,
   rm(linked.peds.beck4)
 
 
-  linked.peds.beck = left_join(linked.peds.beck, BV.MC.Inbred[,c(2,3)], by=c("Code"="NEW.CODE"))
+  linked.peds.beck = dplyr::left_join(linked.peds.beck, BV.MC.Inbred[,c(2,3)], by=c("Code"="NEW.CODE"))
   linked.peds.beck = linked.peds.beck[,c(20,1:19)]
 
 
 
-  linked.peds = left_join(linked.peds[, c(1,2,3)], linked.peds.beck[, c(2,3)], by = c("match"="unique"))
+  linked.peds = dplyr::left_join(linked.peds[, c(1,2,3)], linked.peds.beck[, c(2,3)], by = c("match"="unique"))
   #bind.linked.female.peds[[length(bind.linked.female.peds)+1]] = linked.female.peds
   # rm(linked.female.peds, to_search_with.batch)
   # }
@@ -321,9 +320,9 @@ inbredChar = function(#dp = dp,
   #############################################################
   #############################################################
   #############################################################
-  BV.MC.Inbred <- read.csv(paste0("R:/Breeding/MT_TP/Models/Data/Department Data/NEW LINE CODES.csv"))
+  BV.MC.Inbred <- openxlsx::read.xlsx(paste0("R:/Breeding/MT_TP/Models/Data/Department Data/NEW LINE CODES.xlsx"),1)
   BV.MC.Inbred$Pedigre_Backup = BV.MC.Inbred$PEDIGREE
-  BV.MC.Inbred = BV.MC.Inbred[,c(1:3,22,4:21)]
+  BV.MC.Inbred = BV.MC.Inbred[,c(1:3,21,4:20)]
 
 
   ###run pedigree reduction function
@@ -360,13 +359,13 @@ inbredChar = function(#dp = dp,
   linked.peds = linked.peds.save
 
   linked.peds.beck = to_search_with %>%
-    mutate(data = list(to_search_in) ) %>%
-    unnest(data) %>%
-    mutate(unique_ped_id_nchar = nchar(unique_ped_id) ) %>%
-    mutate(unique_nchar = nchar(unique) ) %>%
-    mutate(unique_ped_id_DH = str_extract(digitDH, string = unique_ped_id) ) %>%
+    dplyr::mutate(data = list(to_search_in) ) %>%
+    tidyr::unnest(data) %>%
+    dplyr::mutate(unique_ped_id_nchar = nchar(unique_ped_id) ) %>%
+    dplyr::mutate(unique_nchar = nchar(unique) ) %>%
+    dplyr::mutate(unique_ped_id_DH = (stringr::str_extract(digitDH, string = unique_ped_id) ) )%>%
     #mutate(unique_ped_id_DH2 = gsub(".*?\\.(.*?)\\.*", x=unique_ped_id, value=T) ) %>%
-    mutate(unique_DH = str_extract(digitDH, string=unique) ) %>%
+    dplyr::mutate(unique_DH = (stringr::str_extract(digitDH, string=unique) )) %>%
     dplyr::filter(unique_nchar <= (unique_ped_id_nchar+15)  )
 
   linked.peds.beck2 = linked.peds.beck %>%
@@ -374,21 +373,21 @@ inbredChar = function(#dp = dp,
   rm(linked.peds.beck); invisible(gc(reset=T))
 
   linked.peds.beck3 =  linked.peds.beck2 %>%
-    filter(  str_detect(unique, coll(unique_ped_id)  )  )  %>%
+    dplyr::filter(  stringr(str_detect(unique, (stringr::coll(unique_ped_id)  )  ) ) )%>%
     dplyr::filter(unique_ped_id_DH_1 != TRUE)
   rm(linked.peds.beck2)
   invisible(gc(reset=T)) #cleans memory "garbage collector"
 
   linked.peds.beck4 =   linked.peds.beck3 %>%
-    mutate(DH_Match = ifelse(unique_ped_id_DH == unique_DH , TRUE, FALSE) ) %>%
-    mutate(DH_Match = ifelse(is.na(DH_Match), TRUE, DH_Match)) %>%
+    dplyr::mutate(DH_Match = ifelse(unique_ped_id_DH == unique_DH , TRUE, FALSE) ) %>%
+    dplyr::mutate(DH_Match = ifelse(is.na(DH_Match), TRUE, DH_Match)) %>%
     dplyr::filter(DH_Match != FALSE)
   invisible(gc(reset=T)) #cleans memory "garbage collector"
 
   linked.peds.beck4 = linked.peds.beck4 %>%
-    select(Code,unique_ped_id,unique) %>%
-    group_by(Code,unique) %>%
-    summarise(strings = str_c(unique_ped_id, collapse = ", "))
+    dplyr::select(Code,unique_ped_id,unique) %>%
+    dplyr::group_by(Code,unique) %>%
+    dplyr::summarise(strings = (stringr::str_c(unique_ped_id, collapse = ", ")))
 
 
   rm(linked.peds.beck, linked.peds.beck2, linked.peds.beck3)
@@ -401,12 +400,12 @@ inbredChar = function(#dp = dp,
   rm(linked.peds.beck4)
 
 
-  linked.peds.beck = left_join(linked.peds.beck, BV.MC.Inbred[,c(2,3)], by=c("Code"="NEW.CODE"))
+  linked.peds.beck = dplyr::left_join(linked.peds.beck, BV.MC.Inbred[,c(2,3)], by=c("Code"="NEW.CODE"))
   linked.peds.beck = linked.peds.beck[,c(20,1:19)]
   colnames(linked.peds.beck)[2] = "CodeV2"
 
 
-  linked.peds = left_join(linked.peds[, c(1,2,3,4)], linked.peds.beck[, c(2,3)], by = c("match"="unique"))
+  linked.peds = dplyr::left_join(linked.peds[, c(1,2,3,4)], linked.peds.beck[, c(2,3)], by = c("match"="unique"))
   #bind.linked.female.peds[[length(bind.linked.female.peds)+1]] = linked.female.peds
   # rm(linked.female.peds, to_search_with.batch)
   # }
@@ -479,7 +478,7 @@ inbredChar = function(#dp = dp,
   patterns = patterns[[1]]
   #inbreds###################################################################
   linked.peds$match = as.character(linked.peds$match)
-  match=str_detect(string = linked.peds$match, pattern = paste(patterns, collapse = "|"), negate=T)
+  match=stringr::str_detect(string = linked.peds$match, pattern = paste(patterns, collapse = "|"), negate=T)
   match=data.frame(match)
   for(i in 1:nrow(linked.peds)) {
     if(match[i,1]==TRUE){
@@ -517,7 +516,7 @@ inbredChar = function(#dp = dp,
   #
   # ##############################################
   # ##############################################
-  # #qualdatbyYear <- qualdatbyYear %>% filter((Plot.Discarded) == "")
+  # #qualdatbyYear <- qualdatbyYear %>% dplyr::filter((Plot.Discarded) == "")
   # qualdatbyYear <- qualdatbyYear %>% dplyr::filter(EBN != "TP20S_Filler",
   #                                           EBN != "FILL",
   #                                           EBN != "Filler")
@@ -626,7 +625,7 @@ inbredChar = function(#dp = dp,
                                                                                                                     '46358'=	'046358', '37186'=	'037186', '26507'=	'026507','26076'=	'026076',
                                                                                                                     '16360'=	'016360', '16360'=	'016360', '16088'=	'016088','16088'=	'016088', '50'='050' ))))
 
-  lines2020 <- left_join(qualday, BV.MC.LINE, by=c("unique.Line.ID"="unique"),keep=F);dim(lines2020)
+  lines2020 <- dplyr::left_join(qualday, BV.MC.LINE, by=c("unique.Line.ID"="unique"),keep=F);dim(lines2020)
 
 
 
@@ -701,7 +700,7 @@ inbredChar = function(#dp = dp,
   lines2020$EXP = as.factor(EBN)
   lines2020$LINE = as.factor(LINE)
 
-  qualdat.mt <- lines2020 %>% dplyr::filter(Loc == "Marshalltown") #filter only marshalltown lines
+  qualdat.mt <- lines2020 %>% ddplyr::filter(Loc == "Marshalltown") #filter only marshalltown lines
   qualdat.olivia <- lines2020 %>% dplyr::filter(Loc == "Olivia") #filter only olivia lines
   qualdat.atlanta <- lines2020 %>% dplyr::filter(Loc == "Atlanta") #filter only olivia lines
 
@@ -713,7 +712,7 @@ inbredChar = function(#dp = dp,
 
   detach(lines2020)
   ##############################
-  linesYear = lines2020 %>% filter( between(as.numeric(as.character(YEAR)), l_year, h_year))
+  linesYear = lines2020 %>% dplyr::filter( (dplyr::between(as.numeric(as.character(YEAR)), l_year, h_year)))
   #linesreploc = lines2020 %>% dplyr::filter(YEAR == Current)
 
 
@@ -740,10 +739,10 @@ inbredChar = function(#dp = dp,
   lyear=levels(YEAR); lyear=data.frame(lyear); lyear$c = c(1:nrow(lyear))
   line=levels(LINE); line=data.frame(line); line$c = c(1:nrow(line))
 
-  qualdat.df = left_join(qualdat.df, lexp,   by = c("EXP"="lexp"))
-  qualdat.df = left_join(qualdat.df, lfield, by = c("FIELD"="lfield"))
-  qualdat.df = left_join(qualdat.df, lyear,  by = c("YEAR"="lyear"))
-  qualdat.df = left_join(qualdat.df, line,   by = c("LINE"="line"))
+  qualdat.df = dplyr::left_join(qualdat.df, lexp,   by = c("EXP"="lexp"))
+  qualdat.df = dplyr::left_join(qualdat.df, lfield, by = c("FIELD"="lfield"))
+  qualdat.df = dplyr::left_join(qualdat.df, lyear,  by = c("YEAR"="lyear"))
+  qualdat.df = dplyr::left_join(qualdat.df, line,   by = c("LINE"="line"))
   colnames(qualdat.df)[52:55] = c("expn","fieldn","yearn","linen")
   qualdat.df$FieldBook = paste0(qualdat.df$fieldn,"_",qualdat.df$yearn,"_",qualdat.df$expn)
 
@@ -853,8 +852,8 @@ inbredChar = function(#dp = dp,
         SP_data.filter.feature  = na.omit(SP_data.filter.feature )
         SP_data.filter.index = order(SP_data.filter.feature $feature)
         SP_data.filter.feature  = SP_data.filter.feature [SP_data.filter.index, ]
-        BV.HSIdentical.model.predicted = SP_data.filter.feature  %>% distinct() %>% group_by(LINE) %>%
-          mutate(mean=paste0(feature , collapse=" "))
+        BV.HSIdentical.model.predicted = SP_data.filter.feature  %>% dplyr::distinct() %>% dplyr::group_by(LINE) %>%
+          dplyr::mutate(mean=paste0(feature , collapse=" "))
 
         colnames(BV.HSIdentical.model.predicted)[2] = "g_mean"
         # BV.HSIdentical.model.predicted$std_err = ""
@@ -1074,7 +1073,7 @@ inbredChar = function(#dp = dp,
 
 
         #BV.HSIdentical.model.predicted = gsub(1,"",BV.HSIdentical.model.predicted$mean)
-        df8=left_join(BV.HSIdentical.model.predicted[,c(1,4,2)],counts,by="LINE"); colnames(df8)=c("LINE",paste0(name),paste0(name,"_std.error"), paste0(name,"_Observations"))
+        df8=dplyr::left_join(BV.HSIdentical.model.predicted[,c(1,4,2)],counts,by="LINE"); colnames(df8)=c("LINE",paste0(name),paste0(name,"_std.error"), paste0(name,"_Observations"))
         df8 = df8[!duplicated(df8$LINE), ]
 
         assign(paste0(name), df8)
@@ -1102,6 +1101,7 @@ inbredChar = function(#dp = dp,
 
       if(name == "Tassel.Extension"){
         SP_data.filter$feature =  as.numeric(SP_data.filter$feature)
+
 
         QUALDAT = asreml(fixed = feature ~ YEAR + FIELD ,
                          #random = ~ LINE + LINE*FIELD + REP*LINE,
@@ -1192,7 +1192,7 @@ inbredChar = function(#dp = dp,
                                                               replacement = "Normal Shed-Heavy Shed")
         BV.HSIdentical.model.predicted$predicted.value = gsub(x = BV.HSIdentical.model.predicted$predicted.value, pattern = "5",
                                                               replacement = "Heavy Shed")
-        df8=left_join(BV.HSIdentical.model.predicted[,c(1:3)],counts,by="LINE"); colnames(df8)=c("LINE",paste0(name),paste0(name,"_std.error"), paste0(name,"_Observations"))
+        df8=dplyr::left_join(BV.HSIdentical.model.predicted[,c(1:3)],counts,by="LINE"); colnames(df8)=c("LINE",paste0(name),paste0(name,"_std.error"), paste0(name,"_Observations"))
         df8$Shed.Rating = gsub(x = df8$Shed.Rating , pattern = "NaN",
                                replacement = "")
 
@@ -1275,7 +1275,7 @@ inbredChar = function(#dp = dp,
 
 
         #sigfigs to three digits
-        df8=left_join(BV.HSIdentical.model.predicted[,1:3],counts,by="LINE");colnames(df8)=c("LINE",paste0(name),paste0(name,"_stderror"),paste0(name,"_Observations"))
+        df8=dplyr::left_join(BV.HSIdentical.model.predicted[,1:3],counts,by="LINE");colnames(df8)=c("LINE",paste0(name),paste0(name,"_stderror"),paste0(name,"_Observations"))
 
         #df8$name = ifelse(df8[,name] == -0, 0 , df8[,name])
         #sigfigs.traits<-c(paste0(name))
@@ -1321,8 +1321,8 @@ inbredChar = function(#dp = dp,
 
 
         #sigfigs to three digits
-        df8=left_join(BV.HSIdentical.model.predicted[,1:3],counts,by="LINE");colnames(df8)=c("LINE",paste0(name),paste0(name,"_stderror"),paste0(name,"_Observations"))
-        df9 = left_join(df8,SP_data.filter.gmean,by="LINE")
+        df8=dplyr::left_join(BV.HSIdentical.model.predicted[,1:3],counts,by="LINE");colnames(df8)=c("LINE",paste0(name),paste0(name,"_stderror"),paste0(name,"_Observations"))
+        df9 = dplyr::left_join(df8,SP_data.filter.gmean,by="LINE")
         df8$GOSS = round(df9$g_mean,0)
 
         df8$GOSS = ifelse(df8$GOSS == 1,"Excellent",df8$GOSS)
@@ -1410,7 +1410,7 @@ inbredChar = function(#dp = dp,
 
 
       #sigfigs to three digits
-      df8=left_join(BV.HSIdentical.model.predicted[,1:3],counts,by="LINE");colnames(df8)=c("LINE",paste0(name),paste0(name,"_stderror"),paste0(name,"_Observations"))
+      df8=dplyr::left_join(BV.HSIdentical.model.predicted[,1:3],counts,by="LINE");colnames(df8)=c("LINE",paste0(name),paste0(name,"_stderror"),paste0(name,"_Observations"))
 
       #df8$name = ifelse(df8[,name] == -0, 0 , df8[,name])
       #sigfigs.traits<-c(paste0(name))
@@ -1462,8 +1462,8 @@ inbredChar = function(#dp = dp,
     rm(qualdat.df)
     gc()
     #Flowering_Catalog19s.1<-left_join(GDU_shd50_Line_ML_BLUEs.1, GDU_slk50_Line_ML_BLUEs.1, by = 'LINE')
-    inbredDat = left_join(left_join(left_join(left_join(left_join(left_join(left_join(left_join(left_join(left_join(left_join(left_join(left_join(left_join(left_join(
-      left_join(left_join(left_join(left_join(left_join(left_join(left_join(left_join(left_join(
+    inbredDat = dplyr::left_join(dplyr::left_join(dplyr::left_join(dplyr::left_join(dplyr::left_join(dplyr::left_join(dplyr::left_join(dplyr::left_join(dplyr::left_join(dplyr::left_join(dplyr::left_join(dplyr::left_join(dplyr::left_join(dplyr::left_join(dplyr::left_join(
+      dplyr::left_join(dplyr::left_join(dplyr::left_join(dplyr::left_join(dplyr::left_join(dplyr::left_join(dplyr::left_join(dplyr::left_join(dplyr::left_join(
         linesYear.line,
         Brace.Root, by = "LINE"),
         SLK10, by = "LINE"),
@@ -1511,9 +1511,9 @@ inbredChar = function(#dp = dp,
     inbredDat[inbredDat=="#NUM!"] = NULL
 
    # write.xlsx(inbredDat, paste0(dpf,".xlsx") ,row.names=F, showNA=F)
-    write.xlsx(inbredDat, paste0(dpf, season,"S.xlsx") ,row.names=F, overwrite=T)
+    openxlsx::write.xlsx(inbredDat, paste0(dpf, season,"S.xlsx") ,row.names=F, overwrite=T)
 
-    write.xlsx(inbredDat[,c(1,53:58)], paste0(dpf, "Flowering Catalog_",season,"S.xlsx") ,row.names=F, overwrite=T)
+    openxlsx::write.xlsx(inbredDat[,c(1,53:58)], paste0(dpf, "Flowering Catalog_",season,"S.xlsx") ,row.names=F, overwrite=T)
 
   }
   cat("----------------------------Done!----------------------------", "\n")

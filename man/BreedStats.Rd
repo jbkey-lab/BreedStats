@@ -1,16 +1,15 @@
 \name{BreedStats}
 \alias{BreedStats}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{BreedStats
+\title{Genetic values and predictions for breeding
 %%  ~~Breeding Statistics for R ... ~~
 }
 \description{
-A group of functions for statistics. It uses ASReml algorithms for spatial adjustments and breeding value types of analysis. Simulated (simulate=T) data is avaiable to utilize the functions.
+A group of functions for breeding statistics. It uses ASReml algorithms for spatial adjustments and breeding value types of analysis. Simulated (simulate=T) data is avaiable to utilize the functions.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
- BV(fdp,wdp,ws,doHybridID,doPedigreeChange,doGCABV,year,A,B,C,Prop,Choice,D,R,X,E,Q,V,doDNN,GEM,
-    s0,s1,s2,s3,s4,s5,seas0,seas1,seas2,seas3,seas4,seas5,doYear,folder,simulate)
+ BV(fdp,wdp, ws, doHybridID, doPedigreeChange, InventoryPedigree, doReduceNonCodes, doField, doLmer, ytData, doGCABV, year, A, B, C, Prop, Choice, D, R, X, E, Q, V, doDNN, GEM, date, s0, s1, s2, s3, s4, s5, seas0, seas1, seas2, seas3, seas4, seas5, doYear, folder, simulate)
 
  inbredChar(dpf, gdp, hdp, year, l_year, h_year, doAdjInbredData, simulate)
 

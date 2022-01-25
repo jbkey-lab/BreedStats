@@ -1,6 +1,6 @@
 
 
-RR_IBD = function(df=df){
+RR_IBD = function(df){
 
   df=df
   ibdExp=df
@@ -128,7 +128,7 @@ model2 =function(){
 }
 
 #incomplete block analysis (with recovery of inter-block information)
-model3 =function(subsetSA=subsetSA, EBN=EBN, name=name, subsetSA.discard=subsetSA.discard){
+model3 =function(subsetSA, EBN, name, subsetSA.discard){
   subsetSA.discard=subsetSA.discard
   subsetSA=subsetSA
   EBN=EBN
@@ -157,19 +157,20 @@ model3 =function(subsetSA=subsetSA, EBN=EBN, name=name, subsetSA.discard=subsetS
   #distinct(User.Rep, maxRange, minRange, maxRow,minRow)
   par(mar=c(5, 4, 4, 8), xpd=TRUE)
 
-  EBNMap <- ggplot2::ggplot(subsetSA, aes(x=Row, y=Range, fill = feature)) + ggplot2::geom_tile(aes(width = 1, height=1)) +
-    geom_text(aes(label=Entry), size=3)
+  EBNMap <- ggplot2::ggplot(subsetSA, aes(x=Row, y=Range, fill = feature)) +
+    ggplot2::geom_tile(aes(width = 1, height=1)) +
+    ggplot2::geom_text(aes(label=Entry), size=3)
 
   EBNMap <- EBNMap + ggplot2::scale_fill_gradient2(low='salmon',
-                                          mid ='thistle',
-                                          high ='seagreen3',
-                                          midpoint = mean(subsetSA$feature, na.rm=TRUE),
-                                          guide = "colourbar")
+                                                   mid ='thistle',
+                                                   high ='seagreen3',
+                                                   midpoint = mean(subsetSA$feature, na.rm=TRUE),
+                                                   guide = "colourbar")
 
   EBNMap <- EBNMap + ggplot2::annotate("rect", size=1, xmin=subsetSARect$minRow-0.5, xmax=subsetSARect$maxRow+0.5,
-                              ymin=subsetSARect$minRange-0.5, ymax=subsetSARect$maxRange+0.5,
-                              fill=as.numeric(as.character(subsetSARect$User.Rep)),
-                              color="black", linejoin = "mitre",alpha=0)
+                                       ymin=subsetSARect$minRange-0.5, ymax=subsetSARect$maxRange+0.5,
+                                       fill=as.numeric(as.character(subsetSARect$User.Rep)),
+                                       color="black", linejoin = "mitre",alpha=0)
 
 
   BN = (subsetSARect[!duplicated(subsetSARect$Book.Name),as.character("Book.Name")])
@@ -183,12 +184,12 @@ model3 =function(subsetSA=subsetSA, EBN=EBN, name=name, subsetSA.discard=subsetS
 
 
   EBNMap <- EBNMap + ggplot2::annotate("text",  x = MR$maxRow - 1, y = rep(MRR$maxRange, nrow(MR)) + 1,label = BN,
-                              angle = 0, size = 3) +
+                                       angle = 0, size = 3) +
     ggplot2::coord_cartesian(ylim = c(1, MRR$maxRange+1), clip = "off")
 
 
   EBNMap <- EBNMap  + ggplot2::labs(title = paste0(EBN, " Raw Trial of ", name)
-                           )
+  )
 
   plot(EBNMap)
 
@@ -212,8 +213,8 @@ model3 =function(subsetSA=subsetSA, EBN=EBN, name=name, subsetSA.discard=subsetS
 
   if(RR == nrow(subsetSA)){
 
-    BV.HSIdentical.model =   try(asreml(fixed = feature ~ Pedigree + `User.Rep` ,
-                                        random = ~ idv(units) + Checks ,#+ Pedigree*EXP + `User Rep`*FIELD,
+    BV.HSIdentical.model =   try(asreml(fixed = feature ~ Checks ,
+                                        random = ~ idv(units)+  `User.Rep`*Pedigree  ,#+ Pedigree*EXP + `User Rep`*FIELD,
                                         residual = ~ ar1v(Row):ar1(Range),
                                         sparse = ~ `User.Rep` ,
                                         data = subsetSA,
@@ -226,8 +227,8 @@ model3 =function(subsetSA=subsetSA, EBN=EBN, name=name, subsetSA.discard=subsetS
 
     if(class(BV.HSIdentical.model)=="try-error"){
       cat("Singularities in first try of model...trying model 2...")
-      BV.HSIdentical.model = asreml(fixed = feature ~ Pedigree ,
-                                    random = ~ `User.Rep` + Row + Range + Checks,#Row + Range  ,#+ Pedigree*EXP + `User Rep`*FIELD,
+      BV.HSIdentical.model = asreml(fixed = feature ~ Checks,
+                                    random = ~  Pedigree+`User.Rep` + Row + Range ,#Row + Range  ,#+ Pedigree*EXP + `User Rep`*FIELD,
                                     # # residual = ~ar1v(Checks),
                                     sparse = ~`User.Rep`,
                                     data = subsetSA
@@ -240,8 +241,8 @@ model3 =function(subsetSA=subsetSA, EBN=EBN, name=name, subsetSA.discard=subsetS
 
   }else{
 
-    BV.HSIdentical.model = asreml(fixed = feature ~ Pedigree ,
-                                  random = ~ `User.Rep` + Row + Range + Checks,#Row + Range  ,#+ Pedigree*EXP + `User Rep`*FIELD,
+    BV.HSIdentical.model = asreml(fixed = feature ~ Checks,
+                                  random = ~  Pedigree+`User.Rep` + Row + Range,#Row + Range  ,#+ Pedigree*EXP + `User Rep`*FIELD,
                                   # # residual = ~ar1v(Checks),
                                   sparse = ~`User.Rep`,
                                   data = subsetSA
@@ -267,9 +268,32 @@ model3 =function(subsetSA=subsetSA, EBN=EBN, name=name, subsetSA.discard=subsetS
   ),TRUE)
 
   if(class(BV.HSIdentical.model.predicted)=="try-error"){
+    cat("singularities in predictions trying another model...")
+    BV.HSIdentical.model = asreml(fixed = feature ~ Checks,
+                                  random = ~ Pedigree+`User.Rep` + Row + Range,#Row + Range  ,#+ Pedigree*EXP + `User Rep`*FIELD,
+                                  # # residual = ~ar1v(Checks),
+                                  sparse = ~`User.Rep`,
+                                  data = subsetSA
+                                  #  #equate.levels=c("FEMALE","MALE"),
+                                  #  #workspace="31gb",
+                                  #  na.action=na.method(y = c("include"), x = c("include") )
+    )
+    BV.HSIdentical.model.predicted<- try(predict(BV.HSIdentical.model,
+                                                 classify="Pedigree:User.Rep",
+                                                 #pworkspace="32gb",
+                                                 #parallel=T,
+                                                 #aliased = T
+                                                 #maxit=1
+                                                 #vcov = T,
+                                                 # avsed=T
+    ),TRUE)
 
-    BV.HSIdentical.model = asreml(fixed = feature ~ Pedigree ,
-                                  random = ~ `User.Rep` + Row + Range + Checks,#Row + Range  ,#+ Pedigree*EXP + `User Rep`*FIELD,
+  }
+
+  if(class(BV.HSIdentical.model.predicted)=="try-error"){
+    cat("singularities in predictions trying another model...")
+    BV.HSIdentical.model = asreml(fixed = feature ~ Checks ,
+                                  random = ~  Pedigree+`User.Rep` + Row + Range ,#Row + Range  ,#+ Pedigree*EXP + `User Rep`*FIELD,
                                   # # residual = ~ar1v(Checks),
                                   sparse = ~`User.Rep`,
                                   data = subsetSA
@@ -289,7 +313,6 @@ model3 =function(subsetSA=subsetSA, EBN=EBN, name=name, subsetSA.discard=subsetS
 
   }
 
-
   print(summary(BV.HSIdentical.model)$bic)
   print(BV.HSIdentical.model$loglik)
   print(summary(BV.HSIdentical.model)$varcomp)
@@ -301,8 +324,8 @@ model3 =function(subsetSA=subsetSA, EBN=EBN, name=name, subsetSA.discard=subsetS
   #########################################################
   #Blups
   #########################################################
-   #BV.HSIdentical.blues <- fitted(BV.HSIdentical.model.predicted)$random #determine the fixed effects (blues)
-   #qualdat.blups<-fitted(BV.HSIdentical.model.predicted)$fixed #determine the fixed effects (BLUPS)
+  #BV.HSIdentical.blues <- fitted(BV.HSIdentical.model.predicted)$random #determine the fixed effects (blues)
+  #qualdat.blups<-fitted(BV.HSIdentical.model.predicted)$fixed #determine the fixed effects (BLUPS)
   # BV.HSIdentical.model$
   # BV.HSIdentical.blues$
   # BV.HSIdentical.model.predicted
@@ -334,11 +357,11 @@ model3 =function(subsetSA=subsetSA, EBN=EBN, name=name, subsetSA.discard=subsetS
   preds.index = order(preds$User.Rep)
   preds=preds[preds.index,]
   preds$Checks = ifelse(nchar(as.character(preds$Pedigree))<8,17,1)
-
+  cat("B")
   hist(as.numeric(preds$predicted.value), main =paste0("Histogram of Preds ",name), xlab = paste0(name),
        breaks = nrow(subsetSA)/2)
 
-  plot(preds$predicted.value,preds$feature,  main =paste0("Correlation Between Pred and Raw for",name),
+  plot(preds$predicted.value, preds$feature,  main =paste0("Correlation Between Pred and Raw for",name),
        ylab = paste0(name), xlab=paste0("Pred"), col=as.numeric(as.character(subsetSARect$User.Rep)),
        pch=preds$Checks, sub=  print(paste0("Correlation is ",round(cor(preds$predicted.value, preds$feature,use="pairwise.complete.obs")^2,4),".")))
 
@@ -349,21 +372,21 @@ model3 =function(subsetSA=subsetSA, EBN=EBN, name=name, subsetSA.discard=subsetS
   EBNMapPred <- ggplot2::ggplot( preds , aes(x=Row, y=Range, fill = predicted.value)) + ggplot2::geom_tile() + ggplot2::geom_text(aes(label=Entry), size = 3)
 
   EBNMapPred <- EBNMapPred + ggplot2::scale_fill_gradient2(low='salmon', mid ='thistle',
-                                                  high ='seagreen3',
-                                                  midpoint = mean( preds$predicted.value, na.rm=TRUE)
-                                                  ,guide = "colourbar")
+                                                           high ='seagreen3',
+                                                           midpoint = mean( preds$predicted.value, na.rm=TRUE)
+                                                           ,guide = "colourbar")
 
 
   EBNMapPred <- EBNMapPred + ggplot2::annotate("rect", size=1, xmin=subsetSARect$minRow-0.5, xmax=subsetSARect$maxRow+0.5,
-                                      ymin=subsetSARect$minRange-0.5, ymax=subsetSARect$maxRange+0.5,
-                                      fill=as.numeric(as.character(subsetSARect$User.Rep)),
-                                      color="black", linejoin = "mitre",alpha=0)
+                                               ymin=subsetSARect$minRange-0.5, ymax=subsetSARect$maxRange+0.5,
+                                               fill=as.numeric(as.character(subsetSARect$User.Rep)),
+                                               color="black", linejoin = "mitre",alpha=0)
 
 
   EBNMapPred <- EBNMapPred + ggplot2::annotate("text",
-                                      x = MR$maxRow - 1,
-                                      y = rep(MRR$maxRange, nrow(MR)) + 1,
-                                      label = BN, size = 3) +
+                                               x = MR$maxRow - 1,
+                                               y = rep(MRR$maxRange, nrow(MR)) + 1,
+                                               label = BN, size = 3) +
     ggplot2::coord_cartesian(ylim = c(1, MRR$maxRange + 1), clip = "off")
 
 
@@ -498,10 +521,10 @@ load_Data = function(x="7_26_2021",simulate=F,seed=8042){
     sim=T
   }
   else{
-  ws = paste0('R:/Breeding/MT_TP/Models/Data/Department Data/YT_BV Yield Trial Master Catalog ',x, ".csv")
+    ws = paste0('R:/Breeding/MT_TP/Models/Data/Department Data/YT_BV Yield Trial Master Catalog ',x, ".csv")
 
-  BV.MC.Entry<-data.table::fread(paste0(ws))#all varieties to build the model
-  sim = F
+    BV.MC.Entry<-data.table::fread(paste0(ws))#all varieties to build the model
+    sim = F
   }
   colnames(BV.MC.Entry)
   dim(BV.MC.Entry)
@@ -655,9 +678,9 @@ spaEBN = function(year="21",fdp="R:/Breeding/MT_TP/Models/AL_Adjustments/",spaDF
       subsetSA.discard = subsetSA
 
       subsetSA <- subsetSA %>% dplyr::filter(Plot.Discarded != "Yes", Plot.Status != "3 - Bad"
-                                                      #                                                # Pedigree != "FILL", Variety != "FILL",
-                                                      #                                                # Pedigree != "placeholder", Variety != "placeholder",
-                                                      #                                                # Entry.Book.Name != "Filler", Entry.Book.Name != "INBRED-GW_Prop"
+                                             #                                                # Pedigree != "FILL", Variety != "FILL",
+                                             #                                                # Pedigree != "placeholder", Variety != "placeholder",
+                                             #                                                # Entry.Book.Name != "Filler", Entry.Book.Name != "INBRED-GW_Prop"
 
       )
 
@@ -676,7 +699,7 @@ spaEBN = function(year="21",fdp="R:/Breeding/MT_TP/Models/AL_Adjustments/",spaDF
     spaENB <- rbindlist(spaEBNlist)
 
     spaENB = spaENB %>% dplyr::mutate(predicted.value = as.numeric(predicted.value),
-                               feature = as.numeric(feature)
+                                      feature = as.numeric(feature)
     )
 
     cat("Corr between preds and raw is ",cor(spaENB$predicted.value, spaENB$feature, use="pairwise.complete.obs")^2)
@@ -739,16 +762,16 @@ spaEBN = function(year="21",fdp="R:/Breeding/MT_TP/Models/AL_Adjustments/",spaDF
       BNsubset = BNsubset[BNsubset.index,]
       #####################################Raw
       EBNMapPred <- ggplot2::ggplot(BNsubset, aes(x=FieldRow,
-                                         y=FieldRange,
-                                         fill = as.numeric(BNsubset[,paste0(name)] ))) +
+                                                  y=FieldRange,
+                                                  fill = as.numeric(BNsubset[,paste0(name)] ))) +
         ggplot2::geom_tile(hjust=1,vjust=.5)
 
       EBNMapPred <- EBNMapPred + ggplot2::scale_fill_gradient2(low='salmon', mid ='thistle',
-                                                      high ='seagreen3',
-                                                      midpoint = mean(as.numeric(BNsubset[,paste0(name)] )
-                                                                      ,na.rm=TRUE
-                                                      )
-                                                      ,guide = "colourbar")
+                                                               high ='seagreen3',
+                                                               midpoint = mean(as.numeric(BNsubset[,paste0(name)] )
+                                                                               ,na.rm=TRUE
+                                                               )
+                                                               ,guide = "colourbar")
 
       #EBNMapPred <- EBNMapPred + annotate("rect", size=1, xmin=subsetSARect$minRow-0.5,
       #                                    xmax=subsetSARect$maxRow+0.5,
@@ -760,22 +783,22 @@ spaEBN = function(year="21",fdp="R:/Breeding/MT_TP/Models/AL_Adjustments/",spaDF
       EBNMapPred <- EBNMapPred  + ggplot2::labs(title = paste0(BN, " Raw Field Location of ",name), fill=paste0(name))
 
       EBNMapPred=EBNMapPred+ ggplot2::theme(axis.text=element_text(size=10),
-                                   axis.text.x = element_text(angle = 90))
+                                            axis.text.x = element_text(angle = 90))
 
       plot(EBNMapPred)
 
       #####################################Adjusted
       EBNMapPred <- ggplot2::ggplot(BNsubset, aes(x=FieldRow,
-                                         y=FieldRange,
-                                         fill = as.numeric(BNsubset[,paste0(name,"_ALPrediction")] ))) +
+                                                  y=FieldRange,
+                                                  fill = as.numeric(BNsubset[,paste0(name,"_ALPrediction")] ))) +
         ggplot2::geom_tile(hjust=1,vjust=.5)
 
       EBNMapPred <- EBNMapPred + ggplot2::scale_fill_gradient2(low='salmon', mid ='thistle',
-                                                      high ='seagreen3',
-                                                      midpoint = mean(as.numeric(BNsubset[,paste0(name,"_ALPrediction")] )
-                                                                      ,na.rm=TRUE
-                                                      )
-                                                      ,guide = "colourbar")
+                                                               high ='seagreen3',
+                                                               midpoint = mean(as.numeric(BNsubset[,paste0(name,"_ALPrediction")] )
+                                                                               ,na.rm=TRUE
+                                                               )
+                                                               ,guide = "colourbar")
 
       #EBNMapPred <- EBNMapPred + annotate("rect", size=1, xmin=subsetSARect$minRow-0.5,
       #                                    xmax=subsetSARect$maxRow+0.5,
@@ -787,7 +810,7 @@ spaEBN = function(year="21",fdp="R:/Breeding/MT_TP/Models/AL_Adjustments/",spaDF
       EBNMapPred <- EBNMapPred  + ggplot2::labs(title = paste0(BN, " Adjusted Field Location of ",name), fill=paste0("Preds"))
 
       EBNMapPred=EBNMapPred+ ggplot2::theme(axis.text=element_text(size=10),
-                                   axis.text.x = element_text(angle = 90))
+                                            axis.text.x = element_text(angle = 90))
 
       plot(EBNMapPred)
 
@@ -805,7 +828,7 @@ spaEBN = function(year="21",fdp="R:/Breeding/MT_TP/Models/AL_Adjustments/",spaDF
                         , Yield_status =  ""
                         , Yield= ""
 
-                         ,spaDF[, c( 34, 35, 4, 9, 5,8,7)]
+                        ,spaDF[, c( 34, 35, 4, 9, 5,8,7)]
                         , Yield_ObsCollected = ""
                         , Yield_PctObsCollected = ""
 
@@ -916,8 +939,8 @@ spaEBN = function(year="21",fdp="R:/Breeding/MT_TP/Models/AL_Adjustments/",spaDF
   }
 
   AL.traits <- dplyr::left_join( eval(as.name(paste0("Yield_AL",year,"S")))[, c(11,9,10,2,12,13,1,3,4,6,14,15)],
-                          eval(as.name(paste0("Y.M_AL",year,"S")))[, c(9,10,2,1,3,4,6,14,15)],
-                          by=c("Pedigree","User.Rep","Entry.Book.Name","Entry"));dim(AL.traits)
+                                 eval(as.name(paste0("Y.M_AL",year,"S")))[, c(9,10,2,1,3,4,6,14,15)],
+                                 by=c("Pedigree","User.Rep","Entry.Book.Name","Entry"));dim(AL.traits)
 
 
   #AL.traits.2 <- left_join(AL.traits.1,eval(as.name(paste0("Y.M_AL",year,"S")))[,c(9,10,2,1,3,4,6)],by=c("Pedigree","User.Rep","Entry.Book.Name","Entry"));dim(AL.traits.2)
@@ -947,12 +970,14 @@ spaEBN = function(year="21",fdp="R:/Breeding/MT_TP/Models/AL_Adjustments/",spaDF
   spaDF$Entry.. = as.factor(spaDF$Entry..)
 
   AL.traits = dplyr::left_join(AL.traits, spaDF[,c(13,6,4,9,5,1)], by=c("Pedigree", "UserRep"="User.Rep",
-                                                                 "EntryBookName"="Entry.Book.Name",
-                                                                 "Entry"="Entry..", "BookName"="Book.Name"))
+                                                                        "EntryBookName"="Entry.Book.Name",
+                                                                        "Entry"="Entry..", "BookName"="Book.Name"))
 
   AL.traits=AL.traits[,c(which(colnames(AL.traits)=="RecId"),which(colnames(AL.traits)!="RecId"))]
 
-  AL.traits <- dplyr::filter(function(x)!all(x==""), AL.traits)
+  #AL.traits=data.frame(A=c(1,2,3,""))
+
+  #AL.traits <- sapply(function(x)!all(x==""), AL.traits)
 
   AL.traits.index = order(AL.traits$Entry, AL.traits$EntryBookName, AL.traits$BookName)
 

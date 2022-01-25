@@ -1,10 +1,10 @@
 Package: BreedStats
 Type: Package
-Title: BreedStats
-Version: 0.2.0
+Title: Genetic values and predictions for breeding
+Version: 1.0.0
 Author: Jacob Lamkey
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: A group of functions for statistics. It uses ASReml for spatial and breeding value types of analysis. Simulated (simulate=T) data is avaiable to utilize the functions.
+Maintainer: The package maintainer <jake.lamkey@beckshybrids.com>
+Description: A group of functions for breeding statistics. It uses ASReml for spatial and breeding value types of analysis. Simulated (simulate=T) data is avaiable to utilize the functions.
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
