@@ -241,6 +241,7 @@ inbredChar = function(#dp = dp,
   BV.MC.Inbred <- openxlsx::read.xlsx(paste0("R:/Breeding/MT_TP/Models/Data/Department Data/NEW LINE CODES.xlsx"),1)
   BV.MC.Inbred$Pedigre_Backup = BV.MC.Inbred$PEDIGREE
   BV.MC.Inbred = BV.MC.Inbred[,c(1:3,21,4:20)]
+  BV.MC.Inbred = BV.MC.Inbred[!is.na(BV.MC.Inbred$PEDIGREE),]
 
   to_search_in <- data.table(linked.peds[!duplicated(linked.peds$match),c(3)])
   colnames(to_search_in)=c("unique")
@@ -291,7 +292,7 @@ inbredChar = function(#dp = dp,
   linked.peds.beck4 = linked.peds.beck4 %>%
     dplyr::select(Code,unique_ped_id,unique) %>%
     dplyr::group_by(Code,unique) %>%
-    dplyr::summarise(strings = str_c(unique_ped_id, collapse = ", "))
+    dplyr::summarise(strings = (stringr::str_c(unique_ped_id, collapse = ", ")))
 
 
   rm(linked.peds.beck, linked.peds.beck2, linked.peds.beck3)
@@ -323,6 +324,7 @@ inbredChar = function(#dp = dp,
   BV.MC.Inbred <- openxlsx::read.xlsx(paste0("R:/Breeding/MT_TP/Models/Data/Department Data/NEW LINE CODES.xlsx"),1)
   BV.MC.Inbred$Pedigre_Backup = BV.MC.Inbred$PEDIGREE
   BV.MC.Inbred = BV.MC.Inbred[,c(1:3,21,4:20)]
+  BV.MC.Inbred = BV.MC.Inbred[!is.na(BV.MC.Inbred$PEDIGREE),]
 
 
   ###run pedigree reduction function
@@ -373,7 +375,7 @@ inbredChar = function(#dp = dp,
   rm(linked.peds.beck); invisible(gc(reset=T))
 
   linked.peds.beck3 =  linked.peds.beck2 %>%
-    dplyr::filter(  stringr(str_detect(unique, (stringr::coll(unique_ped_id)  )  ) ) )%>%
+    dplyr::filter(  (stringr::str_detect(unique, (stringr::coll(unique_ped_id)  )  ) ) )%>%
     dplyr::filter(unique_ped_id_DH_1 != TRUE)
   rm(linked.peds.beck2)
   invisible(gc(reset=T)) #cleans memory "garbage collector"
@@ -700,7 +702,7 @@ inbredChar = function(#dp = dp,
   lines2020$EXP = as.factor(EBN)
   lines2020$LINE = as.factor(LINE)
 
-  qualdat.mt <- lines2020 %>% ddplyr::filter(Loc == "Marshalltown") #filter only marshalltown lines
+  qualdat.mt <- lines2020 %>% dplyr::filter(Loc == "Marshalltown") #filter only marshalltown lines
   qualdat.olivia <- lines2020 %>% dplyr::filter(Loc == "Olivia") #filter only olivia lines
   qualdat.atlanta <- lines2020 %>% dplyr::filter(Loc == "Atlanta") #filter only olivia lines
 

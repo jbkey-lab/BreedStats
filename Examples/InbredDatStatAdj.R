@@ -25,19 +25,19 @@ cat(var4 ,"\n")
 x = var1
 
 
- x = "9_2_2021"
+# x = "9_2_2021"
 
 hdp = paste0('R:/Breeding/MT_TP/Models/Data/Shd_slk/Becks_OBS ',x, ".csv")
 gdp = paste0('R:/Breeding/MT_TP/Models/Data/Shd_slk/Becks_OBS GOSS ',x, ".csv")
 
-  var4=2021
-  var2 = 2017
-  var3=2021
- dpf = "C:/Users/jake.lamkey/Documents/Inbred Data_" #"R:/Breeding/MT_TP/Models/shed_silk/Inbred Data_",
- #dpf = "R:/Breeding/MT_TP/Models/shed_silk/Inbred Data_"
-  year= var4
-  l_year = var2
-  h_year = var3
+#  var4=2021
+ # var2 = 2017
+ # var3=2021
+# dpf = "C:/Users/jake.lamkey/Documents/Inbred Data_" #"R:/Breeding/MT_TP/Models/shed_silk/Inbred Data_",
+ dpf = "R:/Breeding/MT_TP/Models/shed_silk/Inbred Data_"
+#  year= var4
+#  l_year = var2
+#  h_year = var3
 
 suppressWarnings(suppressMessages(
 inbredChar(

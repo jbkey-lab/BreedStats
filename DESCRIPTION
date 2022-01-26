@@ -8,5 +8,5 @@ Description: A group of functions for breeding statistics. It uses ASReml for sp
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
-Imports: openxlsx,tidyverse,data.table,pastecs,doParallel,fs,lme4,lucid,parallel,foreach,caret,caretEnsemble,stats
+Imports: openxlsx,tidyverse,data.table,pastecs,doParallel,fs,lme4,lucid,parallel,foreach,caret,caretEnsemble,stats,purrr
 

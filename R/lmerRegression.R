@@ -47,20 +47,20 @@ lmerBV = function(name,BV.HSIdentical.df,counts.adjusted,counts.adjusted.raw){
   # BV.HSIdentical.df.3 <- BV.HSIdentical.df.3 %>% filter(feature <= p95,
   #                                                    feature >= p05)
 
-  DIBV = lmer(formula = feature ~ (1|FEMALE) + (1|MALE) + (1|YEAR) ,
+  DIBV = lme4::lmer(formula = feature ~ (1|FEMALE) + (1|MALE) + (1|YEAR) ,
               na.action='na.exclude', REML = T,
-              control = lmerControl(
+              control = lme4::lmerControl(
                 sparseX = T),
               data = BV.HSIdentical.df.3[,c("YEAR","FIELD","MALE","FEMALE","feature","LINE")] )
 
   # 161
   # 1073
   sum.DIBV=print(summary(DIBV))
-  Blup = ranef(DIBV)
+  Blup = lme4::ranef(DIBV)
   Blup=data.frame(Blup)
-  Blup = Blup %>% filter(grpvar != "MALE")
-  Blup = Blup %>% filter(grpvar != "LINE")
-  Blup = Blup %>% filter(grpvar != "YEAR")
+  Blup = Blup %>% dplyr::filter(grpvar != "MALE")
+  Blup = Blup %>% dplyr::filter(grpvar != "LINE")
+  Blup = Blup %>% dplyr::filter(grpvar != "YEAR")
 
   #Blup.index = order(Blup$condval, decreasing=T)
   #Blup = Blup[Blup.index,]
@@ -71,7 +71,7 @@ lmerBV = function(name,BV.HSIdentical.df,counts.adjusted,counts.adjusted.raw){
   # cor(results1$Yield_GCA, results1$condval,use="pairwise.complete.obs", method="pearson")^2
   #.9999
 
-  VC<- vc(DIBV)
+  VC<- lucid::vc(DIBV)
   N = length(levels(as.factor(BV.HSIdentical.df.3$YEAR)))
   FA = length(levels(as.factor(BV.HSIdentical.df.3$FIELD)))
 

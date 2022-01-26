@@ -113,7 +113,7 @@ HybridID = function(
     cat(paste0("----------------------------",name,"----------------------------"), "\n")
 
     if("feature" %in% colnames(BV.HSIdentical.df)){
-      BV.HSIdentical.df = BV.HSIdentical.df %>% select(-feature)
+      BV.HSIdentical.df = BV.HSIdentical.df %>% dplyr::select(-feature)
     }
     cat("C","\n")
 
@@ -230,7 +230,7 @@ HybridID = function(
       #######################################
       ######BLUPs
       #######################################
-      qualdat.blups<-coef(BV.HSIdentical.model)$fixed#determine the fixed effects (BLUPS)
+      qualdat.blups<- stats::coef(BV.HSIdentical.model)$fixed#determine the fixed effects (BLUPS)
       #qualdat.blups<-data.frame(qualdat.blups$hybridID)
       #qualdat.blups<-setDT(qualdat.blups,keep.rownames=T)[];colnames(qualdat.blups)=c("hybridID",paste0(name,"BLUP"))
       #qualdat.blups.export<-left_join(qualdat.blups, qualdat.gmean, by="hybridID")
@@ -241,7 +241,7 @@ HybridID = function(
       ######BLUEs
       #######################################
       # Create a numeric vector with the BLUP for each line
-      BV.HSIdentical.blues <- coef(BV.HSIdentical.model)$random #determine the fixed effects (blues)
+      BV.HSIdentical.blues <- stats::coef(BV.HSIdentical.model)$random #determine the fixed effects (blues)
       BV.HSIdentical.blues <- setDT(data.frame(BV.HSIdentical.blues),keep.rownames=T)[]; colnames(BV.HSIdentical.blues)=c("LINE",paste0(name,"_BV")); word.remove.fem="LINE_"; word.remove.mal="MALE_"
       #BV.HSIdentical.blues$LINE = gsub(paste0(word.remove.fem,collapse = "|"), "", BV.HSIdentical.blues$LINE)
       #BV.HSIdentical.blues$LINE = gsub(paste0(word.remove.mal,collapse = "|"), "", BV.HSIdentical.blues$LINE)
@@ -251,7 +251,7 @@ HybridID = function(
       BV.HSIdentical.blues.exp <- BV.HSIdentical.blues %>% dplyr::filter(grepl("EXP_", LINE));dim(BV.HSIdentical.blues.exp)
 
       #BV.HSIdentical.blues.female
-      BV.HSIdentical.blues.export <- left_join(BV.HSIdentical.blues.line, BV.HSIdentical.df.gmean, by="LINE")
+      BV.HSIdentical.blues.export <- dplyr::left_join(BV.HSIdentical.blues.line, BV.HSIdentical.df.gmean, by="LINE")
       head(BV.HSIdentical.blues.export); dim(BV.HSIdentical.blues.export)
       ######FIND SE, etc...
       #write.csv(BV.HSIdentical.blues.export,paste0(name,"_BV_19S.csv")) #write blues to spreadsheet
@@ -281,7 +281,7 @@ HybridID = function(
       #BV.HSIdentical.blues.filtered<-na.omit(df3)
       #write.csv(df3.gmean, file=paste0(name,"_BLUEs_19S.csv")) #write BLUEs to spreadsheet
 
-      BV.HSIdentical.fitted = fitted(BV.HSIdentical.model) #predict the dataset
+      BV.HSIdentical.fitted = stats::fitted(BV.HSIdentical.model) #predict the dataset
       df3<-cbind(BV.HSIdentical.fitted,BV.HSIdentical.df); colnames(df3)[1]=c(paste0("fitted_",name))
       df3.gmean = aggregate(df3[,c(paste0("fitted_",name))], by=list(LINE = df3$LINE),mean,na.rm=T);colnames(df3.gmean) = c('LINE',paste0("fitted_",name)); df3.gmean=data.frame(df3.gmean)
       #df3.gmean.female = aggregate(df3[,c(paste0("fitted_",name))], by=list(FEMALE = df3$FEMALE),mean,na.rm=T);colnames(df3.gmean.female) = c('LINE',paste0("fitted_",name)); df3.gmean.female=data.frame(df3.gmean.female)
@@ -294,9 +294,9 @@ HybridID = function(
       #######################################
       ######Graphs and Figures
       #######################################
-      df5<-left_join(BV.HSIdentical.blues.export,df3.gmean,by="LINE");dim(df5)
+      df5<-dplyr::left_join(BV.HSIdentical.blues.export,df3.gmean,by="LINE");dim(df5)
       #df5<-df5[!duplicated(df5$LINE),]
-      counts = left_join(counts.adjusted, counts.adjusted.raw,by=c("LINE"="V1"))
+      counts = dplyr::left_join(counts.adjusted, counts.adjusted.raw,by=c("LINE"="V1"))
       counts = data.frame(counts)
       counts$Observations = as.numeric(counts$Observations )
       counts$rowCount = as.numeric(counts$rowCount )
@@ -306,9 +306,9 @@ HybridID = function(
       counts$ObsPercent = counts$rowCount / counts$Observations
       counts = counts[, c(1,2,4)]
 
-      df6<-left_join(df5, counts, by="LINE")
+      df6<-dplyr::left_join(df5, counts, by="LINE")
       #df6<-left_join(df6,counts,by="LINE")
-      df7<-left_join(df6,std.errors,by="LINE")
+      df7<-dplyr::left_join(df6,std.errors,by="LINE")
       df7<-df7[,-c(3,4)];colnames(df7)[2]=paste0(name,"_BLUP")
       #sigfigs to three digits
       colnames(df7)[3:4]=c(paste0(name,"_Observations"),paste0(name,"_PctPlotObsCollected"))
@@ -345,7 +345,7 @@ HybridID = function(
       #######################################
       ######BLUPs
       #######################################
-      qualdat.blups<-coef(BV.HSIdentical.model)$fixed#determine the fixed effects (BLUPS)
+      qualdat.blups<-stats::coef(BV.HSIdentical.model)$fixed#determine the fixed effects (BLUPS)
       #qualdat.blups<-data.frame(qualdat.blups$hybridID)
       #qualdat.blups<-setDT(qualdat.blups,keep.rownames=T)[];colnames(qualdat.blups)=c("hybridID",paste0(name,"BLUP"))
       #qualdat.blups.export<-left_join(qualdat.blups, qualdat.gmean, by="hybridID")
@@ -356,7 +356,7 @@ HybridID = function(
       ######BLUEs
       #######################################
       # Create a numeric vector with the BLUP for each line
-      BV.HSIdentical.blues <- coef(BV.HSIdentical.model)$random #determine the fixed effects (blues)
+      BV.HSIdentical.blues <- stats::coef(BV.HSIdentical.model)$random #determine the fixed effects (blues)
       BV.HSIdentical.blues <- setDT(data.frame(BV.HSIdentical.blues),keep.rownames=T)[]; colnames(BV.HSIdentical.blues)=c("LINE",paste0(name,"_BV")); word.remove.fem="LINE_"; word.remove.mal="MALE_"
       #BV.HSIdentical.blues$LINE = gsub(paste0(word.remove.fem,collapse = "|"), "", BV.HSIdentical.blues$LINE)
       #BV.HSIdentical.blues$LINE = gsub(paste0(word.remove.mal,collapse = "|"), "", BV.HSIdentical.blues$LINE)
@@ -366,7 +366,7 @@ HybridID = function(
       BV.HSIdentical.blues.exp <- BV.HSIdentical.blues %>% dplyr::filter(grepl("EXP_", LINE));dim(BV.HSIdentical.blues.exp)
 
       #BV.HSIdentical.blues.female
-      BV.HSIdentical.blues.export <- left_join(BV.HSIdentical.blues.line, BV.HSIdentical.df.gmean, by="LINE")
+      BV.HSIdentical.blues.export <- dplyr::left_join(BV.HSIdentical.blues.line, BV.HSIdentical.df.gmean, by="LINE")
       head(BV.HSIdentical.blues.export); dim(BV.HSIdentical.blues.export)
       ######FIND SE, etc...
       #write.csv(BV.HSIdentical.blues.export,paste0(name,"_BV_19S.csv")) #write blues to spreadsheet
@@ -396,7 +396,7 @@ HybridID = function(
       #BV.HSIdentical.blues.filtered<-na.omit(df3)
       #write.csv(df3.gmean, file=paste0(name,"_BLUEs_19S.csv")) #write BLUEs to spreadsheet
 
-      BV.HSIdentical.fitted = fitted(BV.HSIdentical.model) #predict the dataset
+      BV.HSIdentical.fitted = stats::fitted(BV.HSIdentical.model) #predict the dataset
       df3<-cbind(BV.HSIdentical.fitted,BV.HSIdentical.df); colnames(df3)[1]=c(paste0("fitted_",name))
       df3.gmean = aggregate(df3[,c(paste0("fitted_",name))], by=list(LINE = df3$LINE),mean,na.rm=T);colnames(df3.gmean) = c('LINE',paste0("fitted_",name)); df3.gmean=data.frame(df3.gmean)
       #df3.gmean.female = aggregate(df3[,c(paste0("fitted_",name))], by=list(FEMALE = df3$FEMALE),mean,na.rm=T);colnames(df3.gmean.female) = c('LINE',paste0("fitted_",name)); df3.gmean.female=data.frame(df3.gmean.female)
@@ -409,9 +409,9 @@ HybridID = function(
       #######################################
       ######Graphs and Figures
       #######################################
-      df5<-left_join(BV.HSIdentical.blues.export,df3.gmean,by="LINE");dim(df5)
+      df5<-dplyr::left_join(BV.HSIdentical.blues.export,df3.gmean,by="LINE");dim(df5)
       #df5<-df5[!duplicated(df5$LINE),]
-      counts = left_join(counts.adjusted, counts.adjusted.raw,by=c("LINE"="V1"))
+      counts = dplyr::left_join(counts.adjusted, counts.adjusted.raw,by=c("LINE"="V1"))
       counts = data.frame(counts)
       counts$Observations = as.numeric(counts$Observations )
       counts$rowCount = as.numeric(counts$rowCount )
@@ -421,9 +421,9 @@ HybridID = function(
       counts$ObsPercent = counts$rowCount / counts$Observations
       counts = counts[, c(1,2,4)]
 
-      df6<-left_join(df5, counts, by="LINE")
+      df6<-dplyr::left_join(df5, counts, by="LINE")
       #df6<-left_join(df6,counts,by="LINE")
-      df7<-left_join(df6,std.errors,by="LINE")
+      df7<-dplyr::left_join(df6,std.errors,by="LINE")
       df7<-df7[,-c(3,4)];colnames(df7)[2]=paste0(name,"_BLUP")
       #sigfigs to three digits
       colnames(df7)[3:4]=c(paste0(name,"_Observations"),paste0(name,"_PctPlotObsCollected"))
@@ -438,16 +438,16 @@ HybridID = function(
 
     if(doLmer){
 
-      DIBV = lmer(formula = feature ~ (1|LINE) + (1|YEAR) ,
+      DIBV = lme4::lmer(formula = feature ~ (1|LINE) + (1|YEAR) ,
                   na.action='na.exclude', REML = T,
-                  control = lmerControl(
+                  control = lme4::lmerControl(
                     sparseX = T),
                   data = BV.HSIdentical.df[,c("YEAR","FIELD","MALE","FEMALE","feature","LINE")] )
 
       # 161
       # 1073
       sum.DIBV=print(summary(DIBV))
-      Blup = ranef(DIBV)
+      Blup = lme4::ranef(DIBV)
       Blup=data.frame(Blup)
       Blup = Blup %>% dplyr::filter(grpvar != "MALE")
       #Blup = Blup %>% dplyr::filter(grpvar != "LINE")
@@ -462,7 +462,7 @@ HybridID = function(
       # cor(results1$Yield_GCA, results1$condval,use="pairwise.complete.obs", method="pearson")^2
       #.9999
 
-      VC<- vc(DIBV)
+      VC<- lucid::vc(DIBV)
       N = length(levels(as.factor(BV.HSIdentical.df$YEAR)))
       FA = length(levels(as.factor(BV.HSIdentical.df$FIELD)))
 
@@ -563,20 +563,20 @@ HybridID = function(
   #scf = read.csv(paste0(fdph,"StandCnt..Final._BV-HybridID_",year,"S.csv"))
   #scuav = read.csv(paste0(fdph,"StandCnt..UAV._BV-HybridID_",year,"S.csv"))
 
-  BV.traits.1 <- left_join(eval(as.name(paste0("Yield_BV-HybridID_",folder,"S")))[,c(1,3,2,4,5,6,7)],eval(as.name(paste0("PCT.HOH_BV-HybridID_",folder,"S")))[,c(1,3,2,4,5,6,7)], by=c("LINE"));dim(BV.traits.1)
-  BV.traits.2 <- left_join(BV.traits.1,eval(as.name(paste0("Y.M_BV-HybridID_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("LINE"));dim(BV.traits.2)
-  BV.traits.3 <- left_join(BV.traits.2,eval(as.name(paste0("Plt.Height_BV-HybridID_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("LINE"));dim(BV.traits.3)
-  BV.traits.4 <- left_join(BV.traits.3,eval(as.name(paste0("EarHt_BV-HybridID_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("LINE"));dim(BV.traits.4)
-  BV.traits.5 <- left_join(BV.traits.4,eval(as.name(paste0("Test.WT_BV-HybridID_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("LINE"));dim(BV.traits.5)
-  #BV.traits.6 <- left_join(BV.traits.5,rlec[,c(1,3,2,4,5,6,7)],by=c("LINE"));dim(BV.traits.6)
-  BV.traits.6 <- left_join(BV.traits.5,eval(as.name(paste0("RL.._BV-HybridID_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("LINE"));dim(BV.traits.5)
-  BV.traits.7 <- left_join(BV.traits.6,eval(as.name(paste0("RL.Count_BV-HybridID_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("LINE"));dim(BV.traits.6)
-  BV.traits.8 <- left_join(BV.traits.7,eval(as.name(paste0("SL.._BV-HybridID_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("LINE"));dim(BV.traits.7)
-  BV.traits.9 <- left_join(BV.traits.8,eval(as.name(paste0("SL.Count_BV-HybridID_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("LINE"));dim(BV.traits.8)
-  #BV.traits.11 <- left_join(BV.traits.10,gse[,c(1,3,2,4,5,6,7)],by=c("LINE"));dim(BV.traits.11)
-  BV.traits <- left_join(BV.traits.9,eval(as.name(paste0("GS.Late_BV-HybridID_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("LINE"));dim(BV.traits)
-  #BV.traits.11 <- left_join(BV.traits.10,eval(as.name(paste0("StandCnt..Final_BV-HybridID_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("LINE"));dim(BV.traits.10)
-  #BV.traits <- left_join(BV.traits.10,eval(as.name(paste0("StandCnt..UAV._BV-HybridID_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("LINE"));colnames(BV.traits)[1]<-"INBRED";dim(BV.traits)
+  BV.traits.1 <- dplyr::left_join(eval(as.name(paste0("Yield_BV-HybridID_",folder,"S")))[,c(1,3,2,4,5,6,7)],eval(as.name(paste0("PCT.HOH_BV-HybridID_",folder,"S")))[,c(1,3,2,4,5,6,7)], by=c("LINE"));dim(BV.traits.1)
+  BV.traits.2 <- dplyr::left_join(BV.traits.1,eval(as.name(paste0("Y.M_BV-HybridID_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("LINE"));dim(BV.traits.2)
+  BV.traits.3 <- dplyr::left_join(BV.traits.2,eval(as.name(paste0("Plt.Height_BV-HybridID_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("LINE"));dim(BV.traits.3)
+  BV.traits.4 <- dplyr::left_join(BV.traits.3,eval(as.name(paste0("EarHt_BV-HybridID_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("LINE"));dim(BV.traits.4)
+  BV.traits.5 <- dplyr::left_join(BV.traits.4,eval(as.name(paste0("Test.WT_BV-HybridID_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("LINE"));dim(BV.traits.5)
+  #BV.traits.6 <- dplyr::left_join(BV.traits.5,rlec[,c(1,3,2,4,5,6,7)],by=c("LINE"));dim(BV.traits.6)
+  BV.traits.6 <- dplyr::left_join(BV.traits.5,eval(as.name(paste0("RL.._BV-HybridID_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("LINE"));dim(BV.traits.5)
+  BV.traits.7 <- dplyr::left_join(BV.traits.6,eval(as.name(paste0("RL.Count_BV-HybridID_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("LINE"));dim(BV.traits.6)
+  BV.traits.8 <- dplyr::left_join(BV.traits.7,eval(as.name(paste0("SL.._BV-HybridID_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("LINE"));dim(BV.traits.7)
+  BV.traits.9 <- dplyr::left_join(BV.traits.8,eval(as.name(paste0("SL.Count_BV-HybridID_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("LINE"));dim(BV.traits.8)
+  #BV.traits.11 <- dplyr::left_join(BV.traits.10,gse[,c(1,3,2,4,5,6,7)],by=c("LINE"));dim(BV.traits.11)
+  BV.traits <- dplyr::left_join(BV.traits.9,eval(as.name(paste0("GS.Late_BV-HybridID_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("LINE"));dim(BV.traits)
+  #BV.traits.11 <- dplyr::left_join(BV.traits.10,eval(as.name(paste0("StandCnt..Final_BV-HybridID_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("LINE"));dim(BV.traits.10)
+  #BV.traits <- dplyr::left_join(BV.traits.10,eval(as.name(paste0("StandCnt..UAV._BV-HybridID_",folder,"S")))[,c(1,3,2,4,5,6,7)],by=c("LINE"));colnames(BV.traits)[1]<-"INBRED";dim(BV.traits)
   #BV.traits.dup<-BV.traits[duplicated(BV.traits$INBRED),];dim(BV.traits.dup)
   BV.traits$SL.._BLUE = ifelse(BV.traits$SL.._BLUE <0, 0 , BV.traits$SL.._BLUE)
   BV.traits$RL.._BLUE = ifelse(BV.traits$RL.._BLUE <0, 0 , BV.traits$RL.._BLUE)
@@ -598,7 +598,7 @@ HybridID = function(
   #BV.traits.long = read.xlsx(paste0(fdp,"/Traits.BV-HybridID.",year,"S.xlsx"), 1)
   BV.traits.long$INBRED = as.character(BV.traits.long$LINE)
 
-  setDT(BV.traits.long)[, paste0("INBRED", 1:2) := tstrsplit(INBRED, " + ", fixed = T)]
+  data.table::setDT(BV.traits.long)[, paste0("INBRED", 1:2) := data.table::tstrsplit(INBRED, " + ", fixed = T)]
 
   BV.traits.long$female = BV.traits.long$INBRED1
   BV.traits.long$male = BV.traits.long$INBRED2
@@ -612,7 +612,7 @@ HybridID = function(
   #           border=NULL, fill=NULL, font=NULL)
   # Lines <- createSheet(wb, sheetName = "Lines")
   # addDataFrame(data.frame(BV.traits.long),Lines, startRow=1, startColumn=1,row.names=F)
-  write.xlsx(BV.traits.long, paste0(fdp,"/",folder,"/",".Traits.BV-HybridID.",folder,
+  openxlsx::write.xlsx(BV.traits.long, paste0(fdp,"/",folder,"/",".Traits.BV-HybridID.",folder,
                                     if(A){print("A")},
                                     if(B){print("B")},
                                     if(C){print("C")},
