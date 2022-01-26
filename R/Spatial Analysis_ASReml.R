@@ -985,7 +985,7 @@ spaEBN = function(year="21",fdp="R:/Breeding/MT_TP/Models/AL_Adjustments/",spaDF
 
   AL.traits =  AL.traits[!duplicated(AL.traits$RecId),]
 
-  openxlsx::write.xlsx(AL.traits, paste0(fdp, "AL_EBN_Traits.xlsx"),overwrite=T)
+  openxlsx::write.xlsx(AL.traits, paste0(fdp, "AL_EBN_Traits_",year,"S.xlsx"),overwrite=T)
 
 
   return(data.frame(AL.traits))
