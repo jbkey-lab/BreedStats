@@ -72,11 +72,13 @@ if((suppressWarnings(suppressMessages(!require(devtools, warn.conflicts = FALSE)
 if((suppressWarnings(suppressMessages(!require(asreml, warn.conflicts = FALSE))))){
 #  install_github("jbkey730/BreedStats/External Packages/asreml_4.1.0.160.zip", repos = NULL, type = "source")
 #  (suppressWarnings(suppressMessages(library(asreml, warn.conflicts = FALSE))))
+  cat("please download the R asreml package to use the asreml features")
 }
 
 if((suppressWarnings(suppressMessages(!require(DiGGer, warn.conflicts = FALSE))))){
 #  install_github("jbkey730/BreedStats/External Packages/DiGGer_1.0.5.zip",repos = NULL, type = "source")
 #  (suppressWarnings(suppressMessages(library(DiGGer, warn.conflicts = FALSE))))
+  cat("please download the R DiGGer package to use the DiGGer features")
 }
 
 
