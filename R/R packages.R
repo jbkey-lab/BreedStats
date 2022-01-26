@@ -70,12 +70,12 @@ if(!(suppressWarnings(suppressMessages(require(devtools, warn.conflicts = FALSE)
 }
 
 if(!(suppressWarnings(suppressMessages(require(asreml, warn.conflicts = FALSE))))){
-  install.packages("jbkey730/BreedStats/External Packages/asreml_4.1.0.160")
+  install.packages("jbkey730/BreedStats/External Packages/asreml_4.1.0.160", repos = NULL, type = "win.binary")
   (suppressWarnings(suppressMessages(library(asreml, warn.conflicts = FALSE))))
 }
 
 if(!(suppressWarnings(suppressMessages(require(DiGGer, warn.conflicts = FALSE))))){
-  install.packages("jbkey730/BreedStats/External Packages/DiGGer_1.0.5")
+  install.packages("jbkey730/BreedStats/External Packages/DiGGer_1.0.5", repos = NULL, type = "win.binary")
   (suppressWarnings(suppressMessages(library(DiGGer, warn.conflicts = FALSE))))
 }
 
