@@ -6,7 +6,10 @@ trainVal = function(data, colToInd, sample ){
   idx = sample(nrow(ID), nrow(ID) * sample) #.25
 
   Loc_Validate = data.frame(ID=ID[-idx, ])
+  colnames(Loc_Validate) = colToInd
+
   Loc_Train = data.frame(ID=ID[idx, ])
+  colnames(Loc_Train) = colToInd
 
   trainx2 = dplyr::inner_join(data, Loc_Train, by=colToInd) #%>% rbind(trainx1)
   validatex2 = dplyr::inner_join(data, Loc_Validate, by=colToInd)
