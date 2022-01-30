@@ -60,8 +60,9 @@ if((suppressWarnings(suppressMessages(!require(lucid, warn.conflicts = FALSE))))
 }
 
 if((suppressWarnings(suppressMessages(!require(magick, warn.conflicts = FALSE))))){
-  install.packages("magick")
-  (suppressWarnings(suppressMessages(library(magick, warn.conflicts = FALSE))))
+#  install_github("jbkey730/BreedStats/External Packages/DiGGer_1.0.5.zip",repos = NULL, type = "source")
+#  (suppressWarnings(suppressMessages(library(DiGGer, warn.conflicts = FALSE))))
+  cat("please download the R magick package to use the magick features")
 }
 
 if((suppressWarnings(suppressMessages(!require(devtools, warn.conflicts = FALSE))))){
