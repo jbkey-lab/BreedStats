@@ -10,12 +10,12 @@
 
 prepImages = function( ){
 
-  dp="R:/Research General/Marshalltown_IA/Inbred Pictures/Inbreds_original/" #working directory
+  dp="R:/Research General/Marshalltown_IA/Inbred Pictures/" #working directory
   #dp="C:/Users/jake.lamkey/Desktop/"
   #setwd("P:/Temp")
   #function to collect traited pictures
   all_imgs <- fs::dir_ls(
-    paste0(dp),
+    paste0(dp,"Inbreds_original/"),
     recurse = TRUE,
     type = "file",
     glob = "*_E*"
@@ -23,7 +23,7 @@ prepImages = function( ){
   images.path.ear<-data.frame(all_imgs); dim(images.path.ear)
 
   all_imgs <- fs::dir_ls(
-    paste0(dp),
+    paste0(dp,"Inbreds_original/"),
     recurse = TRUE,
     type = "file",
     glob = "*_T*"
@@ -31,7 +31,7 @@ prepImages = function( ){
   images.path.tassel<-data.frame(all_imgs); dim(images.path.tassel)
 
   all_imgs <- fs::dir_ls(
-    paste0(dp),
+    paste0(dp,"Inbreds_original/"),
     recurse = TRUE,
     all=T,
     type = "file",
@@ -40,7 +40,7 @@ prepImages = function( ){
   images.path.silk<-data.frame(all_imgs); dim(images.path.silk)
 
   all_imgs <- fs::dir_ls(
-    paste0(dp),
+    paste0(dp,"Inbreds_original/"),
     recurse = TRUE,
     all=T,
     type = "file",
@@ -49,23 +49,23 @@ prepImages = function( ){
   images.path.br<-data.frame(all_imgs); dim(images.path.br)
 
   #folder name
-  images.dir=list.dirs(path=paste0(dp)); images.dir=data.frame(images.dir)
+  images.dir=list.dirs(path=paste0(dp,"Inbreds_original/")); images.dir=data.frame(images.dir)
 
   #check
   head(images.path.ear); head(images.path.tassel); head(images.path.silk); head(images.path.br); head(images.dir)
   #gsub to get only variety and image name
-  images.dir$Inbreds = gsub(paste0(dp),"",as.character(images.dir$images.dir))
+  images.dir$Inbreds = gsub(paste0(dp,"Inbreds_original/"),"",as.character(images.dir$images.dir))
 
-  images.path.tassel$Inbreds = sub(paste0(dp),"",as.character(images.path.tassel$all_imgs))
+  images.path.tassel$Inbreds = sub(paste0(dp,"Inbreds_original/"),"",as.character(images.path.tassel$all_imgs))
   images.path.tassel$Inbreds = sub("/.*","",as.character(images.path.tassel$Inbreds));head(images.path.tassel)
 
-  images.path.silk$Inbreds = sub(paste0(dp),"",as.character(images.path.silk$all_imgs))
+  images.path.silk$Inbreds = sub(paste0(dp,"Inbreds_original/"),"",as.character(images.path.silk$all_imgs))
   images.path.silk$Inbreds = sub("/.*","",as.character(images.path.silk$Inbreds));head(images.path.silk)
 
-  images.path.br$Inbreds = sub(paste0(dp),"",as.character(images.path.br$all_imgs))
+  images.path.br$Inbreds = sub(paste0(dp,"Inbreds_original/"),"",as.character(images.path.br$all_imgs))
   images.path.br$Inbreds = sub("/.*","",as.character(images.path.br$Inbreds));head(images.path.br)
 
-  images.path.ear$Inbreds = sub(paste0(dp),"",as.character(images.path.ear$all_imgs))
+  images.path.ear$Inbreds = sub(paste0(dp,"Inbreds_original/"),"",as.character(images.path.ear$all_imgs))
   images.path.ear$Inbreds = sub("/.*","",as.character(images.path.ear$Inbreds));head(images.path.ear)
 
   #joing the tables into one
@@ -91,7 +91,7 @@ prepImages = function( ){
 
 
 
-  imageReduce(dp=dp,ndp="R:/Research General/Marshalltown_IA/Inbred Pictures/Inbreds/")
+  imageReduce(dp=paste0(dp,"Inbreds_original/"),ndp="R:/Research General/Marshalltown_IA/Inbred Pictures/Inbreds/")
 
 
 
