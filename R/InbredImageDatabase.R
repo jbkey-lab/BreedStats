@@ -49,23 +49,23 @@ prepImages = function( ){
   images.path.br<-data.frame(all_imgs); dim(images.path.br)
 
   #folder name
-  images.dir=list.dirs(path=paste0(dp,"Inbreds_original/")); images.dir=data.frame(images.dir)
+  images.dir=list.dirs(path=paste0(dp,"Inbreds_original")); images.dir=data.frame(images.dir)
 
   #check
   head(images.path.ear); head(images.path.tassel); head(images.path.silk); head(images.path.br); head(images.dir)
   #gsub to get only variety and image name
-  images.dir$Inbreds = gsub(paste0(dp,"Inbreds_original/"),"",as.character(images.dir$images.dir))
+  images.dir$Inbreds = gsub(paste0(dp,"Inbreds_original"),"",as.character(images.dir$images.dir))
 
-  images.path.tassel$Inbreds = sub(paste0(dp,"Inbreds_original/"),"",as.character(images.path.tassel$all_imgs))
+  images.path.tassel$Inbreds = sub(paste0(dp,"Inbreds_original"),"",as.character(images.path.tassel$all_imgs))
   images.path.tassel$Inbreds = sub("/.*","",as.character(images.path.tassel$Inbreds));head(images.path.tassel)
 
-  images.path.silk$Inbreds = sub(paste0(dp,"Inbreds_original/"),"",as.character(images.path.silk$all_imgs))
+  images.path.silk$Inbreds = sub(paste0(dp,"Inbreds_original"),"",as.character(images.path.silk$all_imgs))
   images.path.silk$Inbreds = sub("/.*","",as.character(images.path.silk$Inbreds));head(images.path.silk)
 
-  images.path.br$Inbreds = sub(paste0(dp,"Inbreds_original/"),"",as.character(images.path.br$all_imgs))
+  images.path.br$Inbreds = sub(paste0(dp,"Inbreds_original"),"",as.character(images.path.br$all_imgs))
   images.path.br$Inbreds = sub("/.*","",as.character(images.path.br$Inbreds));head(images.path.br)
 
-  images.path.ear$Inbreds = sub(paste0(dp,"Inbreds_original/"),"",as.character(images.path.ear$all_imgs))
+  images.path.ear$Inbreds = sub(paste0(dp,"Inbreds_original"),"",as.character(images.path.ear$all_imgs))
   images.path.ear$Inbreds = sub("/.*","",as.character(images.path.ear$Inbreds));head(images.path.ear)
 
   #joing the tables into one
