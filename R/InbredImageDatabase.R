@@ -84,7 +84,7 @@ prepImages = function( ){
   industryNames = InbredNameLibrary()
   industryNames = industryNames[[2]]
 
-  images.path.tsbre$Inbred <- dplyr::revalue(as.character(images.path.tsbre$Inbred),industryNames  ) #industry name to inbred name conversion
+  images.path.tsbre$Inbred <- plyr::revalue(as.character(images.path.tsbre$Inbred),industryNames  ) #industry name to inbred name conversion
 
   qualdat = images.path.tsbre[!duplicated(images.path.tsbre$Inbred),]
   openxlsx::write.xlsx(qualdat,paste0("R:/Research General/Marshalltown_IA/Inbred Pictures/Images.Path.Inbredspics.xlsx"),row.names=F,overwrite=T)
