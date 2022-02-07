@@ -94,6 +94,8 @@ prepImages = function( ){
 
   images.path.tsbre$Inbred <- plyr::revalue(as.character(images.path.tsbre$Inbred),industryNames  ) #industry name to inbred name conversion
 
+  images.path.tsbre = gsub(pattern = "\\/", replacement = "/", fixed = T)
+
   qualdat = images.path.tsbre[!duplicated(images.path.tsbre$Inbred),]
   openxlsx::write.xlsx(qualdat,paste0("R:/Research General/Marshalltown_IA/Inbred Pictures/Images.Path.Inbredspics.xlsx"),rowNames=F,overwrite=T)
 
@@ -112,4 +114,6 @@ prepImages = function( ){
   #write.xlsx(InbredListData_rpt_Final.xlsx.paths, "InbredListData_rpt_Final.xlsx",row.names=F,showNA=F)
 
 }
+
+
 
