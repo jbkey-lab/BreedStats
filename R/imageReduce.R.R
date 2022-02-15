@@ -10,13 +10,15 @@ imageReduce = function(dp,ndp){
 
   image.paths = openxlsx::read.xlsx("R:/Research General/Marshalltown_IA/Inbred Pictures/Images.Path.Inbredspics.xlsx",1)
 
-  image.paths$Inbred = gsub(image.paths$Path, pattern = dp ,replacement="")
+  #image.paths$Inbred = gsub(image.paths$Path, pattern = dp ,replacement="")
 
-  index.inbreds = image.paths$Inbred
+  index.inbreds = image.paths$Path
 
   index.inbreds = index.inbreds[-1]
+  index.inbreds = gsub(index.inbreds, pattern = "\\\\" ,replacement="\\/")
+  index.inbreds.ndp = gsub(index.inbreds, pattern = "R:/Research General/Marshalltown_IA/Inbred Pictures/Inbreds_original/" ,fixed=T,replacement="")
 
-  for (i in index.inbreds) {
+  for (i in index.inbreds.ndp) {
     capturas <- list.files(paste0(dp,i), pattern = "*.JPG", recursive=T, ignore.case=T)
 
 
