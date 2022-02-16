@@ -25,7 +25,7 @@ randomEffect = function(CNN, CN,trainingx2, startVal=1){
   field.2 = (trainingx2[!duplicated(trainingx2[,CS]), CN])
   field.2$num = c(startVal:(nrow(field.2)+(startVal-1)))
   colnames(field.2)[-ncol(field.2)] = CN
-  trainingx2 = left_join(trainingx2, field.2[,c(CS,"num")], by=CS)
+  trainingx2 = dplyr::left_join(trainingx2, field.2[,c(CS,"num")], by=CS)
   colnames(trainingx2)[ncol(trainingx2)] = CNN
   gc()
   return(list(data.frame(field.2), data.frame(trainingx2)))
@@ -69,18 +69,18 @@ xgblinearBV = function(  hdp,
   season4=as.numeric(seas4)
   season5=as.numeric(seas5)
 
-  cores=detectCores()
-  cl <- makeCluster(cores[1]-1, outfile="")
-  registerDoParallel(cl)
+  cores=parallel::detectCores()
+  cl <- parallel:makeCluster(cores[1]-1, outfile="")
+  doParallel::registerDoParallel(cl)
 
 
   ######################################################
 
 
-  trainingx2 = fread(paste0(hdp,"BV.HSIdentical.df.all.csv"))
+  trainingx2 = data.table::fread(paste0(hdp,"BV.HSIdentical.df.all.csv"))
   #BV.MC.Entry.data.test = fread(paste0(hdp,"BV.HSIdentical.df.csv"))
 
-  trainingx2 = trainingx2 %>% filter(Plot.Discarded != "Yes",
+  trainingx2 = trainingx2 %>% dplyr::filter(Plot.Discarded != "Yes",
                                      Plot.Status != "3 - Bad" )%>%data.frame()
 
 
@@ -109,7 +109,7 @@ xgblinearBV = function(  hdp,
   variety.2 = RE[[1]]
   trainingx2 = RE[[2]]
 
-  nullvarnum = variety.2 %>% filter((Variety)=="") %>% select(num) %>% as.integer()
+  nullvarnum = variety.2 %>% dplyr::filter((Variety)=="") %>% dplyr::select(num) %>% as.integer()
 
   BV.MC.Entry.data = trainingx2
   BV.HSIdentical.df.A = levelSelector(level="A",trainingx2)
@@ -144,21 +144,21 @@ xgblinearBV = function(  hdp,
                              'GP718Hx1',	'24AED-D02',"BAA419","BAA411","BHB075","BHJ471","GP702"
                              ))
 
-  male.3 = left_join(male.3,male.2[,-2],by=c("male"="MALE") )
+  male.3 = dplyr::left_join(male.3,male.2[,-2],by=c("male"="MALE") )
 
   #########################
   testx2 = expand.grid(male.3$num, female, Year.2$num, field )
-  testx2 = left_join(testx2, id, by=c("Var1"="male","Var2"="female"))
-  testx2= left_join(testx2, variety, by=c("ID"="ID"))
+  testx2 = dplyr::left_join(testx2, id, by=c("Var1"="male","Var2"="female"))
+  testx2= dplyr::left_join(testx2, variety, by=c("ID"="ID"))
   colnames(testx2)[1:6]=c("male","female","Year","field","ID","variety")
   testx2$ID.cat = paste0(testx2$female, " + ", testx2$male)
 
-  id.unk = testx2 %>% filter(is.na(ID)) %>%
-    mutate(ID.concat = paste0(female, " + ", male)) %>%
-    distinct(ID.concat) %>%
-    mutate(num = ((max(trainingx2$ID)+1):(length(ID.concat)+(max(trainingx2$ID))) ) )
+  id.unk = testx2 %>% dplyr::filter(is.na(ID)) %>%
+    dplyr::mutate(ID.concat = paste0(female, " + ", male)) %>%
+    dplyr::distinct(ID.concat) %>%
+    dplyr::mutate(num = ((max(trainingx2$ID)+1):(length(ID.concat)+(max(trainingx2$ID))) ) )
 
-  testx2 = left_join(testx2, id.unk, by=c("ID.cat"="ID.concat"))
+  testx2 = dplyr::left_join(testx2, id.unk, by=c("ID.cat"="ID.concat"))
   testx2$ID = ifelse(is.na(testx2$ID), testx2$num,testx2$ID)
   testx2$variety = ifelse(is.na(testx2$variety), nullvarnum, testx2$variety)
   #testx2$field = 9
@@ -197,11 +197,11 @@ xgblinearBV = function(  hdp,
 
   trainx2$norm = (trainx2$Yield - mean(trainx2$Yield))/(max(trainx2$Yield)-min(trainx2$Yield))
 
-  models.list2 <- caretList(
+  models.list2 <- caretEnsemble::caretList(
     x=trainx2[ , -c(1,8)],
     y=(trainx2[,8]),
     continue_on_fail = T,
-    trControl=trainControl(method="cv",
+    trControl=caret::trainControl(method="cv",
                            number=1, #1
                            index = createFolds((trainx2[,1]),k=2), #2
                            savePredictions = TRUE,
@@ -235,7 +235,7 @@ xgblinearBV = function(  hdp,
       #qrf6=caretModelSpec(method="xgbLinear", tuneGrid = final_grid2), #5
 
       #qrf7=caretModelSpec(method="xgbLinear", tuneGrid = final_grid3), #5
-      qrf8=caretModelSpec(method="xgbLinear", tuneGrid = final_grid4) #5
+      qrf8=caretEnsemble::caretModelSpec(method="xgbLinear", tuneGrid = final_grid4) #5
 
       #qrf9=caretModelSpec(method="BstLm") #5
       #qrf8=caretModelSpec(method="cubist") #5
@@ -253,8 +253,8 @@ xgblinearBV = function(  hdp,
 
   models.list2
 
-  NCAA.stacked<-caretEnsemble(models.list2, # + 95
-                              trControl = trainControl(
+  NCAA.stacked<-caretEnsemble::caretEnsemble(models.list2, # + 95
+                              trControl = caret::trainControl(
                                 number=2,
                                 method="boot",
                                 verboseIter =TRUE,
@@ -294,35 +294,35 @@ xgblinearBV = function(  hdp,
   preds.ap = data.table(aprop[,-1], preds.ap)
 
   preds.test.agg.FEMALE = preds.ap %>%
-    group_by(female) %>%
-    summarize(preds.ap = mean(preds.ap))
+    dplyr::group_by(female) %>%
+    dplyr::summarize(preds.ap = mean(preds.ap))
 
   preds.test.agg.MALE = preds.ap %>%
-    group_by(male) %>%
-    summarize(preds.ap = mean(preds.ap))
+    dplyr::group_by(male) %>%
+    dplyr::summarize(preds.ap = mean(preds.ap))
 
-  preds.test.agg.FEMALE = left_join(preds.test.agg.FEMALE, female.2[,-2],by=c("female"="num"))
-  preds.test.agg.MALE = left_join(preds.test.agg.MALE, male.2[,-2],by=c("male"="num"))
+  preds.test.agg.FEMALE = dplyr::left_join(preds.test.agg.FEMALE, female.2[,-2],by=c("female"="num"))
+  preds.test.agg.MALE = dplyr::left_join(preds.test.agg.MALE, male.2[,-2],by=c("male"="num"))
   colnames(preds.test.agg.MALE) = c("female","preds.ap","FEMALE")
   preds.test.agg = rbind(preds.test.agg.FEMALE,preds.test.agg.MALE)
 
   preds.test.agg = preds.test.agg %>%
-    group_by(FEMALE) %>%
-    summarize(preds.ap = mean(preds.ap)) %>%
-    mutate(BV = (preds.ap- 228)/2 )
+    dplyr::group_by(FEMALE) %>%
+    dplyr::summarize(preds.ap = mean(preds.ap)) %>%
+    dplyr::mutate(BV = (preds.ap- 228)/2 )
 
 
   #######expand.grind set male.female.year
   preds.test = predict(NCAA.stacked, testx2)
   preds.test = data.table(testx2,preds.test)
   preds.test.bind = preds.test %>%
-    left_join( male.2[,-2],by=c("male"="num")) %>%
-    left_join( female.2[,-2],by=c("female"="num")) %>%
-    mutate(LINE = paste0(FEMALE, " + ", MALE)) %>%
-    left_join( Year.2[,-2],by=c("Year"="num")) %>%
-    left_join( field.2[,-2],by=c("field"="num")) %>%
-    left_join( variety.2[,-2],by=c("variety"="num")) %>%
-    select(-c(1:6)) #%>%
+    dplyr::left_join( male.2[,-2],by=c("male"="num")) %>%
+    dplyr::left_join( female.2[,-2],by=c("female"="num")) %>%
+    dplyr::mutate(LINE = paste0(FEMALE, " + ", MALE)) %>%
+    dplyr::left_join( Year.2[,-2],by=c("Year"="num")) %>%
+    dplyr::left_join( field.2[,-2],by=c("field"="num")) %>%
+    dplyr::left_join( variety.2[,-2],by=c("variety"="num")) %>%
+    dplyr::select(-c(1:6)) #%>%
   #filter(preds.test > 250)
 
   # preds.test.bind.2 = preds.test.bind[,c(1,3,2,4,5,6,7)]
@@ -332,8 +332,8 @@ xgblinearBV = function(  hdp,
   # BV.HSIdentical.df.3 = data.frame(BV.HSIdentical.df.3)
 
   preds.test.agg.FIELD = preds.test.bind %>%
-    group_by(FIELD,LINE) %>%
-    summarize(preds.test = mean(preds.test))
+    dplyr::group_by(FIELD,LINE) %>%
+    dplyr::summarize(preds.test = mean(preds.test))
 
   # preds.test.agg.FEMALE = preds.test.bind %>%
   #   group_by(FEMALE) %>%
