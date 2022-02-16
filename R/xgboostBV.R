@@ -35,6 +35,7 @@ randomEffect = function(CNN, CN,trainingx2, startVal=1){
 
 
 xgblinearBV = function(  hdp,
+                         fdp,
                          s0,
                          s1,
                          s2,
@@ -50,18 +51,27 @@ xgblinearBV = function(  hdp,
 ){
 
   # #####################################################
-  # s0=T
-  # s1 =T
-  # s2 =T
-  # s3 =F
-  # s4 =F
-  # s5 =F
-  # seas0 = 21
-  # seas1 = 20
-  # seas2 = 19
-  # seas3 = ""
-  # seas4 = ""
-  # seas5 = ""
+  s0=T
+  s1 =T
+  s2 =T
+  s3 =F
+  s4 =F
+  s5 =F
+  seas0 = 21
+  seas1 = 20
+  seas2 = 19
+  seas3 = ""
+  seas4 = ""
+  seas5 = ""
+  hdp = "C:/Users/jake.lamkey/Documents/"
+  fdp= "C:/Users/jake.lamkey/Documents/"
+  library(BreedStats)
+  library(tidyverse)
+  library(doParallel)
+  library(caretEnsemble)
+  library(caret)
+  library(data.table)
+
   season0=as.numeric(seas0)
   season1=as.numeric(seas1)
   season2=as.numeric(seas2)
@@ -70,7 +80,7 @@ xgblinearBV = function(  hdp,
   season5=as.numeric(seas5)
 
   cores=parallel::detectCores()
-  cl <- parallel:makeCluster(cores[1]-1, outfile="")
+  cl <- parallel::makeCluster(cores[1]-1, outfile="")
   doParallel::registerDoParallel(cl)
 
 
@@ -112,8 +122,13 @@ xgblinearBV = function(  hdp,
   nullvarnum = variety.2 %>% dplyr::filter((Variety)=="") %>% dplyr::select(num) %>% as.integer()
 
   BV.MC.Entry.data = trainingx2
-  BV.HSIdentical.df.A = levelSelector(level="A",trainingx2)
-  BV.HSIdentical.df.Prop = pcSelector(commericalType = "Prop", altCommericalType = "PET")
+  BV.HSIdentical.df.A = levelSelector(level="A",BV.MC.Entry.data=trainingx2,s0=s0,s1=s1,s2=s2,s3=s3,s4=s4,s5=s5,
+                                      season0=season0,season1=season1,season2=season2,
+                                      season3=season3,season4=season4,season5=season5)
+  BV.HSIdentical.df.Prop = pcSelector(commericalType = "Prop", altCommericalType = "PET",
+                                      BV.MC.Entry.data=trainingx2,s0=s0,s1=s1,s2=s2,s3=s3,s4=s4,s5=s5,
+                                      season0=season0,season1=season1,season2=season2,
+                                      season3=season3,season4=season4,season5=season5)
   BV.HSIdentical.df = rbind(BV.HSIdentical.df.A,
                             BV.HSIdentical.df.Prop)
 
@@ -178,7 +193,7 @@ xgblinearBV = function(  hdp,
 
 
   datasets = trainVal(data = trainingx2, colToInd= "ID", sample = 0.95)
-  trainx2 = rbind(datasets[[1]], trainx1)
+  trainx2 = rbind(datasets[[1]])
   validatex2 = datasets[[2]]
 
 
@@ -195,11 +210,11 @@ xgblinearBV = function(  hdp,
   # final_grid3 <- expand.grid(mstop = 500, maxdepth = 2, nu = 0.1)
   # final_grid4 <- expand.grid(committees = 10, neighbors = 20)
 
-  trainx2$norm = (trainx2$Yield - mean(trainx2$Yield))/(max(trainx2$Yield)-min(trainx2$Yield))
+  #trainx2$norm = (trainx2$Yield - mean(trainx2$Yield))/(max(trainx2$Yield)-min(trainx2$Yield))
 
   models.list2 <- caretEnsemble::caretList(
-    x=trainx2[ , -c(1,8)],
-    y=(trainx2[,8]),
+    x=trainx2[ , -c(1)],
+    y=(trainx2[,1]),
     continue_on_fail = T,
     trControl=caret::trainControl(method="cv",
                            number=1, #1
@@ -279,17 +294,17 @@ xgblinearBV = function(  hdp,
 
   #######Validate Corn
   preds = predict(NCAA.stacked, validatex2[,-1])
-  cor(validatex2[, 1], preds)^2
+  cat("Corr for Validate ALL is: ",cor(validatex2[, 1], preds)^2, "\n")
   sqrt(mean((validatex2[, 1] -  preds)^2))
 
   #######training set
   preds.t = predict(NCAA.stacked, trainx2[,-1])
-  cor(trainx2[, 1], preds.t)^2
+  cat("Corr for Train ALL is: ",cor(trainx2[, 1], preds.t)^2, "\n")
   sqrt(mean((trainx2[, 1] -  preds.t)^2))
 
   #######AProp set
   preds.ap = predict(NCAA.stacked, aprop[,-1])
-  cor(aprop$Yield, preds.ap)^2
+  cat("Corr for Prop and A level is: ",cor(aprop$Yield, preds.ap)^2, "\n")
   sqrt(mean((aprop$Yield -  preds.ap)^2))
   preds.ap = data.table(aprop[,-1], preds.ap)
 
@@ -311,10 +326,14 @@ xgblinearBV = function(  hdp,
     dplyr::summarize(preds.ap = mean(preds.ap)) %>%
     dplyr::mutate(BV = (preds.ap- 228)/2 )
 
-
+  rm(id.unk.all,df5,Blup, datasets, aprop,id.unk, preds.ap, id, preds.t, preds, models.list2,trainingx2,variety,
+     BV.HSIdentical.df.3, male.3, validatex2, trainx2, BV.HSIdentical.df)
+  gc()
   #######expand.grind set male.female.year
+  cat("Predicting A and Prop test level for all combinations over Years,Locations,Male,Female", "\n")
   preds.test = predict(NCAA.stacked, testx2)
   preds.test = data.table(testx2,preds.test)
+  gc()
   preds.test.bind = preds.test %>%
     dplyr::left_join( male.2[,-2],by=c("male"="num")) %>%
     dplyr::left_join( female.2[,-2],by=c("female"="num")) %>%
@@ -322,7 +341,8 @@ xgblinearBV = function(  hdp,
     dplyr::left_join( Year.2[,-2],by=c("Year"="num")) %>%
     dplyr::left_join( field.2[,-2],by=c("field"="num")) %>%
     dplyr::left_join( variety.2[,-2],by=c("variety"="num")) %>%
-    dplyr::select(-c(1:6)) #%>%
+    dplyr::select(-c(1:6))
+
   #filter(preds.test > 250)
 
   # preds.test.bind.2 = preds.test.bind[,c(1,3,2,4,5,6,7)]
@@ -334,6 +354,18 @@ xgblinearBV = function(  hdp,
   preds.test.agg.FIELD = preds.test.bind %>%
     dplyr::group_by(FIELD,LINE) %>%
     dplyr::summarize(preds.test = mean(preds.test))
+
+  rm(preds.test, preds.test.bind,testx2)
+  gc()
+
+  preds.test.agg.FIELD = tidyr::separate(preds.test.agg.FIELD, sep= " \\+ " ,col = LINE, into=c("FEMALE","MALE"), remove=F)
+  cat("Printing Colnames ", colnames(preds.test.agg.FIELD), "\n")
+
+  preds.test.agg.FIELD = preds.test.agg.FIELD %>%
+    filter(FIELD != c("Contract - SSR-Garden City"),
+           FIELD != c("(HOLDING)"),
+           !grepl(FIELD, pattern = "Contract"),
+           !grepl(FIELD, pattern = "Beck - H"))
 
   # preds.test.agg.FEMALE = preds.test.bind %>%
   #   group_by(FEMALE) %>%
@@ -351,11 +383,11 @@ xgblinearBV = function(  hdp,
   #   summarize(preds.test = mean(preds.test))
 
 
-  write.csv(preds.test.agg.FEMALE, "A.Prop_predsByFieldYear.csv")
-  rm(preds.test,preds.test.bind,id.unk.all,df5,Blup,preds.test.bind.2, preds.test.agg.FEMALE,
-     BV.HSIdentical.df.3)
-  gc()
+  openxlsx::write.xlsx(preds.test.agg.FIELD, paste0(fdp,"A.Prop_predsByFieldLine.xlsx"),rowNames=F)
+  openxlsx::write.xlsx(preds.test.agg, paste0(fdp,"A.Prop_predsByFemale.xlsx"),rowNames=F)
 
+  gc()
+  cat("DONE", "\n")
 
 
 }
