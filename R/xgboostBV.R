@@ -34,22 +34,34 @@ randomEffect = function(CNN, CN,trainingx2, startVal=1){
 
 
 
-xgblinearBV = function(){
-  library(BreedStats)
+xgblinearBV = function(  hdp,
+                         s0,
+                         s1,
+                         s2,
+                         s3,
+                         s4 ,
+                         s5 ,
+                         seas0,
+                         seas1 ,
+                         seas2 ,
+                         seas3 ,
+                         seas4 ,
+                         seas5
+){
 
   # #####################################################
-  s0=T
-  s1 =T
-  s2 =T
-  s3 =F
-  s4 =F
-  s5 =F
-  seas0 = 21
-  seas1 = 20
-  seas2 = 19
-  seas3 = ""
-  seas4 = ""
-  seas5 = ""
+  # s0=T
+  # s1 =T
+  # s2 =T
+  # s3 =F
+  # s4 =F
+  # s5 =F
+  # seas0 = 21
+  # seas1 = 20
+  # seas2 = 19
+  # seas3 = ""
+  # seas4 = ""
+  # seas5 = ""
   season0=as.numeric(seas0)
   season1=as.numeric(seas1)
   season2=as.numeric(seas2)
@@ -61,7 +73,6 @@ xgblinearBV = function(){
   cl <- makeCluster(cores[1]-1, outfile="")
   registerDoParallel(cl)
 
-  hdp = "C:/Users/jake.lamkey/Documents/"
 
   ######################################################
 
@@ -130,7 +141,8 @@ xgblinearBV = function(){
                              '84Z',	'TR4949',	'GP695Hx1',	'BSU313',
                              'BHA493',	'R2846-NS6408DGV2P',	'I12003',	'R2846',
                              'BSR273',	'BSQ941',	'BUR032',	'PRW-AM',
-                             'GP718Hx1',	'24AED-D02',"BAA419","bAA411","BHB075","BHJ471","GP702"))
+                             'GP718Hx1',	'24AED-D02',"BAA419","BAA411","BHB075","BHJ471","GP702"
+                             ))
 
   male.3 = left_join(male.3,male.2[,-2],by=c("male"="MALE") )
 
@@ -339,7 +351,7 @@ xgblinearBV = function(){
   #   summarize(preds.test = mean(preds.test))
 
 
-  write.csv(preds.test.agg.FEMALE, "E-EK-Prop.csv")
+  write.csv(preds.test.agg.FEMALE, "A.Prop_predsByFieldYear.csv")
   rm(preds.test,preds.test.bind,id.unk.all,df5,Blup,preds.test.bind.2, preds.test.agg.FEMALE,
      BV.HSIdentical.df.3)
   gc()
@@ -347,5 +359,10 @@ xgblinearBV = function(){
 
 
 }
+
+
+
+
+
 
 

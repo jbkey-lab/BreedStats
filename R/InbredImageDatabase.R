@@ -101,6 +101,8 @@ prepImages = function( ){
   images.path.tsbre$Ear = gsub(images.path.tsbre$Ear, pattern = "/", replacement = "\\\\", fixed = T)
 
   qualdat = images.path.tsbre[!duplicated(images.path.tsbre$Inbred),]
+
+
   openxlsx::write.xlsx(qualdat,paste0("R:/Research General/Marshalltown_IA/Inbred Pictures/Images.Path.Inbredspics.xlsx"),rowNames=F,overwrite=T)
 
 

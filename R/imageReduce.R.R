@@ -50,4 +50,38 @@ imageReduce = function(dp,ndp){
     invisible(gc())
 
   }
+  image.paths = openxlsx::read.xlsx("R:/Research General/Marshalltown_IA/Inbred Pictures/Images.Path.Inbredspics.xlsx",1)
+  image.paths$Path = gsub(image.paths$Path, pattern = "_original" ,replacement="")
+  image.paths$Silk = gsub(image.paths$Silk, pattern = "_original" ,replacement="")
+  image.paths$Tassel = gsub(image.paths$Tassel, pattern = "_original" ,replacement="")
+  image.paths$BraceRoot = gsub(image.paths$BraceRoot, pattern = "_original" ,replacement="")
+  image.paths$Ear = gsub(image.paths$Ear, pattern = "_original" ,replacement="")
+
+   image.paths$Silk = gsub(image.paths$Silk, pattern = "\\/\\/" ,replacement="\\/")
+   image.paths$BraceRoot = gsub(image.paths$BraceRoot, pattern = "\\/\\/" ,replacement="\\/")
+   image.paths$Ear = gsub(image.paths$Ear, pattern = "\\/\\/" ,replacement="\\/")
+
+
+   image.paths$Silk = gsub(image.paths$Silk, pattern = "\\/" ,replacement="\\\\")
+   image.paths$BraceRoot = gsub(image.paths$BraceRoot, pattern = "\\/" ,replacement="\\\\")
+   image.paths$Ear = gsub(image.paths$Ear, pattern = "\\/" ,replacement="\\\\")
+   image.paths$Tassel = gsub(image.paths$Tassel, pattern = "\\/" ,replacement="\\\\")
+
+  openxlsx::write.xlsx(image.paths, "R:/Research General/Marshalltown_IA/Inbred Pictures/Images.Path.Inbredspics.xlsx",rowNames=F)
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
