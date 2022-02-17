@@ -52,26 +52,26 @@ xgblinearBV = function(  hdp,
 ){
 
   # #####################################################
-  s0=T
-  s1 =T
-  s2 =T
-  s3 =F
-  s4 =F
-  s5 =F
-  seas0 = 21
-  seas1 = 20
-  seas2 = 19
-  seas3 = ""
-  seas4 = ""
-  seas5 = ""
-  hdp = "C:/Users/jake.lamkey/Documents/"
-  fdp= "C:/Users/jake.lamkey/Documents/"
-  library(BreedStats)
-  library(tidyverse)
-  library(doParallel)
-  library(caretEnsemble)
-  library(caret)
-  library(data.table)
+  # s0=T
+  # s1 =T
+  # s2 =T
+  # s3 =F
+  # s4 =F
+  # s5 =F
+  # seas0 = 21
+  # seas1 = 20
+  # seas2 = 19
+  # seas3 = ""
+  # seas4 = ""
+  # seas5 = ""
+  # hdp = "C:/Users/jake.lamkey/Documents/"
+  # fdp= "C:/Users/jake.lamkey/Documents/"
+  # library(BreedStats)
+  # library(tidyverse)
+  # library(doParallel)
+  # library(caretEnsemble)
+  # library(caret)
+  # library(data.table)
 
   season0=as.numeric(seas0)
   season1=as.numeric(seas1)
@@ -408,10 +408,10 @@ xgblinearBV = function(  hdp,
   preds.test.agg.FIELD.LINE = tidyr::separate(preds.test.agg.FIELD.LINE, sep= " \\+ " ,col = LINE, into=c("FEMALE","MALE"), remove=F)
 
 
-  openxlsx::write.xlsx(preds.test.agg.FIELD, paste0(fdp,"A.Prop_predsByFieldLine.xlsx"),rowNames=F)
-  openxlsx::write.xlsx(preds.test.agg.FIELD.LINE, paste0(fdp,"A.Prop_predsByLine.xlsx"),rowNames=F)
-  openxlsx::write.xlsx(preds.test.agg.FIELD.select, paste0(fdp,"A.Prop_predsbyLine",inbred,".xlsx"),rowNames=F)
-  openxlsx::write.xlsx(preds.test.agg, paste0(fdp,"A.Prop_predsByFemale.xlsx"),rowNames=F)
+  openxlsx::write.xlsx(preds.test.agg.FIELD, paste0(fdp,"A.Prop_predsByFieldLine.xlsx"),rowNames=F,overwrite=T)
+  openxlsx::write.xlsx(preds.test.agg.FIELD.LINE, paste0(fdp,"A.Prop_predsByLine.xlsx"),rowNames=F,overwrite=T)
+  openxlsx::write.xlsx(preds.test.agg.FIELD.select, paste0(fdp,"A.Prop_predsbyLine",inbred,".xlsx"),rowNames=F,overwrite=T)
+  openxlsx::write.xlsx(preds.test.agg, paste0(fdp,"A.Prop_predsByFemale.xlsx"),rowNames=F,overwrite=T)
 
   gc()
   cat("DONE", "\n")
