@@ -47,7 +47,8 @@ xgblinearBV = function(  hdp,
                          seas2 ,
                          seas3 ,
                          seas4 ,
-                         seas5
+                         seas5,
+                         inbred
 ){
 
   # #####################################################
@@ -91,7 +92,7 @@ xgblinearBV = function(  hdp,
   #BV.MC.Entry.data.test = fread(paste0(hdp,"BV.HSIdentical.df.csv"))
 
   trainingx2 = trainingx2 %>% dplyr::filter(Plot.Discarded != "Yes",
-                                     Plot.Status != "3 - Bad" )%>%data.frame()
+                                            Plot.Status != "3 - Bad" )%>%data.frame()
 
 
 
@@ -156,8 +157,26 @@ xgblinearBV = function(  hdp,
                              '84Z',	'TR4949',	'GP695Hx1',	'BSU313',
                              'BHA493',	'R2846-NS6408DGV2P',	'I12003',	'R2846',
                              'BSR273',	'BSQ941',	'BUR032',	'PRW-AM',
-                             'GP718Hx1',	'24AED-D02',"BAA419","BAA411","BHB075","BHJ471","GP702"
-                             ))
+                             'GP718Hx1',	'24AED-D02',"BAA419","BAA411","BHB075","BHJ471","GP702",
+                             "40QHQ-E07", "BQS941","BRS313","BSS009","GP738","BRR553",
+                             "BQR042/BRQ064)-B-25-3", "BJH031/BHA011.DHB-045-1","BCA509",
+                             "F8994", "BJH031/I11054)-B.DH042","T1874",
+                             "BUR011", "(054530/016360)/ID5754-B-18", "BJH031/BHA011)-B-B-17",
+                             "(LH212Ht/LH185//CJ7008)/(KDL6289/LH185)).DHB-21","BQR334",
+                             "R6076","BRQ041","BBH030","BQR042/BRQ064)-B-36-1",
+                             "F9898","85E","LFX7508","BJH074/BHF041)-B-018-2","BDA032/BBC503//BHH069)-B.DHB-045",
+                             "BJH074/BJH031)-B.DHB-093","BHD043/I10001)-B.DHB040",
+                             "BJH074/BHF041)-B.DHB061","BJH031/BHA011)-B.DHB-001",
+                             "BJH031/BHA011)-B.DHB-059","BDA032/BBC503//BHH069)-B.DHB-055",
+                             "BJH104/I11063.DH058-2-1-1","I11063/I9005)-B.DHB-16",
+                             "MFX8095/BHH069.DHB-047-1","BDA015/BDA032//BHH069)-B-085",
+                             "BJH031/I11054)-B.DH042","FF6224/I9005.DH023-1-1-1",
+                             "BDA051/BDA032)-B.DHB-018","FC2YHR",
+                             "BBC503/BDA032//BHH069)-B-09","BQR042/BRQ064)-B-25-3"
+
+
+  ))
+  male.3 = data.frame(male= male.3[!duplicated(male.3),])
 
   male.3 = dplyr::left_join(male.3,male.2[,-2],by=c("male"="MALE") )
 
@@ -217,27 +236,27 @@ xgblinearBV = function(  hdp,
     y=(trainx2[,1]),
     continue_on_fail = T,
     trControl=caret::trainControl(method="cv",
-                           number=1, #1
-                           index = createFolds((trainx2[,1]),k=2), #2
-                           savePredictions = TRUE,
-                           #classProbs=T,
-                           allowParallel = TRUE,
-                           verboseIter = TRUE
-                           #preProcOptions =  c( method = c("center", "scale"))
-                           #na.remove = TRUE,
-                           # k = 5,
-                           # knnSummary = mean,
-                           # outcome = NULL,
-                           # fudge = 0.2,
-                           # numUnique = 3,
-                           # verbose = FALSE,
-                           # freqCut = 95/5,
-                           # uniqueCut = 10,
-                           #cutoff = 0.9)
-                           # rangeBounds = c(0, 1))
-                           #p=.75
-                           # seeds=c(1,2,3,4,5,6,7,8,9),
-                           # indexFinal = length(sample(nrow(trainx2), (nrow(trainx2))*.3))
+                                  number=1, #1
+                                  index = createFolds((trainx2[,1]),k=2), #2
+                                  savePredictions = TRUE,
+                                  #classProbs=T,
+                                  allowParallel = TRUE,
+                                  verboseIter = TRUE
+                                  #preProcOptions =  c( method = c("center", "scale"))
+                                  #na.remove = TRUE,
+                                  # k = 5,
+                                  # knnSummary = mean,
+                                  # outcome = NULL,
+                                  # fudge = 0.2,
+                                  # numUnique = 3,
+                                  # verbose = FALSE,
+                                  # freqCut = 95/5,
+                                  # uniqueCut = 10,
+                                  #cutoff = 0.9)
+                                  # rangeBounds = c(0, 1))
+                                  #p=.75
+                                  # seeds=c(1,2,3,4,5,6,7,8,9),
+                                  # indexFinal = length(sample(nrow(trainx2), (nrow(trainx2))*.3))
     ),
     tuneList=list(
       #  qrf1=caretModelSpec(method="qrf", ntree=500, tuneLength = 1), #11
@@ -269,12 +288,12 @@ xgblinearBV = function(  hdp,
   models.list2
 
   NCAA.stacked<-caretEnsemble::caretEnsemble(models.list2, # + 95
-                              trControl = caret::trainControl(
-                                number=2,
-                                method="boot",
-                                verboseIter =TRUE,
-                                allowParallel = T
-                              )
+                                             trControl = caret::trainControl(
+                                               number=2,
+                                               method="boot",
+                                               verboseIter =TRUE,
+                                               allowParallel = T
+                                             )
   );NCAA.stacked # + 95
 
   invisible(gc())
@@ -362,10 +381,10 @@ xgblinearBV = function(  hdp,
   cat("Printing Colnames ", colnames(preds.test.agg.FIELD), "\n")
 
   preds.test.agg.FIELD = preds.test.agg.FIELD %>%
-    filter(FIELD != c("Contract - SSR-Garden City"),
-           FIELD != c("(HOLDING)"),
-           !grepl(FIELD, pattern = "Contract"),
-           !grepl(FIELD, pattern = "Beck - H"))
+    dplyr::filter(FIELD != c("Contract - SSR-Garden City"),
+                  FIELD != c("(HOLDING)"),
+                  !grepl(FIELD, pattern = "Contract"),
+                  !grepl(FIELD, pattern = "Beck - H"))
 
   # preds.test.agg.FEMALE = preds.test.bind %>%
   #   group_by(FEMALE) %>%
@@ -381,9 +400,17 @@ xgblinearBV = function(  hdp,
   # preds.test.agg.FEMALE = preds.test.agg %>%
   #   group_by(FEMALE) %>%
   #   summarize(preds.test = mean(preds.test))
+  preds.test.agg.FIELD.select = preds.test.agg.FIELD %>% dplyr::filter(MALE == inbred)
+
+  preds.test.agg.FIELD.LINE = preds.test.agg.FIELD %>%
+    dplyr::group_by(LINE) %>%
+    dplyr::summarize(preds.test = mean(preds.test))
+  preds.test.agg.FIELD.LINE = tidyr::separate(preds.test.agg.FIELD.LINE, sep= " \\+ " ,col = LINE, into=c("FEMALE","MALE"), remove=F)
 
 
   openxlsx::write.xlsx(preds.test.agg.FIELD, paste0(fdp,"A.Prop_predsByFieldLine.xlsx"),rowNames=F)
+  openxlsx::write.xlsx(preds.test.agg.FIELD.LINE, paste0(fdp,"A.Prop_predsByLine.xlsx"),rowNames=F)
+  openxlsx::write.xlsx(preds.test.agg.FIELD.select, paste0(fdp,"A.Prop_predsbyLine",inbred,".xlsx"),rowNames=F)
   openxlsx::write.xlsx(preds.test.agg, paste0(fdp,"A.Prop_predsByFemale.xlsx"),rowNames=F)
 
   gc()
