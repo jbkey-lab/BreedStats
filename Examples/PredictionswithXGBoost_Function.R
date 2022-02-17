@@ -2,7 +2,7 @@ library(BreedStats)
 
 
 
-xgblinearBV(              
+xgblinearBV(
   hdp = "C:/Users/jake.lamkey/Documents/",
   fdp= "C:/Users/jake.lamkey/Documents/",
   s0=T,
@@ -17,8 +17,9 @@ xgblinearBV(
   seas3 = "",
   seas4 = "",
   seas5 = "",
-  
+
   inbred = "BRS312"
+
 )
 
 

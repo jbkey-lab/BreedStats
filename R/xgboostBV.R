@@ -386,6 +386,8 @@ xgblinearBV = function(  hdp,
                   !grepl(FIELD, pattern = "Contract"),
                   !grepl(FIELD, pattern = "Beck - H"))
 
+
+
   # preds.test.agg.FEMALE = preds.test.bind %>%
   #   group_by(FEMALE) %>%
   #   summarize(preds.test = mean(preds.test))
@@ -404,16 +406,20 @@ xgblinearBV = function(  hdp,
 
   preds.test.agg.FIELD.LINE = preds.test.agg.FIELD %>%
     dplyr::group_by(LINE) %>%
-    dplyr::summarize(preds.test = mean(preds.test))
-  preds.test.agg.FIELD.LINE = tidyr::separate(preds.test.agg.FIELD.LINE, sep= " \\+ " ,col = LINE, into=c("FEMALE","MALE"), remove=F)
 
+    dplyr::summarize(preds.test = mean(preds.test))
 
   openxlsx::write.xlsx(preds.test.agg.FIELD, paste0(fdp,"A.Prop_predsByFieldLine.xlsx"),rowNames=F,overwrite=T)
-  openxlsx::write.xlsx(preds.test.agg.FIELD.LINE, paste0(fdp,"A.Prop_predsByLine.xlsx"),rowNames=F,overwrite=T)
-  openxlsx::write.xlsx(preds.test.agg.FIELD.select, paste0(fdp,"A.Prop_predsbyLine",inbred,".xlsx"),rowNames=F,overwrite=T)
-  openxlsx::write.xlsx(preds.test.agg, paste0(fdp,"A.Prop_predsByFemale.xlsx"),rowNames=F,overwrite=T)
+    rm(preds.test.agg.FIELD);gc()
 
-  gc()
+  preds.test.agg.FIELD.LINE = tidyr::separate(preds.test.agg.FIELD.LINE, sep= " \\+ " ,col = LINE, into=c("FEMALE","MALE"), remove=F)
+
+   openxlsx::write.xlsx(preds.test.agg.FIELD.LINE, paste0(fdp,"A.Prop_predsByLine.xlsx"),rowNames=F,overwrite=T)
+    rm(preds.test.agg.FIELD.LINE);gc()
+  openxlsx::write.xlsx(preds.test.agg.FIELD.select, paste0(fdp,"A.Prop_predsbyLine",inbred,".xlsx"),rowNames=F,overwrite=T)
+    rm(preds.test.agg.FIELD.select);gc()
+  openxlsx::write.xlsx(preds.test.agg, paste0(fdp,"A.Prop_predsByFemale.xlsx"),rowNames=F,overwrite=T)
+    rm(preds.test.agg);gc()
   cat("DONE", "\n")
 
 
