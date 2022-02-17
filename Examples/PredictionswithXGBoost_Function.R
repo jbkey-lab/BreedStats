@@ -1,8 +1,12 @@
+# library(devtools)
+# install_github("jbkey730/BreedStats")
+
+
 library(BreedStats)
 
 
 
-xgblinearBV(
+datasets=xgblinearBV(
   hdp = "C:/Users/jake.lamkey/Documents/",
   fdp= "C:/Users/jake.lamkey/Documents/",
   s0=T,

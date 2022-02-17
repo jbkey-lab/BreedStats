@@ -409,20 +409,23 @@ xgblinearBV = function(  hdp,
 
     dplyr::summarize(preds.test = mean(preds.test))
 
-  openxlsx::write.xlsx(preds.test.agg.FIELD, paste0(fdp,"A.Prop_predsByFieldLine.xlsx"),rowNames=F,overwrite=T)
-    rm(preds.test.agg.FIELD);gc()
+  #rm(preds.test.agg.FIELD);gc()
 
   preds.test.agg.FIELD.LINE = tidyr::separate(preds.test.agg.FIELD.LINE, sep= " \\+ " ,col = LINE, into=c("FEMALE","MALE"), remove=F)
+  gc()
 
    openxlsx::write.xlsx(preds.test.agg.FIELD.LINE, paste0(fdp,"A.Prop_predsByLine.xlsx"),rowNames=F,overwrite=T)
     rm(preds.test.agg.FIELD.LINE);gc()
+    cat("Finished writing by LINE")
   openxlsx::write.xlsx(preds.test.agg.FIELD.select, paste0(fdp,"A.Prop_predsbyLine",inbred,".xlsx"),rowNames=F,overwrite=T)
     rm(preds.test.agg.FIELD.select);gc()
+    cat("Finished writing by LINE MALE")
   openxlsx::write.xlsx(preds.test.agg, paste0(fdp,"A.Prop_predsByFemale.xlsx"),rowNames=F,overwrite=T)
     rm(preds.test.agg);gc()
+    cat("Finished writing by FEMALE")
   cat("DONE", "\n")
 
-
+  return(data.frame(preds.test.agg.FIELD))
 }
 
 

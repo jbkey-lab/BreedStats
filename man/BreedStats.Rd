@@ -23,6 +23,8 @@ A group of functions for breeding statistics. It uses ASReml algorithms for spat
 
  spaEBN(year="21",fdp="R:/Breeding/MT_TP/Models/AL_Adjustments/",spaDF=spaDF,namesSeq)
 
+ xgblinearBV(hdp, fdp, s0, s1, s2, s3, s4, s5, seas0, seas1, seas2, seas3, seas4, seas5, inbred)
+
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -65,6 +67,9 @@ A group of functions for breeding statistics. It uses ASReml algorithms for spat
   }
   \item{numOfChecks}{
   list of checks per entry list book
+  }
+  \item{inbred}{
+  list of male inbreds to filter with
   }
 %%     ~~Describe \code{x} here~~
 
@@ -337,6 +342,30 @@ suppressWarnings(suppressMessages(BV(fdp = fdp, #paste0("R:/Breeding/MT_TP/Model
                                      seas0=seas0,seas1=seas1, seas2=seas2, seas3=seas3,  seas4=seas4, seas5=seas5
                                      #if(doYear == "True"){doYear=T}else(doYear=F) #doYear,
 )))
+
+######################################################################################################
+######Pedigree Adjustments from Inventory
+######################################################################################################
+xgblinearBV(
+  hdp = "C:/Users/jake.lamkey/Documents/",
+  fdp= "C:/Users/jake.lamkey/Documents/",
+  s0=T,
+  s1 =T,
+  s2 =T,
+  s3 =F,
+  s4 =F,
+  s5 =F,
+  seas0 = 21,
+  seas1 = 20,
+  seas2 = 19,
+  seas3 = "",
+  seas4 = "",
+  seas5 = "",
+
+  inbred = "BRS312"
+
+)
+
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
