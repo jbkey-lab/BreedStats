@@ -18,13 +18,11 @@ library(BreedStats)
 #library(asreml)
 #library(DiGGer)
 
-spaDF = load_Data(x = "11_8_2021",simulate=F )
 
 
 
-
-
-AL.traits = spaEBN(year = "21",
+AL.traits = spaEBN(spaDF=load_Data(x = "11_8_2021",simulate=F ),
+                   year = "21",
                    fdp = "C:/Users/jake.lamkey/Documents/",#"R:/Breeding/MT_TP/Models/AL_Adjustments/",
                    spaDF = spaDF,
                    namesSeq =   c(3:5) #ear, plt, tw, ym, yield,####not included yet gs, moist, rl%, rl count, sl%, sl count,

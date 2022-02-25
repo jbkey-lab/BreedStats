@@ -622,45 +622,33 @@ BV = function(fdp ,
 
 
       if(doDNN){
-        #  BV.HSIdentical.df.male = BV.HSIdentical.df[,c(1:25,26,28)]; colnames(BV.HSIdentical.df.male)[26] = "BV.ped"
-        #  BV.HSIdentical.df.female = BV.HSIdentical.df[,c(1:25,27,28)]; colnames(BV.HSIdentical.df.female)[26] = "BV.ped"
-        #  BV.HSIdentical.df.bvDNN = rbind(BV.HSIdentical.df.male, BV.HSIdentical.df.female)
-        BV.HSIdentical.model.feature = BV.HSIdentical.model %>% select(c(feature, paste0(name), MALE, Female, FIELD, EXP))
-        #BV.HSIdentical.model = BV.HSIdentical.model %>% select(- c(feature, paste0(name)))
-
-        model <- keras_model_sequential()
-
-        model %>%
-          layer_dense(units = 64, activation = "relu",
-                      input_shape = dim(train_data)[2]) %>%
-          layer_dense(units = 64, activation = "relu") %>%
-          layer_dense(units = 1) #output
 
 
-        model %>% compile(
-          loss = "mse",
-          optimizer = optimizer_rmsprop(),
-          metrics = list("mean_absolute_error")
-        )
+        datasets=xgblinearBV(
+          hdp = "C:/Users/jake.lamkey/Documents/",
+          fdp= "C:/Users/jake.lamkey/Documents/",
+          s0=T,
+          s1 =T,
+          s2 =F,
+          s3 =F,
+          s4 =F,
+          s5 =F,
+          seas0 = 21,
+          seas1 = 20,
+          seas2 = "",
+          seas3 = "",
+          seas4 = "",
+          seas5 = "",
 
-        model
+          inbred = "BRS312",
+          rounds = 3000,
+          eta = 1,
+          lambda = 0.0003,
+          alpha = 0.0003
 
-        # Fit the model and store training stats
-        history <- model %>% fit(
-          as.matrix(BV.HSIdentical.model.feature[,-c(1,2)]),
-          as.matrix(BV.HSIdentical.model.feature$feature),
-          epochs = 100,
-          #validation_split = 0.2,
-          verbose = 0
         )
 
 
-        plot(history, metrics = "mean_absolute_error", smooth = FALSE) +
-          coord_cartesian(ylim = c(0, 5))
-
-        c(loss, mae) %<-% (model %>% evaluate(test_data, test_labels, verbose = 0))
-
-        paste0("Mean absolute error on test set: $", sprintf("%.2f", mae * 1000))
 
         BV.HSIdentical.model.predicted = model %>% predict(BV.HSIdentical.model.feature)
 

@@ -11,24 +11,32 @@ A group of functions for breeding statistics. It uses ASReml algorithms for spat
 \usage{
  BV(fdp,wdp, ws, doHybridID, doPedigreeChange, InventoryPedigree, doReduceNonCodes, doField, doLmer, ytData, doGCABV, year, A, B, C, Prop, Choice, D, R, X, E, Q, V, doDNN, GEM, date, s0, s1, s2, s3, s4, s5, seas0, seas1, seas2, seas3, seas4, seas5, doYear, folder, simulate)
 
- inbredChar(dpf, gdp, hdp, year, l_year, h_year, doAdjInbredData, simulate)
-
- prepImages()
+ inbredChar(dpf, gdp, hdp, year, l_year, h_year, doAdjInbredData, simulate, prepImages)
 
  sim_yielddata(BV.MC.Entry,seed)
 
  oneRepIBDSpatial(numOfReps = rep, numOfEntry = plot, ebn = EBN, numOfChecks=Checks)
 
- load_Data(x,simulate)
+ spaEBN(year="21",fdp="R:/Breeding/MT_TP/Models/AL_Adjustments/",spaDF=load_Data(x,simulate),namesSeq)
 
- spaEBN(year="21",fdp="R:/Breeding/MT_TP/Models/AL_Adjustments/",spaDF=spaDF,namesSeq)
-
- xgblinearBV(hdp, fdp, s0, s1, s2, s3, s4, s5, seas0, seas1, seas2, seas3, seas4, seas5, inbred)
+ xgblinearBV(hdp, fdp, s0, s1, s2, s3, s4, s5, seas0, seas1, seas2, seas3, seas4, seas5, inbred,
+ rounds, eta, lambda, alpha, male )
 
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-
+  \item{doLmer}{
+  uses lme4 to run breeding values analysis (0.9999 r2 to ASReml)
+  }
+  \item{doField}{
+  Switches from year to field effect
+  }
+  \item{doHybridID}{
+  Runs BV analysis with LINE as random
+  }
+  \item{doGCABV}{
+  Runs BV analysis with MALE and FEMALE as random
+  }
   \item{x}{
   date in "11_8_2021" format, export out of prism must be used with a spatial analysis design setup from function oneRepIBDSpatial()
   }
@@ -71,6 +79,11 @@ A group of functions for breeding statistics. It uses ASReml algorithms for spat
   \item{inbred}{
   list of male inbreds to filter with
   }
+  \item{male}{
+  list of male inbreds to include with predicitons file
+  }
+
+
 %%     ~~Describe \code{x} here~~
 
 }
@@ -85,6 +98,8 @@ A group of functions for breeding statistics. It uses ASReml algorithms for spat
 %% ...
 }
 \references{
+ https://www.github.com/jbkey730/BreedStats
+
 %% ~put references to the literature/web site here ~
 }
 \author{Jacob Lamkey
@@ -119,8 +134,6 @@ library(asreml)
 cl=parallel::detectCores()
 cl <- makePSOCKcluster(cl)
 registerDoParallel(cl)
-
-######################################################################################################
 
 #dimField = 48*50 #2400 plots
 #num of plots in Entry List
@@ -234,9 +247,7 @@ seas5 = ""
 
 doYear="True"
 folder=year
-#########################################################
-#########################################################
-#########################################################
+
 #vdp = 'R:/Breeding/MT_TP/Models/Data/Department Data/Variety.male.female.xlsx'
 #folder= "21S"
 A = if(varA== "True"){varA=T}else(varA=F)#varA,
@@ -321,7 +332,7 @@ seas3 = ""
 seas4 = ""
 seas5 = ""
 
-#########################################################
+
 suppressWarnings(suppressMessages(BV(fdp = fdp, #paste0("R:/Breeding/MT_TP/Models/Breeding Values/",folder),
                                      wdp = wdp,#paste0("R:/Breeding/MT_TP/Models/Data/Department Data/",folder,"/"),
                                      ws = ws, date=date,  #LOAD DATA
@@ -343,26 +354,35 @@ suppressWarnings(suppressMessages(BV(fdp = fdp, #paste0("R:/Breeding/MT_TP/Model
                                      #if(doYear == "True"){doYear=T}else(doYear=F) #doYear,
 )))
 
-######################################################################################################
-######Pedigree Adjustments from Inventory
-######################################################################################################
+########################################################################################################
+######Predictions with xgblinear for a expand.grid type of dataframe including male, female, year, field
+########################################################################################################
 xgblinearBV(
   hdp = "C:/Users/jake.lamkey/Documents/",
   fdp= "C:/Users/jake.lamkey/Documents/",
   s0=T,
   s1 =T,
-  s2 =T,
+  s2 =F,
   s3 =F,
   s4 =F,
   s5 =F,
   seas0 = 21,
   seas1 = 20,
-  seas2 = 19,
+  seas2 = "",
   seas3 = "",
   seas4 = "",
   seas5 = "",
 
-  inbred = "BRS312"
+  inbred = "BRS312",
+  rounds = 3000,
+  eta = 1,
+  lambda = 0.0003,
+  alpha = 0.0003,
+  male =   data.frame(male=c('BSQ033',	'BEX905',
+                    'BRQ529',	'BSR095',	'BRU059',
+                    'BRQ291',	'BRP251',"BRS312"
+
+  ))
 
 )
 

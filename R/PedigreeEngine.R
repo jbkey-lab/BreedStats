@@ -850,6 +850,7 @@ pedigreeEngine = function(ws,
   nrow(newData.changed)
 
   cat("I")
+
   BV.MC.Entry.data.AB = BV.MC.Entry.data.AB[,-c(8,9,11,12,13,14,15,16,18,19,23,24,41,42,43,44,45,46)]
 
 
@@ -858,11 +859,16 @@ pedigreeEngine = function(ws,
   ##########################################
   #BV.MC<-read.xlsx(paste0(wdp,'linked.male.female.nestedpeds.update.xlsx'),1,na.strings ="")#all varieties to build the model
   if(InventoryPedigree){
+
     linked.peds = openxlsx::read.xlsx(paste0(wdp,"/linked.peds.xlsx"), 1 )
 
   }else{
-  linked.peds = openxlsx::read.xlsx(paste0("R:/Breeding/MT_TP/Models/Data/Department Data/linked.peds.updated.xlsx"), 1 )
+
+    #linked.peds = openxlsx::read.xlsx(paste0("R:/Breeding/MT_TP/Models/Data/Department Data/linked.peds.updated.xlsx"), 1 )
+    linked.peds = openxlsx::read.xlsx(paste0(wdp,"/linked.peds.xlsx"), 1 )
+
   }
+
   BV.MC = linked.peds
 
   # dim(linked.peds)
@@ -939,6 +945,8 @@ pedigreeEngine = function(ws,
   BV.MC.Entry.data.AB.review.yna = BV.MC.Entry.data.AB %>% dplyr::filter(is.na(match.y ))
   cat("Number of missing male lines is ",nrow(BV.MC.Entry.data.AB.review.xna) + nrow(BV.MC.Entry.data.AB.review.x),".\n")
   cat("Number of missing female lines is ",nrow(BV.MC.Entry.data.AB.review.yna) + nrow(BV.MC.Entry.data.AB.review.y),".\n")
+
+  BV.MC.Entry.data.AB = BV.MC.Entry.data.AB %>% filter( !is.na(match.x) )
 
   # BV.MC.Entry.data.AB.forReview = BV.MC.Entry.data.AB[,-c(3,5,6,32,33,14,15,8,9)]
   # BV.MC.Entry.data.AB.forReview.female = BV.MC.Entry.data.AB.forReview[is.na(BV.MC.Entry.data.AB.forReview$match1.y.y.y.y.y.y),]
