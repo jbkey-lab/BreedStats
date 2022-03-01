@@ -21,7 +21,7 @@ datasets=xgblinearBV(
   seas3 = "",
   seas4 = "",
   seas5 = "",
-
+  season = "21S",
   inbred = "BRS312",
   rounds = 3000,
   eta = 1,
@@ -47,8 +47,6 @@ datasets=xgblinearBV(
                     "(LH212Ht/LH185//CJ7008)/(KDL6289/LH185)).DHB-21","BQR334",
                     "R6076","BRQ041","BBH030","BQR042/BRQ064)-B-36-1",
                     "F9898","85E","LFX7508","FC2YHR"
-
-
   ))
 )
 
