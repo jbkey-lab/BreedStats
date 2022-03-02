@@ -771,7 +771,7 @@ BV = function(fdp ,
              HG = paste(Gender, collapse = " , "))
 
     group_and_concat$HG = gsub(group_and_concat$HG, pattern="/", replacement = " , ")
-    group_and_concat$HetGrp <- sapply(group_and_concat$HG, function(x) paste(unique(unlist(str_split(x," , "))),
+    group_and_concat$HetGrp <- sapply(group_and_concat$HG, function(x) paste(unique(unlist(stringr::str_split(x," , "))),
                                                                        collapse = " , "))
     group_and_concat$HetGrp = gsub(group_and_concat$HetGrp, pattern="FEMALE , Male", replacement = "Female/Male")
     group_and_concat$HetGrp = gsub(group_and_concat$HetGrp, pattern="Male , FEMALE", replacement = "Female/Male")

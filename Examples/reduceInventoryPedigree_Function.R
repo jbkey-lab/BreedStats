@@ -1,6 +1,6 @@
 
 library(BreedStats)
-library(tidyverse)
+ library(tidyverse)
 library(data.table)
 
 #########################################################
@@ -9,7 +9,7 @@ wdp = paste0("C:/Users/jake.lamkey/Documents") #WORKING DATA PATH TO CHANGE PEDI
 
 #x="11_8_2021"
 #ws = paste0('R:/Breeding/MT_TP/Models/Data/Department Data/YT_BV Yield Trial Master Catalog ',x, ".csv")
-date="1_19_2022"
+date="3_2_2022"
 ws = paste0("P:/Temp/PedAdjust ",date,".csv")
 
 #YEARS IN INVENTORY CATALOG

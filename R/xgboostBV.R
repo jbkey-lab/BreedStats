@@ -35,7 +35,7 @@ randomEffect = function(CNN, CN,trainingx2, startVal=1){
 
 
 
-xgblinearBV = function(  hdp,
+xgblinearBV = function(  sdp,
                          fdp,
                          season,
                          s0,
@@ -138,7 +138,7 @@ xgblinearBV = function(  hdp,
                   HG = paste(Gender, collapse = " , "))
 
   group_and_concat$HG = gsub(group_and_concat$HG, pattern="/", replacement = " , ")
-  group_and_concat$HetGrp <- sapply(group_and_concat$HG, function(x) paste(unique(unlist(str_split(x," , "))),
+  group_and_concat$HetGrp <- sapply(group_and_concat$HG, function(x) paste(unique(unlist(stringr::str_split(x," , "))),
                                                                            collapse = " , "))
   group_and_concat$HetGrp = gsub(group_and_concat$HetGrp, pattern="FEMALE , Male", replacement = "Female/Male")
   group_and_concat$HetGrp = gsub(group_and_concat$HetGrp, pattern="Male , FEMALE", replacement = "Female/Male")
@@ -152,7 +152,8 @@ xgblinearBV = function(  hdp,
   trainingx2 = trainingx2 %>% dplyr::filter(Plot.Discarded != "Yes",
                                             Plot.Status != "3 - Bad",
                                             Yield < 650,
-                                            PCT.HOH < 50) %>%
+                                            PCT.HOH < 50,
+                                            EarHT > 30) %>%
                                             data.frame()
 
 
@@ -223,7 +224,8 @@ xgblinearBV = function(  hdp,
     dplyr::filter(FIELD != c("Contract - SSR-Garden City"),
                   FIELD != c("(HOLDING)"),
                   !grepl(FIELD, pattern = "Contract"),
-                  !grepl(FIELD, pattern = "Beck - H")) %>% select(field)
+                  !grepl(FIELD, pattern = "Beck - H")) %>%
+    dplyr::select(field)
 
 
   gc()
@@ -517,7 +519,7 @@ xgblinearBV = function(  hdp,
     gc()
     preds.test.bind = preds.test %>%
       dplyr::left_join( Year.2[,-2],by=c("Year"="num")) %>%
-      dplyr::group_by(field,ID) %>%
+      dplyr::group_by(field, ID) %>%
       dplyr::summarize(preds.test = mean(preds.test)) %>%
       dplyr::select(preds.test) %>%
       data.frame()
@@ -662,13 +664,13 @@ xgblinearBV = function(  hdp,
 
   openxlsx::write.xlsx(preds.test.bind.LINE, paste0(fdp,season,"/","A.Prop",season,"_predsByLine.xlsx"),rowNames=F,overwrite=T)
   rm(preds.test.bind.LINE);gc()
-  cat("Finished writing by LINE")
+  cat("Finished writing by LINE", "\n")
   openxlsx::write.xlsx(preds.test.bind.inbredselect, paste0(fdp,season,"/","A.Prop",season,"_predsbyLine",inbred,".xlsx"),rowNames=F,overwrite=T)
   rm(preds.test.bind.inbredselect);gc()
-  cat("Finished writing by LINE MALE")
+  cat("Finished writing by LINE MALE", "\n")
   openxlsx::write.xlsx(preds.testFemale, paste0(fdp,season,"/","A.Prop",season,"_predsByFemale.xlsx"),rowNames=F,overwrite=T)
   rm(preds.testFemale);gc()
-  cat("Finished writing by FEMALE")
+  cat("Finished writing by FEMALE", "\n")
 
   Field= "Field"
   if(!dir.exists(paste0(fdp,Field))){

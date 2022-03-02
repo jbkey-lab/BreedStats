@@ -7,7 +7,7 @@ library(BreedStats)
 
 
 datasets=xgblinearBV(
-  hdp = "C:/Users/jake.lamkey/Documents/",
+  sdp = "C:/Users/jake.lamkey/Documents/",
   fdp= "C:/Users/jake.lamkey/Documents/",
   s0=T,
   s1 =T,
@@ -41,12 +41,8 @@ datasets=xgblinearBV(
                     'BSR273',	'BSQ941',	'BUR032',	'PRW-AM',
                     'GP718Hx1',	'24AED-D02',"BAA419","BAA411","BHB075","BHJ471","GP702",
                     "40QHQ-E07", "BQS941","BRS313","BSS009","GP738","BRR553",
-                    "BQR042/BRQ064)-B-25-3", "BJH031/BHA011.DHB-045-1","BCA509",
-                    "F8994", "BJH031/I11054)-B.DH042","T1874",
-                    "BUR011", "(054530/016360)/ID5754-B-18", "BJH031/BHA011)-B-B-17",
-                    "(LH212Ht/LH185//CJ7008)/(KDL6289/LH185)).DHB-21","BQR334",
-                    "R6076","BRQ041","BBH030","BQR042/BRQ064)-B-36-1",
-                    "F9898","85E","LFX7508","FC2YHR"
+                   "BCA509","F8994","T1874","BUR011", "BQR334",
+                    "R6076","BRQ041","BBH030","F9898","85E","LFX7508","FC2YHR"
   ))
 )
 
