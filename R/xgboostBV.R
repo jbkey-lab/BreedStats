@@ -55,7 +55,8 @@ xgblinearBV = function(  sdp,
                          eta,
                          lambda,
                          alpha,
-                         male
+                         male,
+                         genotype
 ){
 
   # #####################################################
@@ -80,31 +81,28 @@ xgblinearBV = function(  sdp,
   # library(caret)
   # library(data.table)
   # season="21S"
-  # rounds = 3000
+  # rounds = 30
   # eta=1
   # alpha = .0003
   # lambda=.0003
-  # male = data.frame(male=c('BSQ033',	'GP734GTCBLL',	'BEX905',	'R08072HT',
-  #                   'BRQ529',	'8D2',	'SGI193',	'8SY',
-  #                   'GP718',	'FC2',	'BSR095',	'BRU059',
-  #                   'BRQ291',	'BRP251',	'TR6254RR2',	'BSQ033-PWRA',
-  #                   'BUR070',	'BRS312',	'8SY-AM',	'GP717Hx1',
-  #                   'BAC020',	'TPCJ6605',	'BSU151',	'SGI193-V2P',
-  #                   'BRQ064',	'GP6823Hx1',	'I10516',	'W8039RPGJZ',
-  #                   'FB6455',	'BSU311',	'GP717',	'BSQ002',
-  #                   'BAA441',	'GP738Hx1',	'BHH069',
-  #                   '84Z',	'TR4949',	'GP695Hx1',	'BSU313',
-  #                   'BHA493',	'R2846-NS6408DGV2P',	'I12003',	'R2846',
-  #                   'BSR273',	'BSQ941',	'BUR032',	'PRW-AM',
-  #                   'GP718Hx1',	'24AED-D02',"BAA419","BAA411","BHB075","BHJ471","GP702",
-  #                   "40QHQ-E07", "BQS941","BRS313","BSS009","GP738","BRR553",
-  #                   "BQR042/BRQ064)-B-25-3", "BJH031/BHA011.DHB-045-1","BCA509",
-  #                   "F8994", "BJH031/I11054)-B.DH042","T1874",
-  #                   "BUR011", "(054530/016360)/ID5754-B-18", "BJH031/BHA011)-B-B-17",
-  #                   "(LH212Ht/LH185//CJ7008)/(KDL6289/LH185)).DHB-21","BQR334",
-  #                   "R6076","BRQ041","BBH030",
-  #                   "F9898","85E","LFX7508","FC2YHR"
+  # male =   data.frame(male=c('BSQ033',	'GP734GTCBLL',	'BEX905',	'R08072HT',
+  #                            'BRQ529',	'8D2',	'SGI193',	'8SY',
+  #                            'GP718',	'FC2',	'BSR095',	'BRU059',
+  #                            'BRQ291',	'BRP251',	'TR6254RR2',	'BSQ033-PWRA',
+  #                            'BUR070',	'BRS312',	'8SY-AM',	'GP717Hx1',
+  #                            'BAC020',	'TPCJ6605',	'BSU151',	'SGI193-V2P',
+  #                            'BRQ064',	'GP6823Hx1',	'I10516',	'W8039RPGJZ',
+  #                            'FB6455',	'BSU311',	'GP717',	'BSQ002',
+  #                            'BAA441',	'GP738Hx1',	'BHH069',
+  #                            '84Z',	'TR4949',	'GP695Hx1',	'BSU313',
+  #                            'BHA493',	'R2846-NS6408DGV2P',	'I12003',	'R2846',
+  #                            'BSR273',	'BSQ941',	'BUR032',	'PRW-AM',
+  #                            'GP718Hx1',	'24AED-D02',"BAA419","BAA411","BHB075","BHJ471","GP702",
+  #                            "40QHQ-E07", "BQS941","BRS313","BSS009","GP738","BRR553",
+  #                            "BCA509","F8994","T1874","BUR011", "BQR334",
+  #                            "R6076","BRQ041","BBH030","F9898","85E","LFX7508","FC2YHR"
   # ))
+  # genotype=T
 
   season0=as.numeric(seas0)
   season1=as.numeric(seas1)
@@ -151,10 +149,9 @@ xgblinearBV = function(  sdp,
 
   trainingx2 = trainingx2 %>% dplyr::filter(Plot.Discarded != "Yes",
                                             Plot.Status != "3 - Bad",
-                                            Yield < 650,
-                                            PCT.HOH < 50,
-                                            EarHT > 30) %>%
-                                            data.frame()
+                                            Yield < 600,
+                                            PCT.HOH < 50 ) %>%
+    data.frame()
 
 
 
@@ -186,6 +183,10 @@ xgblinearBV = function(  sdp,
   gender.2 = RE[[1]]
   trainingx2 = RE[[2]]
 
+  linked.peds.rmdups = linked.peds[!duplicated(linked.peds$match),]
+
+  trainingx2 = left_join(trainingx2, linked.peds.rmdups[,2:3], by=c("FEMALE"="match"))
+
   nullvarnum = variety.2 %>% dplyr::filter((Variety)=="") %>% dplyr::select(num) %>% as.integer()
 
 
@@ -198,27 +199,69 @@ xgblinearBV = function(  sdp,
                                       season3=season3,season4=season4,season5=season5)
   BV.HSIdentical.df = rbind(BV.HSIdentical.df.A,
                             BV.HSIdentical.df.Prop)
+  if(genotype){
 
-  male = BV.HSIdentical.df[!duplicated(BV.HSIdentical.df$male),"male"]
-  female = BV.HSIdentical.df[!duplicated(BV.HSIdentical.df$female),"female"]
+    #Genos = openxlsx::read.xlsx(paste0(sdp,"exportmarkers.xlsx"), 1 )#; colnames(earht.prism.norm)[1] = "Female Pedigree"
+    #trimpeds = read.csv(paste0(sdp,"BV.HSIdentical.df.trimpeds.csv") )#; colnames(earht.prism.norm)[1] = "Female Pedigree"
+    #need two files for this function preprosseed separatly
+
+    BV.HSIdentical.df=genoReady(sdp=sdp, inbreds=inbreds, linked.peds=linked.peds,
+                                trainingx2=BV.HSIdentical.df)
+
+  }
+
+  #male = BV.HSIdentical.df[!duplicated(BV.HSIdentical.df$male),"male"]
+
+  female = BV.HSIdentical.df[!duplicated(BV.HSIdentical.df$FEMALE),c("FEMALE","female")]
+  female = BV.HSIdentical.df[!duplicated(BV.HSIdentical.df$FEMALE),c("FEMALE","female")]
+  female.index = grepl(female$FEMALE, pattern="^B|^G|^T|^S|^R")
+  female.grid = female[female.index==T,]
+
   field = BV.HSIdentical.df[!duplicated(BV.HSIdentical.df$field),c("field","FIELD","YEAR")]
   field = field %>%  dplyr::filter(YEAR == 2021) %>%  dplyr::select(field,FIELD)
+
   variety = trainingx2[!duplicated(trainingx2$ID), c("variety","ID")]
+
   id = trainingx2[!duplicated(trainingx2$ID), c("male","female","ID")]
+
   gender = trainingx2[!duplicated(trainingx2$ID), c("hetgrp","ID")]
 
 
 
-  rm(BV.HSIdentical.df.A, BV.HSIdentical.df.Prop, BV.MC.Entry.data.test, BV.MC.Entry.data,RE,group_and_concat,
-     linked.peds)
+  rm(BV.HSIdentical.df.A, BV.HSIdentical.df.Prop, BV.MC.Entry.data.test, BV.MC.Entry.data,RE,group_and_concat)
   gc()
 
-  male.3 =male.3
+  #male.3 =male.3
   male.3 = data.frame(male= male.3[!duplicated(male.3),])
 
   male.3 = dplyr::left_join(male.3,male.2[,-2],by=c("male"="MALE") )
 
   male.3 = na.omit(male.3)
+
+  male = data.frame(male.2[,1]); female = data.frame(female.2[,1])
+  colnames(male)="FEMALE"
+  colnames(female)="FEMALE"
+
+  inbreds = rbind(male,female)
+  inbreds = inbreds[!duplicated(inbreds$FEMALE), ]
+
+  inbreds = data.frame(inbreds)
+  rm(linked.peds.rmdups)
+  gc()
+
+  ##############################################
+  #process genotypes
+  #############################################
+  if(genotype){
+
+    #Genos = openxlsx::read.xlsx(paste0(sdp,"exportmarkers.xlsx"), 1 )#; colnames(earht.prism.norm)[1] = "Female Pedigree"
+    #trimpeds = read.csv(paste0(sdp,"BV.HSIdentical.df.trimpeds.csv") )#; colnames(earht.prism.norm)[1] = "Female Pedigree"
+    #need two files for this function preprosseed separatly
+
+    trainingx2=genoReady(sdp=sdp, inbreds=inbreds, linked.peds=linked.peds,
+                         trainingx2=trainingx2)
+
+  }
   #########################
   field = field %>% data.frame() %>%
     dplyr::filter(FIELD != c("Contract - SSR-Garden City"),
@@ -230,8 +273,8 @@ xgblinearBV = function(  sdp,
 
   gc()
   #field =data.frame(field=c(1,2))
-  testx2 = expand.grid(male.3$num, female, Year.2$num, field$field )
- # testx2$ID.cat = paste0(testx2$female, " + ", testx2$male)
+  testx2 = expand.grid(male.3$num, female.grid$female, Year.2$num, field$field )
+  # testx2$ID.cat = paste0(testx2$female, " + ", testx2$male)
 
   testx2 = dplyr::left_join(testx2, id, by=c("Var1"="male","Var2"="female"))
   testx2= dplyr::left_join(testx2, variety, by=c("ID"="ID"))
@@ -240,9 +283,9 @@ xgblinearBV = function(  sdp,
   colnames(testx2)=c("male","female","Year","field","ID","variety","hetgrp")
   testx2$ID.cat = paste0(testx2$female, " + ", testx2$male)
 
-   id.unk = testx2 %>% dplyr::filter(is.na(ID)) %>%
-     dplyr::mutate(ID.concat = paste0(female, " + ", male)) %>%
-     dplyr::distinct(ID.concat) %>%
+  id.unk = testx2 %>% dplyr::filter(is.na(ID)) %>%
+    dplyr::mutate(ID.concat = paste0(female, " + ", male)) %>%
+    dplyr::distinct(ID.concat) %>%
 
     dplyr::mutate(num = ((max(trainingx2$ID)+1):(length(ID.concat)+(max(trainingx2$ID))) ) )
 
@@ -251,24 +294,24 @@ xgblinearBV = function(  sdp,
   testx2$variety = ifelse(is.na(testx2$variety), nullvarnum, testx2$variety)
   #testx2$field = 9
 
-  # ID.3 = testx2 %>%
-  #   dplyr::left_join( field.2[,-2], by = c("field"="num")) %>%
-  #   dplyr::group_by(ID,field,male,female) %>%
-  #   dplyr::left_join( ID.2[,], by = c("ID"="num"))
-
-  # ID.3 = testx2 %>%
-  #   dplyr::left_join( Year.2[,-2],by=c("Year"="num")) %>%
-  #   dplyr::group_by(field, ID, male, female) %>%
-  #   dplyr::summarize(Year = mean(Year))
-  #
-  # ID.3 = ID.3 %>%
-  #   dplyr::left_join( field.2[,-2], by = c("field"="num")) %>%
-  #   dplyr::left_join( ID.2, by = c("ID"="num"))
-
-
-
-
   testx2 = testx2[ ,c(6,5,1,2,3,4,7)]
+
+  BV.HSIdentical.df = BV.HSIdentical.df[,-c(43,44)]
+  trainingx2 = trainingx2[,-c(43,44)]
+
+  if(genotype){
+    BV.HSIdentical.df.join=BV.HSIdentical.df[!duplicated(BV.HSIdentical.df$female),c(38,43,44,45)]
+
+    #Genos = openxlsx::read.xlsx(paste0(sdp,"exportmarkers.xlsx"), 1 )#; colnames(earht.prism.norm)[1] = "Female Pedigree"
+    #trimpeds = read.csv(paste0(sdp,"BV.HSIdentical.df.trimpeds.csv") )#; colnames(earht.prism.norm)[1] = "Female Pedigree"
+    #need two files for this function preprosseed separatly
+
+    testx2 = testx2 %>%
+      left_join(BV.HSIdentical.df.join)
+    rm(BV.HSIdentical.df.join)
+    gc()
+  }
+
 
 
 
@@ -277,15 +320,33 @@ xgblinearBV = function(  sdp,
   classes<-sapply(trainingx2[c(10:22)], class); classes
   #cat(paste0(fdp),"\n")
   #cat("F", "\n")
-  if(!dir.exists(paste0(fdp,season))){
-    dir.create(paste0(fdp,season))
+  if(genotype){
+
+    if(!dir.exists(paste0(fdp,season,"_genotype"))){
+      dir.create(paste0(fdp,season,"_genotype"))
+    }
+
+
+    sink(file=paste0(fdp,season,"_genotype","/XGBlinearBV_genotype",season,".txt"),split=TRUE)
+
+    pdf(file = paste0(fdp,season,"_genotype","/XGBlinearBV_genotype",season,".pdf"), paper="special",width = 11,
+        height = 8.5,family="Times", pointsize=11,bg="white",fg="black")
+    #name='yield'
+  }else{
+    if(!dir.exists(paste0(fdp,season))){
+      dir.create(paste0(fdp,season))
+    }
+
+
+    sink(file=paste0(fdp,season,"/XGBlinearBV",season,".txt"),split=TRUE)
+
+    pdf(file = paste0(fdp,season,"/XGBlinearBV",season,".pdf"), paper="special",width = 11,
+        height = 8.5,family="Times", pointsize=11,bg="white",fg="black")
+
   }
 
-  sink(file=paste0(fdp,season,"/XGBlinearBV_",season, ".txt"),split=TRUE)
 
-  pdf(file = paste0(fdp,season,"/XGBlinearBV_",season, ".pdf"), paper="special",width = 11,
-      height = 8.5,family="Times", pointsize=11,bg="white",fg="black")
-  #name='yield'
+
   for(name in names){
     print(name)
   }
@@ -302,8 +363,12 @@ xgblinearBV = function(  sdp,
   #                                         "asreml","setDT","left_join","fitted","data.table","transform","data.table")
   #  ) %dopar% {
   #library(asreml)
+  rm(linked.peds, id.unk, gender,female,variety, male,male.3, id, field, female.grid)
+  gc()
+
   name="Yield"
   cat("G", "\n")
+
 
   for(name in names){
     cat(paste0("--------------------------------------",name,"--------------------------------------"), "\n")
@@ -324,7 +389,6 @@ xgblinearBV = function(  sdp,
     nameCol = paste0(name)
     BV.HSIdentical.df = data.frame(BV.HSIdentical.df)
     BV.HSIdentical.df$feature = BV.HSIdentical.df[,name]
-    ap.prop = na.omit( BV.HSIdentical.df[,36:43] )
     #trainingx2 = na.omit(trainingx2[,c(name,41,39,37,38,40,36,42)]) #yield = 22, plt.height=13, ear=10
 
     # id.unk.all = id.unk %>%
@@ -339,9 +403,14 @@ xgblinearBV = function(  sdp,
 
 
     datasets = trainVal(data = trainingx2, colToInd= "ID", sample = 0.95)
-    trainx2 = na.omit(rbind(datasets[[1]])[,36:43])
-    validatex2 =na.omit( datasets[[2]][,36:43] )
+    gc()
 
+    trainx2 = na.omit((datasets[[1]])[, -c(1:35) ])
+    validatex2 =na.omit( datasets[[2]][, -c(1:35) ] )
+
+    rm(datasets)
+
+    gc()
 
     ##################################################################
     #final_grid1=expand.grid(nrounds=550, eta=.5, max_depth=3, gamma=0,colsample_bytree=0.95,min_child_weight=1,subsample = 1)
@@ -351,20 +420,26 @@ xgblinearBV = function(  sdp,
     #final_grid2 <- expand.grid(nrounds = 2500, eta = .5, lambda = 0.0003, alpha=0.0003)
 
     final_grid3 <- expand.grid(nrounds = rounds, eta = eta, lambda = lambda, alpha=alpha)
+
+    final_grid3 <- expand.grid(nrounds = 300, eta = 1, lambda = 0.0003, alpha=0.0003)
+
+
     #final_grid4 <- expand.grid(nrounds = c(5000), eta = 1, lambda = 0.0003, alpha=0.0003)
 
     # final_grid3 <- expand.grid(mstop = 500, maxdepth = 2, nu = 0.1)
     # final_grid4 <- expand.grid(committees = 10, neighbors = 20)
 
     #trainx2$norm = (trainx2$Yield - mean(trainx2$Yield))/(max(trainx2$Yield)-min(trainx2$Yield))
+    gc()
+
 
     models.list2 <- caretEnsemble::caretList(
-      x=as.matrix(trainx2[,-8]),
-      y=(trainx2[,8]),
+      x=as.matrix(trainx2[, -c(300:ncol(trainx2))  ] ),
+      y=(trainx2[,ncol(trainx2)]),
       continue_on_fail = T,
       trControl=caret::trainControl(method="cv",
                                     number=1, #1
-                                    index = createFolds((trainx2[,8]),k=2), #2
+                                    index = createFolds((trainx2[,ncol(trainx2)]),k=2), #2
                                     savePredictions = TRUE,
                                     #classProbs=T,
                                     allowParallel = TRUE,
@@ -442,30 +517,34 @@ xgblinearBV = function(  sdp,
     #######Validate Corn
     plot(caret::varImp(models.list2$qrf7, scale=T))
 
-    preds = predict(NCAA.stacked, validatex2[,-8])
-    cat("r2 for Validate ALL is: ",cor(validatex2[, 8], preds)^2, "\n")
-    cat("rmse for Validate ALL is: ",sqrt(mean((validatex2[, 8] -  preds)^2)), "\n")
+    preds = predict(NCAA.stacked, validatex2[,-c(300:ncol(validatex2))])
+    cat("r2 for Validate ALL is: ",cor(validatex2[, ncol(validatex2)], preds)^2, "\n")
+    cat("rmse for Validate ALL is: ",sqrt(mean((validatex2[, ncol(validatex2)] -  preds)^2)), "\n")
 
 
     hist(preds, main= paste0(name))
-    plot(preds, validatex2[,8], col = c("red","blue"), main = paste0(name))
+    plot(preds, validatex2[,ncol(validatex2)], col = c("red","blue"), main = paste0(name))
     #######training set
-    preds.t = predict(NCAA.stacked, trainx2[,-8])
-    cat("r2 for Train ALL is: ",cor(trainx2[, 8], preds.t)^2, "\n")
-    cat("rmse for Train ALL is: ",sqrt(mean((trainx2[, 8] -  preds.t)^2)), "\n")
+    preds.t = predict(NCAA.stacked, trainx2[,-c(11:ncol(trainx2))])
+    cat("r2 for Train ALL is: ",cor(trainx2[, ncol(trainx2)], preds.t)^2, "\n")
+    cat("rmse for Train ALL is: ",sqrt(mean((trainx2[, ncol(trainx2)] -  preds.t)^2)), "\n")
 
     hist(preds.t, main= paste0(name))
+    plot(preds.t, trainx2[,ncol(trainx2)], col = c("red","blue"), main = paste0(name))
+
     #######AProp set
-    preds.ap = predict(NCAA.stacked, ap.prop[,-8])
-    cat("r2 for Prop and A level is: ",cor(ap.prop[,8], preds.ap)^2, "\n")
-    cat("rmse for Prop and A level is: ", sqrt(mean((ap.prop[,8] -  preds.ap)^2)), "\n")
+    ap.prop = na.omit( BV.HSIdentical.df[,-c(1:35) ] )
+
+    preds.ap = predict(NCAA.stacked, ap.prop[,-c(11:ncol(ap.prop))])
+    cat("r2 for Prop and A level is: ",cor(ap.prop[,ncol(ap.prop)], preds.ap)^2, "\n")
+    cat("rmse for Prop and A level is: ", sqrt(mean((ap.prop[,ncol(ap.prop)] -  preds.ap)^2)), "\n")
 
     #sqrt(mean((ap.prop[,8] -  preds.ap)^2))
 
     hist(preds.ap, main= paste0(name))
-    plot(preds.ap, ap.prop[,8], col = c("red","blue"), main = paste0(name))
+    plot(preds.ap, ap.prop[,ncol(ap.prop)], col = c("red","blue"), main = paste0(name))
 
-    preds.ap = data.table(ap.prop[,-8], preds.ap)
+    preds.ap = data.table(ap.prop[,-ncol(ap.prop)], preds.ap)
 
     preds.test.agg.FEMALE = preds.ap %>%
       dplyr::group_by(female) %>%
@@ -483,7 +562,7 @@ xgblinearBV = function(  sdp,
     preds.test.agg = preds.test.agg %>%
       dplyr::group_by(FEMALE) %>%
       dplyr::summarize(preds.ap = mean(preds.ap))
-      #dplyr::mutate(BV = (preds.ap - 228)/2 )
+    #dplyr::mutate(BV = (preds.ap - 228)/2 )
     hist(preds.test.agg$preds.ap, main= paste0(name))
     #biplot(preds.test.agg$FEMALE, preds.test.agg$BV)
 
@@ -501,8 +580,10 @@ xgblinearBV = function(  sdp,
     #    BV.HSIdentical.df.3, male.3, validatex2, trainx2, BV.HSIdentical.df)
     # gc()
     #######expand.grind set male.female.year
+    rm(trainx2, validatex2,ap.prop)
+    gc()
     cat("Predicting A and Prop test level for all combinations over Years, Locations, Male, Female", "\n")
-    preds.test = predict(NCAA.stacked, testx2[,c(6,3,4,2,5,1,7)])
+    preds.test = predict(NCAA.stacked, testx2[,c(6,3,4,2,5,1,7,8,9,10)])
 
     hist(preds.test, main= paste0(name))
 
@@ -558,11 +639,7 @@ xgblinearBV = function(  sdp,
   dev.off()
   ###############################
   gc()
-  male = data.frame(male.2[,1]); female = data.frame(female.2[,1])
-  colnames(male)="FEMALE"
-  colnames(female)="FEMALE"
 
-  inbreds = rbind(male,female)
 
   preds.testFemale = dplyr::left_join(dplyr::left_join(dplyr::left_join(dplyr::left_join(dplyr::left_join(
     dplyr::left_join(dplyr::left_join(dplyr::left_join(dplyr::left_join(
@@ -661,28 +738,53 @@ xgblinearBV = function(  sdp,
 
   gc()
   #preds.test.agg.FIELD.LINE = tidyr::separate(preds.test.agg.FIELD.LINE, sep= " \\+ " ,col = LINE, into=c("FEMALE","MALE"), remove=F)
+  if(genotype){
+    openxlsx::write.xlsx(preds.test.bind.LINE, paste0(fdp,season,"_genotype","/","A.Prop",season,"_predsByLine.xlsx"),rowNames=F,overwrite=T)
+    rm(preds.test.bind.LINE);gc()
+    cat("Finished writing by LINE", "\n")
+    openxlsx::write.xlsx(preds.test.bind.inbredselect, paste0(fdp,season,"_genotype","/","A.Prop",season,"_predsbyLine",inbred,".xlsx"),rowNames=F,overwrite=T)
+    rm(preds.test.bind.inbredselect);gc()
+    cat("Finished writing by LINE MALE", "\n")
+    openxlsx::write.xlsx(preds.testFemale, paste0(fdp,season,"_genotype","/","A.Prop",season,"_predsByFemale.xlsx"),rowNames=F,overwrite=T)
+    rm(preds.testFemale);gc()
+    cat("Finished writing by FEMALE", "\n")
 
-  openxlsx::write.xlsx(preds.test.bind.LINE, paste0(fdp,season,"/","A.Prop",season,"_predsByLine.xlsx"),rowNames=F,overwrite=T)
-  rm(preds.test.bind.LINE);gc()
-  cat("Finished writing by LINE", "\n")
-  openxlsx::write.xlsx(preds.test.bind.inbredselect, paste0(fdp,season,"/","A.Prop",season,"_predsbyLine",inbred,".xlsx"),rowNames=F,overwrite=T)
-  rm(preds.test.bind.inbredselect);gc()
-  cat("Finished writing by LINE MALE", "\n")
-  openxlsx::write.xlsx(preds.testFemale, paste0(fdp,season,"/","A.Prop",season,"_predsByFemale.xlsx"),rowNames=F,overwrite=T)
-  rm(preds.testFemale);gc()
-  cat("Finished writing by FEMALE", "\n")
+    Field= "Field"
+    if(!dir.exists(paste0(fdp,season,"_genotype",Field))){
+      dir.create(paste0(fdp,season,"_genotype",Field))
+    }
 
-  Field= "Field"
-  if(!dir.exists(paste0(fdp,Field))){
-    dir.create(paste0(fdp,Field))
+    field.index = preds.test.bind[!duplicated(preds.test.bind$FIELD), "FIELD"]
+    field.index = as.matrix(field.index)
+
+    for(i in field.index){
+      field.subset = subset(x=preds.test.bind, FIELD == i )
+      openxlsx::write.xlsx(field.subset, paste0(fdp,season,"_genotype","/",Field,"/A.Prop",season,"_predsbyLINE",i,".xlsx"),rowNames=F,overwrite=T)
+    }
   }
+  else{
+    openxlsx::write.xlsx(preds.test.bind.LINE, paste0(fdp,season,"/","A.Prop",season,"_predsByLine.xlsx"),rowNames=F,overwrite=T)
+    rm(preds.test.bind.LINE);gc()
+    cat("Finished writing by LINE", "\n")
+    openxlsx::write.xlsx(preds.test.bind.inbredselect, paste0(fdp,season,"/","A.Prop",season,"_predsbyLine",inbred,".xlsx"),rowNames=F,overwrite=T)
+    rm(preds.test.bind.inbredselect);gc()
+    cat("Finished writing by LINE MALE", "\n")
+    openxlsx::write.xlsx(preds.testFemale, paste0(fdp,season,"/","A.Prop",season,"_predsByFemale.xlsx"),rowNames=F,overwrite=T)
+    rm(preds.testFemale);gc()
+    cat("Finished writing by FEMALE", "\n")
 
-  field.index = preds.test.bind[!duplicated(preds.test.bind$FIELD), "FIELD"]
-  field.index = as.matrix(field.index)
+    Field= "Field"
+    if(!dir.exists(paste0(fdp,season,Field))){
+      dir.create(paste0(fdp,season,Field))
+    }
 
-  for(i in field.index){
-    field.subset = subset(x=preds.test.bind, FIELD == i )
-    openxlsx::write.xlsx(field.subset, paste0(fdp,season,"/",Field,"/A.Prop",season,"_predsbyLINE",i,".xlsx"),rowNames=F,overwrite=T)
+    field.index = preds.test.bind[!duplicated(preds.test.bind$FIELD), "FIELD"]
+    field.index = as.matrix(field.index)
+
+    for(i in field.index){
+      field.subset = subset(x=preds.test.bind, FIELD == i )
+      openxlsx::write.xlsx(field.subset, paste0(fdp,season,"/",Field,"/A.Prop",season,"_predsbyLINE",i,".xlsx"),rowNames=F,overwrite=T)
+    }
   }
 
   cat("DONE", "\n")
