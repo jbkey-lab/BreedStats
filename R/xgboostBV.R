@@ -60,49 +60,49 @@ xgblinearBV = function(  sdp,
 ){
 
   # #####################################################
-  # s0=T
-  # s1 =T
-  # s2 =F
-  # s3 =F
-  # s4 =F
-  # s5 =F
-  # seas0 = 21
-  # seas1 = 20
-  # seas2 = ""
-  # seas3 = ""
-  # seas4 = ""
-  # seas5 = ""
-  # sdp = "C:/Users/jake.lamkey/Documents/"
-  # fdp= "C:/Users/jake.lamkey/Documents/"
-  # library(BreedStats)
-  # library(tidyverse)
-  # library(doParallel)
-  # library(caretEnsemble)
-  # library(caret)
-  # library(data.table)
-  # season="21S"
-  # rounds = 30
-  # eta=1
-  # alpha = .0003
-  # lambda=.0003
-  # male =   data.frame(male=c('BSQ033',	'GP734GTCBLL',	'BEX905',	'R08072HT',
-  #                            'BRQ529',	'8D2',	'SGI193',	'8SY',
-  #                            'GP718',	'FC2',	'BSR095',	'BRU059',
-  #                            'BRQ291',	'BRP251',	'TR6254RR2',	'BSQ033-PWRA',
-  #                            'BUR070',	'BRS312',	'8SY-AM',	'GP717Hx1',
-  #                            'BAC020',	'TPCJ6605',	'BSU151',	'SGI193-V2P',
-  #                            'BRQ064',	'GP6823Hx1',	'I10516',	'W8039RPGJZ',
-  #                            'FB6455',	'BSU311',	'GP717',	'BSQ002',
-  #                            'BAA441',	'GP738Hx1',	'BHH069',
-  #                            '84Z',	'TR4949',	'GP695Hx1',	'BSU313',
-  #                            'BHA493',	'R2846-NS6408DGV2P',	'I12003',	'R2846',
-  #                            'BSR273',	'BSQ941',	'BUR032',	'PRW-AM',
-  #                            'GP718Hx1',	'24AED-D02',"BAA419","BAA411","BHB075","BHJ471","GP702",
-  #                            "40QHQ-E07", "BQS941","BRS313","BSS009","GP738","BRR553",
-  #                            "BCA509","F8994","T1874","BUR011", "BQR334",
-  #                            "R6076","BRQ041","BBH030","F9898","85E","LFX7508","FC2YHR"
-  # ))
-  # genotype=T
+  s0=T
+  s1 =T
+  s2 =F
+  s3 =F
+  s4 =F
+  s5 =F
+  seas0 = 21
+  seas1 = 20
+  seas2 = ""
+  seas3 = ""
+  seas4 = ""
+  seas5 = ""
+  sdp = "C:/Users/jake.lamkey/Documents/"
+  fdp= "C:/Users/jake.lamkey/Documents/"
+  library(BreedStats)
+  library(tidyverse)
+  library(doParallel)
+  library(caretEnsemble)
+  library(caret)
+  library(data.table)
+  season="21S"
+  rounds = 30
+  eta=1
+  alpha = .0003
+  lambda=.0003
+  male =   data.frame(male=c('BSQ033',	'GP734GTCBLL',	'BEX905',	'R08072HT',
+                             'BRQ529',	'8D2',	'SGI193',	'8SY',
+                             'GP718',	'FC2',	'BSR095',	'BRU059',
+                             'BRQ291',	'BRP251',	'TR6254RR2',	'BSQ033-PWRA',
+                             'BUR070',	'BRS312',	'8SY-AM',	'GP717Hx1',
+                             'BAC020',	'TPCJ6605',	'BSU151',	'SGI193-V2P',
+                             'BRQ064',	'GP6823Hx1',	'I10516',	'W8039RPGJZ',
+                             'FB6455',	'BSU311',	'GP717',	'BSQ002',
+                             'BAA441',	'GP738Hx1',	'BHH069',
+                             '84Z',	'TR4949',	'GP695Hx1',	'BSU313',
+                             'BHA493',	'R2846-NS6408DGV2P',	'I12003',	'R2846',
+                             'BSR273',	'BSQ941',	'BUR032',	'PRW-AM',
+                             'GP718Hx1',	'24AED-D02',"BAA419","BAA411","BHB075","BHJ471","GP702",
+                             "40QHQ-E07", "BQS941","BRS313","BSS009","GP738","BRR553",
+                             "BCA509","F8994","T1874","BUR011", "BQR334",
+                             "R6076","BRQ041","BBH030","F9898","85E","LFX7508","FC2YHR"
+  ))
+  genotype=T
 
   season0=as.numeric(seas0)
   season1=as.numeric(seas1)
@@ -113,7 +113,7 @@ xgblinearBV = function(  sdp,
   male.3=male
 
   cores=parallel::detectCores()
-  cl <- parallel::makeCluster(cores[1]-1, outfile="")
+  cl <- parallel::makeCluster(cores[1]-2, outfile="")
   doParallel::registerDoParallel(cl)
 
 
@@ -371,6 +371,7 @@ xgblinearBV = function(  sdp,
 
 
   for(name in names){
+
     cat(paste0("--------------------------------------",name,"--------------------------------------"), "\n")
 
     if( "feature" %in% colnames(trainingx2)){
@@ -390,6 +391,48 @@ xgblinearBV = function(  sdp,
     BV.HSIdentical.df = data.frame(BV.HSIdentical.df)
     BV.HSIdentical.df$feature = BV.HSIdentical.df[,name]
     #trainingx2 = na.omit(trainingx2[,c(name,41,39,37,38,40,36,42)]) #yield = 22, plt.height=13, ear=10
+
+
+    if(genotype){
+
+      #markerList = list()
+      markerSelect = function(trainingx2 ,markerList,j ){
+        markerLm = stats::lm(feature ~ field + ID + female + male + hetgrp + Year + variety + PC1 +
+                               PC2 + PC3 + trainingx2[, j], data = trainingx2)
+
+        sumMarkerLm = summary(markerLm)
+        sumMarkerLmPvalue=as.numeric(sumMarkerLm$coefficients[ ,"Pr(>|t|)"]["trainingx2[, j]"])
+        #
+        if(sumMarkerLmPvalue <= 0.000001){
+
+          #cat(j,": P-value is ",sumMarkerLmPvalue,"\n" )
+          #   #markerList[[length(markerList)+1]] = j
+          return(j)
+          }
+        rm(markerLM,sumMarkerLm,sumMarkerLmPvalue,i )
+
+      }
+
+      markerData=foreach(j=colnames(trainingx2)[46:ncol(trainingx2)] ,.packages=c("stats"),
+                         .export=c("lm"),.combine=rbind,.inorder=F) %dopar% {
+                           #for( j in colnames(trainingx2)[46:ncol(trainingx2)]  ){
+
+                           a = markerSelect(trainingx2 =trainingx2 ,markerList=markerList,j=j )
+                           a
+
+
+                         }
+
+      #markerData = data.frame(markers = markerData)
+
+      trainingMarkers = trainingx2[, colnames(markerData)]
+      trainingx2 = data.frame(trainingx2[ ,1:45], trainingMarkers)
+
+      rm(markerData, trainingMarkers)
+      gc()
+    }
+
+
 
     # id.unk.all = id.unk %>%
     #   separate(col=ID.concat, sep=" \\+ ", into=c("female","male"),remove=F ) %>%
