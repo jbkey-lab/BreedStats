@@ -366,7 +366,7 @@ xgblinearBV = function(  sdp,
   rm(linked.peds, id.unk, gender,female,variety, male,male.3, id, field, female.grid)
   gc()
 
-  name="Yield"
+  name="Plt.Height"
   cat("G", "\n")
 
 
@@ -396,19 +396,21 @@ xgblinearBV = function(  sdp,
     if(genotype){
 
       #markerList = list()
+
       markerSelect = function(trainingx2 ,markerList,j ){
-        markerLm = stats::lm(feature ~ field + ID + female + male + hetgrp + Year + variety + PC1 +
-                               PC2 + PC3 + trainingx2[, j], data = trainingx2)
+        markerLm = stats::lm(feature ~ trainingx2[, j], data = trainingx2)
+
+        #variety + PC1 + PC2 + PC3 +field + ID + hetgrp female + male + Year +
 
         sumMarkerLm = summary(markerLm)
         sumMarkerLmPvalue=as.numeric(sumMarkerLm$coefficients[ ,"Pr(>|t|)"]["trainingx2[, j]"])
         #
-        if(sumMarkerLmPvalue <= 0.000001){
-
+        if(sumMarkerLmPvalue <= 0.0000000000000000000000000000000000000001){
+          #print(j)
           #cat(j,": P-value is ",sumMarkerLmPvalue,"\n" )
           #   #markerList[[length(markerList)+1]] = j
           return(j)
-          }
+        }
         rm(markerLM,sumMarkerLm,sumMarkerLmPvalue,i )
 
       }
@@ -425,11 +427,19 @@ xgblinearBV = function(  sdp,
 
       #markerData = data.frame(markers = markerData)
 
-      trainingMarkers = trainingx2[, colnames(markerData)]
-      trainingx2 = data.frame(trainingx2[ ,1:45], trainingMarkers)
+      trainingMarkers = trainingx2[, (markerData)]
+      cat("----------------------------Training Marker List-------------------------------","\n")
+
+      markerData
+      cat("\n")
+
+      trainingx3 = data.frame(trainingx2[ ,1:45], trainingMarkers)
 
       rm(markerData, trainingMarkers)
       gc()
+
+
+
     }
 
 
@@ -444,17 +454,29 @@ xgblinearBV = function(  sdp,
     #   select(-ID.concat)
     # colnames(id.unk.all) = c("female","male","line",'MALE',"FEMALE","LINE")
 
+    if(genotype){
 
-    datasets = trainVal(data = trainingx2, colToInd= "ID", sample = 0.95)
-    gc()
+      datasets = trainVal(data = trainingx3, colToInd= "ID", sample = 0.95)
+      gc()
 
-    trainx2 = na.omit((datasets[[1]])[, -c(1:35) ])
-    validatex2 =na.omit( datasets[[2]][, -c(1:35) ] )
+      trainx2 = na.omit((datasets[[1]])[, -c(1:35) ])
+      validatex2 =na.omit( datasets[[2]][, -c(1:35) ] )
 
-    rm(datasets)
+      rm(datasets,trainingx3)
 
-    gc()
+      gc()
 
+    }else{
+      datasets = trainVal(data = trainingx2, colToInd= "ID", sample = 0.95)
+      gc()
+
+      trainx2 = na.omit((datasets[[1]])[, -c(1:35) ])
+      validatex2 =na.omit( datasets[[2]][, -c(1:35) ] )
+
+      rm(datasets)
+
+      gc()
+    }
     ##################################################################
     #final_grid1=expand.grid(nrounds=550, eta=.5, max_depth=3, gamma=0,colsample_bytree=0.95,min_child_weight=1,subsample = 1)
     #final_grid2=expand.grid(nrounds=100, eta=.5, max_depth=5, gamma=0,colsample_bytree=0.95,min_child_weight=1,subsample = 1)
@@ -464,10 +486,11 @@ xgblinearBV = function(  sdp,
 
     final_grid3 <- expand.grid(nrounds = rounds, eta = eta, lambda = lambda, alpha=alpha)
 
-    final_grid3 <- expand.grid(nrounds = 300, eta = 1, lambda = 0.0003, alpha=0.0003)
+    final_grid3 <- expand.grid(nrounds = 3000, eta = 1, lambda = 0.0003, alpha=0.0003)
 
 
-    #final_grid4 <- expand.grid(nrounds = c(5000), eta = 1, lambda = 0.0003, alpha=0.0003)
+    # final_grid4 <- expand.grid(nrounds = c(2500), eta = 1, lambda = 0.0003, alpha=0.0003)
+    # final_grid2 <- expand.grid(nrounds = c(2000), eta = 1, lambda = 0.0003, alpha=0.0003)
 
     # final_grid3 <- expand.grid(mstop = 500, maxdepth = 2, nu = 0.1)
     # final_grid4 <- expand.grid(committees = 10, neighbors = 20)
@@ -477,7 +500,7 @@ xgblinearBV = function(  sdp,
 
 
     models.list2 <- caretEnsemble::caretList(
-      x=as.matrix(trainx2[, -c(300:ncol(trainx2))  ] ),
+      x=as.matrix(trainx2[, -c(ncol(trainx2))  ] ),
       y=(trainx2[,ncol(trainx2)]),
       continue_on_fail = T,
       trControl=caret::trainControl(method="cv",
@@ -512,7 +535,7 @@ xgblinearBV = function(  sdp,
         #qrf5=caretModelSpec(method="qrf", ntree=10, tuneLength = 1), #5
         #qrf6=caretModelSpec(method="xgbLinear", tuneGrid = final_grid2), #5
         #qrf5=caretModelSpec(method="qrf",ntree=10, tuneLength = 1), #5
-        #qrf6=caretModelSpec(method="xgbLinear", tuneGrid = final_grid2), #5
+      #  qrf6=caretModelSpec(method="xgbLinear", tuneGrid = final_grid2), #5
 
         qrf7=caretEnsemble::caretModelSpec(method="xgbLinear", tuneGrid = final_grid3) #5
         #qrf8=caretEnsemble::caretModelSpec(method="xgbLinear", tuneGrid = final_grid4) #5
@@ -535,7 +558,7 @@ xgblinearBV = function(  sdp,
 
     NCAA.stacked<-caretEnsemble::caretEnsemble(models.list2, # + 95
                                                trControl = caret::trainControl(
-                                                 number=2,
+                                                 number=10,
                                                  method="boot",
                                                  verboseIter =TRUE,
                                                  allowParallel = T
@@ -544,9 +567,9 @@ xgblinearBV = function(  sdp,
 
     invisible(gc())
     #626063 + 36001
-    #----Yield Val = 59
-    #----Yield tra = 72
-    #----Yield apr = 68
+    #----Yield Val = 59, 52
+    #----Yield tra = 79, 72
+    #----Yield apr = 76, 68
 
     #~~~~~~~~~~~~~~~~~~
     #
@@ -557,10 +580,10 @@ xgblinearBV = function(  sdp,
     #----earht Val = 53
     #----earht tra = 68
 
-    #######Validate Corn
-    plot(caret::varImp(models.list2$qrf7, scale=T))
+    #######Validate Cor
+    (caret::varImp(models.list2$qrf7, scale=T))
 
-    preds = predict(NCAA.stacked, validatex2[,-c(300:ncol(validatex2))])
+    preds = predict(NCAA.stacked, validatex2[,-c(ncol(validatex2))])
     cat("r2 for Validate ALL is: ",cor(validatex2[, ncol(validatex2)], preds)^2, "\n")
     cat("rmse for Validate ALL is: ",sqrt(mean((validatex2[, ncol(validatex2)] -  preds)^2)), "\n")
 
@@ -568,7 +591,7 @@ xgblinearBV = function(  sdp,
     hist(preds, main= paste0(name))
     plot(preds, validatex2[,ncol(validatex2)], col = c("red","blue"), main = paste0(name))
     #######training set
-    preds.t = predict(NCAA.stacked, trainx2[,-c(11:ncol(trainx2))])
+    preds.t = predict(NCAA.stacked, trainx2[,-c(ncol(trainx2))])
     cat("r2 for Train ALL is: ",cor(trainx2[, ncol(trainx2)], preds.t)^2, "\n")
     cat("rmse for Train ALL is: ",sqrt(mean((trainx2[, ncol(trainx2)] -  preds.t)^2)), "\n")
 
@@ -578,7 +601,7 @@ xgblinearBV = function(  sdp,
     #######AProp set
     ap.prop = na.omit( BV.HSIdentical.df[,-c(1:35) ] )
 
-    preds.ap = predict(NCAA.stacked, ap.prop[,-c(11:ncol(ap.prop))])
+    preds.ap = predict(NCAA.stacked, ap.prop[,-c(ncol(ap.prop))])
     cat("r2 for Prop and A level is: ",cor(ap.prop[,ncol(ap.prop)], preds.ap)^2, "\n")
     cat("rmse for Prop and A level is: ", sqrt(mean((ap.prop[,ncol(ap.prop)] -  preds.ap)^2)), "\n")
 
