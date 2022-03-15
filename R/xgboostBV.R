@@ -405,11 +405,12 @@ xgblinearBV = function(  sdp,
         sumMarkerLm = summary(markerLm)
         sumMarkerLmPvalue=as.numeric(sumMarkerLm$coefficients[ ,"Pr(>|t|)"]["trainingx2[, j]"])
         #
-        if(sumMarkerLmPvalue <= 0.0000000000000000000000000000000000000001){
+        if(sumMarkerLmPvalue <= 0.001){
           #print(j)
           #cat(j,": P-value is ",sumMarkerLmPvalue,"\n" )
           #   #markerList[[length(markerList)+1]] = j
-          return(j)
+          a = data.frame(j, sumMarkerLmPvalue)
+          return(a)
         }
         rm(markerLM,sumMarkerLm,sumMarkerLmPvalue,i )
 
@@ -424,13 +425,15 @@ xgblinearBV = function(  sdp,
 
 
                          }
-
+      markerData.index = order(markerData$sumMarkerLmPvalue, decreasing = F)
+      markerData = markerData[markerData.index, ]
+      markerData = markerData[1:300, ]
       #markerData = data.frame(markers = markerData)
 
-      trainingMarkers = trainingx2[, (markerData)]
+      trainingMarkers = trainingx2[, (markerData$j)]
       cat("----------------------------Training Marker List-------------------------------","\n")
 
-      markerData
+      markerData[1:50,]
       cat("\n")
 
       trainingx3 = data.frame(trainingx2[ ,1:45], trainingMarkers)
@@ -500,8 +503,8 @@ xgblinearBV = function(  sdp,
 
 
     models.list2 <- caretEnsemble::caretList(
-      x=as.matrix(trainx2[, -c(ncol(trainx2))  ] ),
-      y=(trainx2[,ncol(trainx2)]),
+      x=trainx2 %>% dplyr::select(-feature) %>% as.matrix(),
+      y=(trainx2[,"feature"]),
       continue_on_fail = T,
       trControl=caret::trainControl(method="cv",
                                     number=1, #1
@@ -558,7 +561,7 @@ xgblinearBV = function(  sdp,
 
     NCAA.stacked<-caretEnsemble::caretEnsemble(models.list2, # + 95
                                                trControl = caret::trainControl(
-                                                 number=10,
+                                                 number=2,
                                                  method="boot",
                                                  verboseIter =TRUE,
                                                  allowParallel = T
@@ -583,34 +586,34 @@ xgblinearBV = function(  sdp,
     #######Validate Cor
     (caret::varImp(models.list2$qrf7, scale=T))
 
-    preds = predict(NCAA.stacked, validatex2[,-c(ncol(validatex2))])
-    cat("r2 for Validate ALL is: ",cor(validatex2[, ncol(validatex2)], preds)^2, "\n")
-    cat("rmse for Validate ALL is: ",sqrt(mean((validatex2[, ncol(validatex2)] -  preds)^2)), "\n")
+    preds = predict(NCAA.stacked, validatex2 %>% dplyr::select(-feature))
+    cat("r2 for Validate ALL is: ",cor(validatex2[, "feature"], preds)^2, "\n")
+    cat("rmse for Validate ALL is: ",sqrt(mean((validatex2[, "feature"] -  preds)^2)), "\n")
 
 
     hist(preds, main= paste0(name))
-    plot(preds, validatex2[,ncol(validatex2)], col = c("red","blue"), main = paste0(name))
+    plot(preds, validatex2[,"feature"], col = c("red","blue"), main = paste0(name))
     #######training set
-    preds.t = predict(NCAA.stacked, trainx2[,-c(ncol(trainx2))])
-    cat("r2 for Train ALL is: ",cor(trainx2[, ncol(trainx2)], preds.t)^2, "\n")
-    cat("rmse for Train ALL is: ",sqrt(mean((trainx2[, ncol(trainx2)] -  preds.t)^2)), "\n")
+    preds.t = predict(NCAA.stacked, trainx2 %>% dplyr::select(-feature))
+    cat("r2 for Train ALL is: ",cor(trainx2[, "feature"], preds.t)^2, "\n")
+    cat("rmse for Train ALL is: ",sqrt(mean((trainx2[, "feature"] -  preds.t)^2)), "\n")
 
     hist(preds.t, main= paste0(name))
-    plot(preds.t, trainx2[,ncol(trainx2)], col = c("red","blue"), main = paste0(name))
+    plot(preds.t, trainx2[,"feature"], col = c("red","blue"), main = paste0(name))
 
     #######AProp set
-    ap.prop = na.omit( BV.HSIdentical.df[,-c(1:35) ] )
+    ap.prop = na.omit( BV.HSIdentical.df[, colnames(trainx2) ] )
 
-    preds.ap = predict(NCAA.stacked, ap.prop[,-c(ncol(ap.prop))])
-    cat("r2 for Prop and A level is: ",cor(ap.prop[,ncol(ap.prop)], preds.ap)^2, "\n")
-    cat("rmse for Prop and A level is: ", sqrt(mean((ap.prop[,ncol(ap.prop)] -  preds.ap)^2)), "\n")
+    preds.ap = predict(NCAA.stacked, ap.prop %>% dplyr::select(-feature))
+    cat("r2 for Prop and A level is: ",cor(ap.prop[,"feature"], preds.ap)^2, "\n")
+    cat("rmse for Prop and A level is: ", sqrt(mean((ap.prop[,"feature"] -  preds.ap)^2)), "\n")
 
     #sqrt(mean((ap.prop[,8] -  preds.ap)^2))
 
     hist(preds.ap, main= paste0(name))
-    plot(preds.ap, ap.prop[,ncol(ap.prop)], col = c("red","blue"), main = paste0(name))
+    plot(preds.ap, ap.prop[,"feature"], col = c("red","blue"), main = paste0(name))
 
-    preds.ap = data.table(ap.prop[,-ncol(ap.prop)], preds.ap)
+    preds.ap = data.table(ap.prop %>% dplyr::select(-feature), preds.ap)
 
     preds.test.agg.FEMALE = preds.ap %>%
       dplyr::group_by(female) %>%
@@ -649,6 +652,9 @@ xgblinearBV = function(  sdp,
     rm(trainx2, validatex2,ap.prop)
     gc()
     cat("Predicting A and Prop test level for all combinations over Years, Locations, Male, Female", "\n")
+
+    testx2 = testx2 %>% left_join(trainingx2[,colnames(trainx2)], by = "female")
+
     preds.test = predict(NCAA.stacked, testx2[,c(6,3,4,2,5,1,7,8,9,10)])
 
     hist(preds.test, main= paste0(name))
