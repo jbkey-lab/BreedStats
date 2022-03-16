@@ -299,6 +299,7 @@ xgblinearBV = function(  sdp,
   BV.HSIdentical.df = BV.HSIdentical.df[,-c(43,44)]
   trainingx2 = trainingx2[,-c(43,44)]
 
+
   if(genotype){
     BV.HSIdentical.df.join=BV.HSIdentical.df[!duplicated(BV.HSIdentical.df$female),c(38,43,44,45)]
 
@@ -427,7 +428,7 @@ xgblinearBV = function(  sdp,
                          }
       markerData.index = order(markerData$sumMarkerLmPvalue, decreasing = F)
       markerData = markerData[markerData.index, ]
-      markerData = markerData[1:300, ]
+      markerData = markerData[1:50, ]
       #markerData = data.frame(markers = markerData)
 
       trainingMarkers = trainingx2[, (markerData$j)]
@@ -649,13 +650,15 @@ xgblinearBV = function(  sdp,
     #    BV.HSIdentical.df.3, male.3, validatex2, trainx2, BV.HSIdentical.df)
     # gc()
     #######expand.grind set male.female.year
-    rm(trainx2, validatex2,ap.prop)
+    rm(validatex2, trainx2)
     gc()
+
     cat("Predicting A and Prop test level for all combinations over Years, Locations, Male, Female", "\n")
+    ap.prop = ap.prop[!duplicated(ap.prop$female),]
+    testx2 = testx2 %>% left_join(ap.prop[, colnames(ap.prop)[-c(1,2,4,5,6,7,8,9,10,11)]], by = "female")
+    testx2 = testx2[,c(6,3,4,2,5,1,7,8:ncol(testx2))]
 
-    testx2 = testx2 %>% left_join(trainingx2[,colnames(trainx2)], by = "female")
-
-    preds.test = predict(NCAA.stacked, testx2[,c(6,3,4,2,5,1,7,8,9,10)])
+    preds.test = predict(NCAA.stacked, testx2)
 
     hist(preds.test, main= paste0(name))
 
@@ -666,6 +669,7 @@ xgblinearBV = function(  sdp,
     # #
     # BV.HSIdentical.df.3 = rbind(preds.test.bind.2,preds.test.bind)
     # BV.HSIdentical.df.3 = data.frame(BV.HSIdentical.df.3)
+    testx2 = testx2[,-c(8:ncol(testx2))]
     gc()
 
     preds.test = data.table(testx2, preds.test)
