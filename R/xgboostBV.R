@@ -80,6 +80,11 @@ xgblinearBV = function(  sdp,
   library(caretEnsemble)
   library(caret)
   library(data.table)
+  require(BGLR)
+  library(coda)
+  library(MCMCpack)
+  library(MCMCglmm)
+
   season="21S"
   rounds = 30
   eta=1
@@ -182,6 +187,11 @@ xgblinearBV = function(  sdp,
   RE = randomEffect(CNN= "hetgrp", CN=c("HetGrp","LINE"), trainingx2)
   gender.2 = RE[[1]]
   trainingx2 = RE[[2]]
+
+  peds = as.matrix(trainingx2[!duplicated(trainingx2$ID),c("ID","female","male")])
+  iA = MCMCglmm::inverseA(pedigree = peds)
+
+
 
   linked.peds.rmdups = linked.peds[!duplicated(linked.peds$match),]
 
@@ -443,28 +453,13 @@ xgblinearBV = function(  sdp,
       gc()
 
 
-
-    }
-
-
-
-    # id.unk.all = id.unk %>%
-    #   separate(col=ID.concat, sep=" \\+ ", into=c("female","male"),remove=F ) %>%
-    #   transform(male = as.numeric(male),
-    #            female=as.numeric(female))  %>%
-    #   left_join(male.2[,-2], by=c("male"="num")) %>%
-    #   left_join(female.2[-2], by=c("female"="num")) %>%
-    #   mutate(LINE = paste0(FEMALE, " + ", MALE)) %>%
-    #   select(-ID.concat)
-    # colnames(id.unk.all) = c("female","male","line",'MALE',"FEMALE","LINE")
-
-    if(genotype){
-
       datasets = trainVal(data = trainingx3, colToInd= "ID", sample = 0.95)
       gc()
 
       trainx2 = na.omit((datasets[[1]])[, -c(1:35) ])
       validatex2 =na.omit( datasets[[2]][, -c(1:35) ] )
+
+
 
       rm(datasets,trainingx3)
 
