@@ -188,7 +188,8 @@ xgblinearBV = function(  sdp,
   trainingx2 = RE[[2]]
 
 
-  trainingx2$popId = paste0(trainingx2$field,"_", trainingx2$male )
+  trainingx2$popId = paste0(trainingx2$field,"00", trainingx2$male )
+  trainingx2$popId = as.numeric(trainingx2$popId)
 
 
   linked.peds.rmdups = linked.peds[!duplicated(linked.peds$match),]
@@ -327,7 +328,7 @@ xgblinearBV = function(  sdp,
     testx2 = testx2 %>%
       left_join(BV.HSIdentical.df.join.female) %>%
       left_join(BV.HSIdentical.df.join.male)
-    rm(BV.HSIdentical.df.join)
+    rm(BV.HSIdentical.df.join.female, BV.HSIdentical.df.join.male)
     gc()
   }
 
@@ -452,9 +453,9 @@ xgblinearBV = function(  sdp,
 
       trainingMarkers = trainingx2[, (markerData$j)]
       cat("----------------------------Training Marker List-------------------------------","\n")
-
       markerData[1:50,]
-      cat("\n")
+
+      cat( "\n")
 
       trainingx3 = data.frame(trainingx2[ ,1:46], trainingMarkers)
 
@@ -465,8 +466,8 @@ xgblinearBV = function(  sdp,
       datasets = trainVal(data = trainingx3, colToInd= "ID", sample = 0.95)
       gc()
 
-      trainx2 = ((datasets[[1]])[, -c(1:35) ])
-      validatex2 =( datasets[[2]][, -c(1:35) ] )
+      trainx2 = na.omit((datasets[[1]])[, -c(1:35) ])
+      validatex2 =na.omit( datasets[[2]][, -c(1:35) ] )
 
 
 
