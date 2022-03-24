@@ -232,7 +232,8 @@ xgblinearBV = function(  sdp,
 
   id = trainingx2[!duplicated(trainingx2$ID), c("male","female","ID")]
 
-  gender = trainingx2[!duplicated(trainingx2$ID), c("hetgrp","ID")]
+  gender.male = trainingx2[!duplicated(trainingx2$male), c("hetgrp","male")]
+  gender.female = trainingx2[!duplicated(trainingx2$female), c("hetgrp","female")]
 
 
 
@@ -286,9 +287,13 @@ xgblinearBV = function(  sdp,
 
   testx2 = dplyr::left_join(testx2, id, by=c("Var1"="male","Var2"="female"))
   testx2= dplyr::left_join(testx2, variety, by=c("ID"="ID"))
-  testx2= dplyr::left_join(testx2, gender, by=c("ID"="ID"))
 
-  colnames(testx2)=c("male","female","Year","field","ID","variety","hetgrp")
+
+  colnames(testx2)=c("male","female","Year","field","ID","variety")
+  testx2= dplyr::left_join(testx2, gender.female, by=c("female"="female"))
+
+  #testx2= dplyr::left_join(testx2, gender.male, by=c("male"="male"))
+
   testx2$ID.cat = paste0(testx2$female, " + ", testx2$male)
 
   id.unk = testx2 %>% dplyr::filter(is.na(ID)) %>%
@@ -312,14 +317,16 @@ xgblinearBV = function(  sdp,
 
 
   if(genotype){
-    BV.HSIdentical.df.join=BV.HSIdentical.df[!duplicated(BV.HSIdentical.df$female),c("ID","PC1","PC2","PC3")]
+    BV.HSIdentical.df.join.female=BV.HSIdentical.df[!duplicated(BV.HSIdentical.df$female),c("female","PC1","PC2","PC3")]
+    BV.HSIdentical.df.join.male=BV.HSIdentical.df[!duplicated(BV.HSIdentical.df$female),c("male","PC1","PC2","PC3")]
 
     #Genos = openxlsx::read.xlsx(paste0(sdp,"exportmarkers.xlsx"), 1 )#; colnames(earht.prism.norm)[1] = "Female Pedigree"
     #trimpeds = read.csv(paste0(sdp,"BV.HSIdentical.df.trimpeds.csv") )#; colnames(earht.prism.norm)[1] = "Female Pedigree"
     #need two files for this function preprosseed separatly
 
     testx2 = testx2 %>%
-      left_join(BV.HSIdentical.df.join)
+      left_join(BV.HSIdentical.df.join.female) %>%
+      left_join(BV.HSIdentical.df.join.male)
     rm(BV.HSIdentical.df.join)
     gc()
   }
@@ -389,6 +396,7 @@ xgblinearBV = function(  sdp,
     if( "feature" %in% colnames(trainingx2)){
       trainingx2 = trainingx2 %>% dplyr::select(-feature)
     }
+
     nameCol = paste0(name)
     trainingx2 = data.frame(trainingx2)
     trainingx2$feature = trainingx2[,name]
