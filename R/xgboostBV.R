@@ -81,9 +81,7 @@ xgblinearBV = function(  sdp,
   library(caret)
   library(data.table)
   require(BGLR)
-  library(coda)
-  library(MCMCpack)
-  library(MCMCglmm)
+  library(asreml)
 
   season="21S"
   rounds = 30
@@ -132,7 +130,8 @@ xgblinearBV = function(  sdp,
   industryNames = InbredNameLibrary()
   industryNames = industryNames[[2]]
 
-  linked.peds[,"match"] <- suppressWarnings(suppressMessages(plyr::revalue(as.character(linked.peds[,"match"]), industryNames)))  #industry name to inbred name conversion
+  linked.peds[,"match"] <- suppressWarnings(suppressMessages(
+    plyr::revalue(as.character(linked.peds[,"match"]), industryNames)))  #industry name to inbred name conversion
 
   group_and_concat <- linked.peds %>%
     dplyr::select(uniqued_id, match, Gender) %>%
@@ -148,7 +147,7 @@ xgblinearBV = function(  sdp,
 
   group_and_concat = group_and_concat[!duplicated(group_and_concat$match),]
 
-  trainingx2 = dplyr::left_join(trainingx2, group_and_concat[,c(2,4,6)], by=c("MALE"="match"))
+  trainingx2 = dplyr::left_join(trainingx2, group_and_concat[,c(2,4,6)], by=c("FEMALE"="match"))
 
   #BV.MC.Entry.data.test = fread(paste0(hdp,"BV.HSIdentical.df.csv"))
 
@@ -188,9 +187,8 @@ xgblinearBV = function(  sdp,
   gender.2 = RE[[1]]
   trainingx2 = RE[[2]]
 
-  peds = as.matrix(trainingx2[!duplicated(trainingx2$ID),c("ID","female","male")])
-  iA = MCMCglmm::inverseA(pedigree = peds)
 
+  trainingx2$popId = paste0(trainingx2$field,"_", trainingx2$male )
 
 
   linked.peds.rmdups = linked.peds[!duplicated(linked.peds$match),]
@@ -302,16 +300,19 @@ xgblinearBV = function(  sdp,
   testx2 = dplyr::left_join(testx2, id.unk, by=c("ID.cat"="ID.concat"))
   testx2$ID = ifelse(is.na(testx2$ID), testx2$num,testx2$ID)
   testx2$variety = ifelse(is.na(testx2$variety), nullvarnum, testx2$variety)
+
+  testx2$popId = paste0(testx2$field,"_",testx2$male)
+
   #testx2$field = 9
 
-  testx2 = testx2[ ,c(6,5,1,2,3,4,7)]
+  testx2 = testx2[ ,c(6,5,1,2,3,4,7,10)]
 
-  BV.HSIdentical.df = BV.HSIdentical.df[,-c(43,44)]
-  trainingx2 = trainingx2[,-c(43,44)]
+  BV.HSIdentical.df = BV.HSIdentical.df %>% dplyr::select(-c("X1","pedigree"))
+  trainingx2 = trainingx2 %>% dplyr::select(-c("X1","pedigree"))
 
 
   if(genotype){
-    BV.HSIdentical.df.join=BV.HSIdentical.df[!duplicated(BV.HSIdentical.df$female),c(38,43,44,45)]
+    BV.HSIdentical.df.join=BV.HSIdentical.df[!duplicated(BV.HSIdentical.df$female),c("ID","PC1","PC2","PC3")]
 
     #Genos = openxlsx::read.xlsx(paste0(sdp,"exportmarkers.xlsx"), 1 )#; colnames(earht.prism.norm)[1] = "Female Pedigree"
     #trimpeds = read.csv(paste0(sdp,"BV.HSIdentical.df.trimpeds.csv") )#; colnames(earht.prism.norm)[1] = "Female Pedigree"
@@ -408,7 +409,7 @@ xgblinearBV = function(  sdp,
 
       #markerList = list()
 
-      markerSelect = function(trainingx2 ,markerList,j ){
+      markerSelect = function(trainingx2 ,j ){
         markerLm = stats::lm(feature ~ trainingx2[, j], data = trainingx2)
 
         #variety + PC1 + PC2 + PC3 +field + ID + hetgrp female + male + Year +
@@ -427,11 +428,11 @@ xgblinearBV = function(  sdp,
 
       }
 
-      markerData=foreach(j=colnames(trainingx2)[46:ncol(trainingx2)] ,.packages=c("stats"),
+      markerData=foreach(j=colnames(trainingx2)[47:ncol(trainingx2)] ,.packages=c("stats"),
                          .export=c("lm"),.combine=rbind,.inorder=F) %dopar% {
                            #for( j in colnames(trainingx2)[46:ncol(trainingx2)]  ){
 
-                           a = markerSelect(trainingx2 =trainingx2 ,markerList=markerList,j=j )
+                           a = markerSelect(trainingx2 =trainingx2 ,j=j )
                            a
 
 
@@ -447,7 +448,7 @@ xgblinearBV = function(  sdp,
       markerData[1:50,]
       cat("\n")
 
-      trainingx3 = data.frame(trainingx2[ ,1:45], trainingMarkers)
+      trainingx3 = data.frame(trainingx2[ ,1:46], trainingMarkers)
 
       rm(markerData, trainingMarkers)
       gc()
@@ -456,8 +457,8 @@ xgblinearBV = function(  sdp,
       datasets = trainVal(data = trainingx3, colToInd= "ID", sample = 0.95)
       gc()
 
-      trainx2 = na.omit((datasets[[1]])[, -c(1:35) ])
-      validatex2 =na.omit( datasets[[2]][, -c(1:35) ] )
+      trainx2 = ((datasets[[1]])[, -c(1:35) ])
+      validatex2 =( datasets[[2]][, -c(1:35) ] )
 
 
 
