@@ -105,7 +105,7 @@ xgblinearBV = function(  sdp,
                              "BCA509","F8994","T1874","BUR011", "BQR334",
                              "R6076","BRQ041","BBH030","F9898","85E","LFX7508","FC2YHR"
   ))
-  genotype=T
+  genotype=F
 
   season0=as.numeric(seas0)
   season1=as.numeric(seas1)
@@ -316,8 +316,6 @@ xgblinearBV = function(  sdp,
 
   testx2 = testx2[ ,c(6,5,1,2,3,4,7,10,11)]
 
-  BV.HSIdentical.df = BV.HSIdentical.df %>% dplyr::select(-c("X1","pedigree"))
-  trainingx2 = trainingx2 %>% dplyr::select(-c("X1","pedigree"))
 
 
   if(genotype){
@@ -332,7 +330,16 @@ xgblinearBV = function(  sdp,
       left_join(BV.HSIdentical.df.join.female) %>%
       left_join(BV.HSIdentical.df.join.male)
     rm(BV.HSIdentical.df.join.female, BV.HSIdentical.df.join.male)
+    BV.HSIdentical.df = BV.HSIdentical.df %>% dplyr::select(-c("X1","pedigree"))
+    trainingx2 = trainingx2 %>% dplyr::select(-c("X1","pedigree"))
+
+
     gc()
+  }else{
+    BV.HSIdentical.df = BV.HSIdentical.df %>% dplyr::select(-c("pedigree"))
+    trainingx2 = trainingx2 %>% dplyr::select(-c("pedigree"))
+
+
   }
 
 
@@ -477,52 +484,53 @@ xgblinearBV = function(  sdp,
       rm(datasets,trainingx3)
 
       gc()
-      # r, proportion of phenotypic variance attributed to model residuals
-      R2=0.5
+      # # r, proportion of phenotypic variance attributed to model residuals
+      # R2=0.5
+      #
+      # # Prior hyperparameter values
+      # # sigmaE2 (residual variance)
+      # mode.sigE=R2*var(trainx2 %>% rbind(validatex2)  %>% dplyr::select(feature) %>% as.matrix())
+      # dfe=5
+      # Se=mode.sigE*(dfe + 2)
+      #
+      # # lambda
+      # mode.sigL=(1-R2)*var(trainx2 %>% rbind(validatex2)  %>% dplyr::select(feature) %>% as.matrix())
+      # lambda.hat=sqrt(2*mode.sigE/mode.sigL*sum(colMeans(trainx2[,13:(ncol(trainx2)-1)] %>%
+      #                                                      rbind(validatex2[,13:(ncol(validatex2)-1)])
+      #                                                         )^2))
+      # delta.lambda=0.05                # rate
+      # r.lambda=lambda.hat*delta.lambda # shape
+      #
+      #
+      # prior=list( varE=list(S=Se,df=dfe),
+      #             lambda=list(type='random',
+      #                         value=lambda.hat,
+      #                         shape=r.lambda,
+      #                         rate=delta.lambda) )
+      #
+      # ETA = list(  list(X = rbind( trainx2[,1:10], validatex2[,1:10]),  model="FIXED"),
+      #              list(K = as.matrix(rbind(trainx2[,10:(ncol(trainx2)-1)], validatex2[,10:(ncol(validatex2)-1)])) ,
+      #                   model = "RKHS",
+      #                   prior))
+      #
+      # fmR<-BGLR::BGLR(y = trainx2 %>% rbind(validatex2)  %>% dplyr::select(feature) %>% as.matrix(),
+      #           ETA=ETA,
+      #           nIter=100,
+      #           burnIn=50,
+      #           thin=1,
+      #           verbose = T
+      #           #saveAt=paste(outpath,"B",df,'LASSO_r_',r,'_',sep=''))
+      # )
+      #
 
-      # Prior hyperparameter values
-      # sigmaE2 (residual variance)
-      mode.sigE=R2*var(trainx2 %>% rbind(validatex2)  %>% dplyr::select(feature) %>% as.matrix())
-      dfe=5
-      Se=mode.sigE*(dfe + 2)
-
-      # lambda
-      mode.sigL=(1-R2)*var(trainx2 %>% rbind(validatex2)  %>% dplyr::select(feature) %>% as.matrix())
-      lambda.hat=sqrt(2*mode.sigE/mode.sigL*sum(colMeans(trainx2[,13:(ncol(trainx2)-1)] %>%
-                                                           rbind(validatex2[,13:(ncol(validatex2)-1)])
-                                                              )^2))
-      delta.lambda=0.05                # rate
-      r.lambda=lambda.hat*delta.lambda # shape
-
-
-      prior=list( varE=list(S=Se,df=dfe),
-                  lambda=list(type='random',
-                              value=lambda.hat,
-                              shape=r.lambda,
-                              rate=delta.lambda) )
-
-      ETA = list(  list(X = rbind( trainx2[,c("popId","male")], validatex2[,c("popId","male")]),  model="FIXED"),
-                   list(X = rbind(trainx2[,13:(ncol(trainx2)-1)], validatex2[,13:(ncol(validatex2)-1)]) , model = "BRR",
-                        prior))
-
-      fmR<-BGLR::BGLR(y = trainx2 %>% rbind(validatex2)  %>% dplyr::select(feature) %>% as.matrix(),
-                ETA=ETA,
-                nIter=250,
-                burnIn=50,
-                thin=1,
-                verbose = T
-                #saveAt=paste(outpath,"B",df,'LASSO_r_',r,'_',sep=''))
-      )
-
-
-    cat("r2 for train ALL is: ",
-        cor(trainx2[, "feature"],
-        fmR$yHat[1:(nrow(trainx2))])^2, "\n")
-
-    cat("r2 for Validate ALL is: ",
-        cor(validatex2[, "feature"],
-        fmR$yHat[(nrow(trainx2)+1):(nrow(validatex2)+nrow(trainx2)) ])^2, "\n")
-
+    # cat("r2 for train ALL is: ",
+    #     cor(trainx2[, "feature"],
+    #     fmR$yHat[1:(nrow(trainx2))])^2, "\n")
+    #
+    # cat("r2 for Validate ALL is: ",
+    #     cor(validatex2[, "feature"],
+    #     fmR$yHat[(nrow(trainx2)+1):(nrow(validatex2)+nrow(trainx2)) ])^2, "\n")
+    #
 
     }else{
       datasets = trainVal(data = trainingx2, colToInd= "ID", sample = 0.95)
@@ -555,94 +563,112 @@ xgblinearBV = function(  sdp,
 
       #trainx2$norm = (trainx2$Yield - mean(trainx2$Yield))/(max(trainx2$Yield)-min(trainx2$Yield))
       gc()
+      parms = list(lambda = 0.0003, alpha=0.0003,eval_metric = "rmse",
+                   colsample_bytree = 0.7,
+                   min_child_weight = 0,
+                   max_depth = 4
+                   )
 
+      NCAA.stacked <- xgboost::xgboost(data = trainx2 %>% dplyr::select(-feature) %>% as.matrix(),
+                          label = (trainx2[,"feature"]),
+                          nthread = 7,
+                          objective = "reg:squaredlogerror",
+                          booster = "gbtree", nrounds = 3000,  eta = .8,
+                          print_every_n = 50,
+                          params = parms)
 
-      models.list2 <- caretEnsemble::caretList(
-        x=trainx2 %>% dplyr::select(-feature) %>% as.matrix(),
-        y=(trainx2[,"feature"]),
-        continue_on_fail = T,
-        trControl=caret::trainControl(method="cv",
-                                      number=1, #1
-                                      index = createFolds((trainx2[,ncol(trainx2)]),k=2), #2
-                                      savePredictions = TRUE,
-                                      #classProbs=T,
-                                      allowParallel = TRUE,
-                                      verboseIter = TRUE
-                                      # preProcOptions =list(
-                                      #  # method = c("knnImpute"),
-                                      #   k = 7,
-                                      #   knnSummary = mean)
-                                      #na.remove = TRUE #method = c("center", "scale"))
-                                      # outcome = NULL,
-                                      # fudge = 0.2,
-                                      # numUnique = 3,
-                                      # verbose = FALSE,
-                                      # freqCut = 95/5,
-                                      # uniqueCut = 10,
-                                      #cutoff = 0.9)
-                                      # rangeBounds = c(0, 1))
-                                      #p=.75
-                                      # seeds=c(1,2,3,4,5,6,7,8,9),
-                                      # indexFinal = length(sample(nrow(trainx2), (nrow(trainx2))*.3))
-        ),
-        tuneList=list(
-          #  qrf1=caretModelSpec(method="qrf", ntree=500, tuneLength = 1), #11
-          #  qrf2=caretModelSpec(method="qrf", ntree=7, tuneLength = 1), #11
-          #  qrf3=caretModelSpec(method="qrf", ntree=10, tuneLength = 1), #9
-          # # #qrf4=caretModelSpec(method="qrf", ntree = 150, tuneLength = 1), #7
-          #qrf5=caretModelSpec(method="qrf", ntree=10, tuneLength = 1), #5
-          #qrf6=caretModelSpec(method="xgbLinear", tuneGrid = final_grid2), #5
-          #qrf5=caretModelSpec(method="qrf",ntree=10, tuneLength = 1), #5
-          #  qrf6=caretModelSpec(method="xgbLinear", tuneGrid = final_grid2), #5
+      preds = predict(NCAA.stacked, validatex2 %>% dplyr::select(-feature) %>% as.matrix())
+      cat("r2 for Validate ALL is: ",cor(validatex2[, "feature"], preds)^2, "\n")
+      cat("rmse for Validate ALL is: ",sqrt(mean((validatex2[, "feature"] -  preds)^2)), "\n")
 
-          qrf7=caretEnsemble::caretModelSpec(method="xgbLinear", tuneGrid = final_grid3) #5
-          #qrf8=caretEnsemble::caretModelSpec(method="xgbLinear", tuneGrid = final_grid4) #5
-
-          #qrf9=caretModelSpec(method="BstLm") #5
-          #qrf8=caretModelSpec(method="cubist") #5
-          # qrf6=caretModelSpec(method="qrf", ntree=2, tuneLength = 1) #5
-        )
-        # ),
-        # methodList = c(
-        #   "cubist",
-        #   "xgbLinear"
-        #
-        # )
-      )
-
-      invisible(gc())
-
-      models.list2
-
-      NCAA.stacked<-caretEnsemble::caretEnsemble(models.list2, # + 95
-                                                 trControl = caret::trainControl(
-                                                   number=2,
-                                                   method="boot",
-                                                   verboseIter =TRUE,
-                                                   allowParallel = T
-                                                 )
-      );NCAA.stacked # + 95
-
-      invisible(gc())
-      #626063 + 36001
-      #----Yield Val = 59, 52
-      #----Yield tra = 79, 72
-      #----Yield apr = 76, 68
-
-      #~~~~~~~~~~~~~~~~~~
-      #
-      #----pltht Val = 77, 74
-      #----pltht tra = 86, 95
-      #~~~~~~~~~~~~~~~~~~
-      #95958 + 5087
-      #----earht Val = 53
-      #----earht tra = 68
-
-      #######Validate Cor
-      (caret::varImp(models.list2$qrf7, scale=T))
+      #NCAA.stacked = bstDense
+#
+#       models.list2 <- caretEnsemble::caretList(
+#         x=trainx2 %>% dplyr::select(-feature) %>% as.matrix(),
+#         y=(trainx2[,"feature"]),
+#         continue_on_fail = T,
+#         trControl=caret::trainControl(method="cv",
+#                                       number=1, #1
+#                                       index = createFolds((trainx2[,ncol(trainx2)]),k=2), #2
+#                                       savePredictions = TRUE,
+#                                       #classProbs=T,
+#                                       allowParallel = TRUE,
+#                                       verboseIter = TRUE
+#                                       # preProcOptions =list(
+#                                       #  # method = c("knnImpute"),
+#                                       #   k = 7,
+#                                       #   knnSummary = mean)
+#                                       #na.remove = TRUE #method = c("center", "scale"))
+#                                       # outcome = NULL,
+#                                       # fudge = 0.2,
+#                                       # numUnique = 3,
+#                                       # verbose = FALSE,
+#                                       # freqCut = 95/5,
+#                                       # uniqueCut = 10,
+#                                       #cutoff = 0.9)
+#                                       # rangeBounds = c(0, 1))
+#                                       #p=.75
+#                                       # seeds=c(1,2,3,4,5,6,7,8,9),
+#                                       # indexFinal = length(sample(nrow(trainx2), (nrow(trainx2))*.3))
+#         ),
+#         tuneList=list(
+#           #  qrf1=caretModelSpec(method="qrf", ntree=500, tuneLength = 1), #11
+#           #  qrf2=caretModelSpec(method="qrf", ntree=7, tuneLength = 1), #11
+#           #  qrf3=caretModelSpec(method="qrf", ntree=10, tuneLength = 1), #9
+#           # # #qrf4=caretModelSpec(method="qrf", ntree = 150, tuneLength = 1), #7
+#           #qrf5=caretModelSpec(method="qrf", ntree=10, tuneLength = 1), #5
+#           #qrf6=caretModelSpec(method="xgbLinear", tuneGrid = final_grid2), #5
+#           #qrf5=caretModelSpec(method="qrf",ntree=10, tuneLength = 1), #5
+#           #  qrf6=caretModelSpec(method="xgbLinear", tuneGrid = final_grid2), #5
+#
+#           qrf7=caretEnsemble::caretModelSpec(method="xgbLinear", tuneGrid = final_grid3) #5
+#           #qrf8=caretEnsemble::caretModelSpec(method="xgbLinear", tuneGrid = final_grid4) #5
+#
+#           #qrf9=caretModelSpec(method="BstLm") #5
+#           #qrf8=caretModelSpec(method="cubist") #5
+#           # qrf6=caretModelSpec(method="qrf", ntree=2, tuneLength = 1) #5
+#         )
+#         # ),
+#         # methodList = c(
+#         #   "cubist",
+#         #   "xgbLinear"
+#         #
+#         # )
+#       )
+#
+#       invisible(gc())
+#
+#       models.list2
+#
+#       NCAA.stacked<-caretEnsemble::caretEnsemble(models.list2, # + 95
+#                                                  trControl = caret::trainControl(
+#                                                    number=2,
+#                                                    method="boot",
+#                                                    verboseIter =TRUE,
+#                                                    allowParallel = T
+#                                                  )
+#       );NCAA.stacked # + 95
+#
+#       invisible(gc())
+#       #626063 + 36001
+#       #----Yield Val = 59, 52
+#       #----Yield tra = 79, 72
+#       #----Yield apr = 76, 68
+#
+#       #~~~~~~~~~~~~~~~~~~
+#       #
+#       #----pltht Val = 77, 74
+#       #----pltht tra = 92, 95
+#       #~~~~~~~~~~~~~~~~~~
+#       #95958 + 5087
+#       #----earht Val = 53
+#       #----earht tra = 68
+#
+#       #######Validate Cor
+#       (caret::varImp(models.list2$qrf7, scale=T))
     }
 
-    preds = predict(NCAA.stacked, validatex2 %>% dplyr::select(-feature))
+    preds = predict(NCAA.stacked, validatex2 %>% dplyr::select(-feature) %>% as.matrix())
     cat("r2 for Validate ALL is: ",cor(validatex2[, "feature"], preds)^2, "\n")
     cat("rmse for Validate ALL is: ",sqrt(mean((validatex2[, "feature"] -  preds)^2)), "\n")
 
@@ -650,7 +676,7 @@ xgblinearBV = function(  sdp,
     hist(preds, main= paste0(name))
     plot(preds, validatex2[,"feature"], col = c("red","blue"), main = paste0(name))
     #######training set
-    preds.t = predict(NCAA.stacked, trainx2 %>% dplyr::select(-feature))
+    preds.t = predict(NCAA.stacked, trainx2 %>% dplyr::select(-feature) %>% as.matrix())
     cat("r2 for Train ALL is: ",cor(trainx2[, "feature"], preds.t)^2, "\n")
     cat("rmse for Train ALL is: ",sqrt(mean((trainx2[, "feature"] -  preds.t)^2)), "\n")
 
