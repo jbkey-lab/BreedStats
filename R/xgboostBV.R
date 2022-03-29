@@ -796,7 +796,7 @@ xgblinearBV = function(  sdp,
     #testx2 = testx2 %>% left_join(ap.prop[, colnames(ap.prop)[-c(1,2,4,5,6,7,8,9,10,11)]], by = "female")
     #testx2 = testx2[,c(6,3,4,2,5,1,7,8:ncol(testx2))]
 
-    preds.test = predict(NCAA.stacked, testx2 %>% as.matrix())
+    preds.test = predict(NCAA.stacked, testx2 %>% mutate_all(as.numeric) %>% as.matrix())
 
     hist(preds.test, main= paste0(name))
 
