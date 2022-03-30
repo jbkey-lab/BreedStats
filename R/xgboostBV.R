@@ -632,7 +632,7 @@ xgblinearBV = function(  sdp,
 
 
     #importance_matrix <- xgboost::xgb.importance(model = NCAA.stacked)
-    xgboost::xgb.save(bst, paste0(fdp,name,"_xgboost.model"))
+    xgboost::xgb.save(NCAA.stacked, paste0(fdp,name,"_xgboost.model"))
 
     # preds = predict(NCAA.stacked, validatex2 %>% dplyr::select(-feature) %>% as.matrix())
     # cat("r2 for Validate ALL is: ",cor(validatex2[, "feature"], preds)^2, "\n")
