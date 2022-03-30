@@ -61,53 +61,45 @@ xgblinearBV = function(  sdp,
 ){
 
   # #####################################################
- # s0=T
- # s1 =T
-#   s2 =F
-#   s3 =F
-#   s4 =F
-#   s5 =F
-#   seas0 = 21
-#   seas1 = 20
-#   seas2 = ""
-#   seas3 = ""
-#   seas4 = ""
-#   seas5 = ""
-#   sdp = "C:/Users/jake.lamkey/Documents/"
-#   fdp= "C:/Users/jake.lamkey/Documents/"
-#   library(BreedStats)
-#   library(tidyverse)
-#   library(doParallel)
-#   library(caretEnsemble)
-#   library(caret)
-#   library(data.table)
-#   require(BGLR)
-#   library(asreml)
+  s0=T
+  s1 =T
+  s2 =F
+  s3 =F
+  s4 =F
+  s5 =F
+  seas0 = 21
+  seas1 = 20
+  seas2 = ""
+  seas3 = ""
+  seas4 = ""
+  seas5 = ""
+  sdp = "C:/Users/jake.lamkey/Documents/"
+  fdp= "C:/Users/jake.lamkey/Documents/"
+  library(BreedStats)
+  library(tidyverse)
+  library(doParallel)
+  library(caretEnsemble)
+  library(caret)
+  library(data.table)
+  require(BGLR)
+  library(asreml)
 
-#   season="21S"
-#   rounds = 30
-#   eta=1
-#   alpha = .0003
-#   lambda=.0003
-#   male =   data.frame(male=c('BSQ033',	'GP734GTCBLL',	'BEX905',	'R08072HT',
-#                              'BRQ529',	'8D2',	'SGI193',	'8SY',
-#                              'GP718',	'FC2',	'BSR095',	'BRU059',
-#                              'BRQ291',	'BRP251',	'TR6254RR2',	'BSQ033-PWRA',
-#                              'BUR070',	'BRS312',	'8SY-AM',	'GP717Hx1',
-#                              'BAC020',	'TPCJ6605',	'BSU151',	'SGI193-V2P',
-#                              'BRQ064',	'GP6823Hx1',	'I10516',	'W8039RPGJZ',
-#                              'FB6455',	'BSU311',	'GP717',	'BSQ002',
-#                              'BAA441',	'GP738Hx1',	'BHH069',
-#                              '84Z',	'TR4949',	'GP695Hx1',	'BSU313',
-#                              'BHA493',	'R2846-NS6408DGV2P',	'I12003',	'R2846',
-#                              'BSR273',	'BSQ941',	'BUR032',	'PRW-AM',
-#                              'GP718Hx1',	'24AED-D02',"BAA419","BAA411","BHB075","BHJ471","GP702",
-#                              "40QHQ-E07", "BQS941","BRS313","BSS009","GP738","BRR553",
-#                              "BCA509","F8994","T1874","BUR011", "BQR334",
-#                              "R6076","BRQ041","BBH030","F9898","85E","LFX7508","FC2YHR"
-#   ))
-#   genotype=F
-#   seed = 30
+  season="21S"
+  #   rounds = 30
+  #   eta=1
+  #   alpha = .0003
+  #   lambda=.0003
+  male =   data.frame(male=c('BSQ033',	'GP734GTCBLL', "BFA143", "BQS025", "BQS986",
+                             'BRQ529', 'GP718',	'BSR095',
+                             'BRP251', 'BUR070',	'BRS312',
+                             'BAC020','BSU151', 'GP6823Hx1',	'I10516',	'W8039RPGJZ',
+                             'GP717', 'BAA441',	'GP738Hx1',	'BHH069',
+                             'TR4949', "BRS312", "BRS314", 'I12003',	'BSQ941',
+                             "BAA419","BHB075","BHJ471","GP702",
+                             "40QHQ-E07", "BQS941","BRS313","BSS009","GP738","BRR553"
+  ))
+  genotype=F
+  seed = 30
 
   season0=as.numeric(seas0)
   season1=as.numeric(seas1)
@@ -210,6 +202,7 @@ xgblinearBV = function(  sdp,
                                       BV.MC.Entry.data=trainingx2,s0=s0,s1=s1,s2=s2,s3=s3,s4=s4,s5=s5,
                                       season0=season0,season1=season1,season2=season2,
                                       season3=season3,season4=season4,season5=season5)
+
   BV.HSIdentical.df = rbind(BV.HSIdentical.df.A,
                             BV.HSIdentical.df.Prop)
   if(genotype){
@@ -398,7 +391,7 @@ xgblinearBV = function(  sdp,
   rm(linked.peds, id.unk, gender,female,variety, male,male.3, id, field, female.grid)
   gc()
 
-  name="Plt.Height"
+  name="Yield"
   cat("G", "\n")
 
 
@@ -566,77 +559,59 @@ xgblinearBV = function(  sdp,
     # final_grid4 <- expand.grid(committees = 10, neighbors = 20)
 
     #trainx2$norm = (trainx2$Yield - mean(trainx2$Yield))/(max(trainx2$Yield)-min(trainx2$Yield))
-    gc()
-    R2=0.8
-    # Prior hyperparameter values
-    # sigmaE2 (residual variance)
-    mode.sigE=R2*var(trainx2  %>% dplyr::select(feature) %>% as.matrix())
-    # dfe=1
-    # Se=mode.sigE*(dfe + 2)
+    if(name == "Plt.Height"){
+      NCAA.stacked = xgboostTraitLoop(max_depth = 6,min_child_weight = 0,refresh_leaf = 0,
+                                      grow_policy="lossguide", max_bin = 10000, max_leaves = 40,
+                                      eta = .17, nrounds = 3000, r2 = 0.8)
+    }#done
 
-    # lambda
-    mode.sigL=(1-R2)*var(trainx2 %>% dplyr::select(feature) %>% as.matrix())
-    lambda.hat=sqrt(2*mode.sigE/mode.sigL/sum(colMeans(trainx2[,1:(ncol(trainx2))] )))
+    if(name == "earHT"){
+      NCAA.stacked = xgboostTraitLoop(max_depth = 6,min_child_weight = 0,refresh_leaf = 0,
+                                      grow_policy="lossguide", max_bin = 10000, max_leaves = 40,
+                                      eta = .17, nrounds = 3000, r2 = 0.8)
+    }
 
+    if(name == "GS.Late"){
+      NCAA.stacked = xgboostTraitLoop(max_depth = 6,min_child_weight = 0,refresh_leaf = 0,
+                                      grow_policy="lossguide", max_bin = 10000, max_leaves = 40,
+                                      eta = .17, nrounds = 3000, r2 = 0.8)
+    }
 
-    alpha=(mean(trainx2  %>%
-                  dplyr::select(feature) %>%
-                  as.matrix())^2)/var(trainx2  %>% dplyr::select(feature) %>% as.matrix())
+    if(name == "PCT.HOH"){
+      NCAA.stacked = xgboostTraitLoop(max_depth = 6,min_child_weight = 0,refresh_leaf = 0,
+                                      grow_policy="lossguide", max_bin = 10000, max_leaves = 40,
+                                      eta = .17, nrounds = 3000, r2 = 0.8)
+    }
 
-    gamma = stats::dgamma(trainx2  %>% dplyr::select(feature) %>% as.matrix(), shape=1)
-    gamma=colMeans(gamma)
+    if(name == "RL.Count"){
+      NCAA.stacked = xgboostTraitLoop(max_depth = 6,min_child_weight = 0,refresh_leaf = 0,
+                                      grow_policy="lossguide", max_bin = 10000, max_leaves = 40,
+                                      eta = .17, nrounds = 3000, r2 = 0.8)
+    }
 
-    dtrain <- xgboost::xgb.DMatrix(data = trainx2 %>% dplyr::select(-feature) %>% as.matrix(),
-                                   label = (trainx2[,"feature"]))
+    if(name == "SL.Count"){
+      NCAA.stacked = xgboostTraitLoop(max_depth = 6,min_child_weight = 0,refresh_leaf = 0,
+                                      grow_policy="lossguide", max_bin = 10000, max_leaves = 40,
+                                      eta = .17, nrounds = 3000, r2 = 0.8)
+    }
 
-    dtest <- xgboost::xgb.DMatrix(data = validatex2 %>% dplyr::select(-feature) %>% as.matrix(),
-                                  label=validatex2[, "feature"])
+    if(name == "Test.WT"){
+      NCAA.stacked = xgboostTraitLoop(max_depth = 6,min_child_weight = 0,refresh_leaf = 0,
+                                      grow_policy="lossguide", max_bin = 10000, max_leaves = 40,
+                                      eta = .17, nrounds = 3000, r2 = 0.8)
+    }
 
+    if(name == "Y.M"){
+      NCAA.stacked = xgboostTraitLoop(max_depth = 6,min_child_weight = 0,refresh_leaf = 0,
+                                      grow_policy="lossguide", max_bin = 10000, max_leaves = 40,
+                                      eta = .17, nrounds = 3000, r2 = 0.8)
+    }
 
-    parms = list(lambda = lambda.hat,
-                 alpha=alpha,
-                 gamma = gamma,
-                 eval_metric = "rmse",
-                 # colsample_bytree = 0.7,
-                 min_child_weight = 0,
-                 max_depth = 6,
-                 refresh_leaf =0,
-                 grow_policy ="lossguide",
-                 max_bin = 10000,
-                 max_leaves =40
-                 #sampling_method = "gradient_based"
-                 #scale_pos_weight = 1
-                 #subsample =.95
-
-                 #updater = "grow_colmaker" #grow_gpu_hist
-                 #predictor = "cpu_predictor",  #gpu_predictor
-                 #num_parallel_tree = 5
-                 #single_precision_histogram = T
-
-    )
-
-
-    NCAA.stacked <- xgboost::xgb.train(data = dtrain,
-                                       nthread = 8,
-                                       objective = "reg:squarederror",
-                                       booster = "gbtree",  eta = 0.17, #eta=0.8 for tree_method = auto
-                                       tree_method = "hist", #"gpu_hist"
-                                       print_every_n = 50,
-                                       nrounds = 3000,
-                                       params = parms,
-                                       #watchlist = list(val=dtest,train=dtrain)
-                                       watchlist <- list(train=dtrain, test=dtest),
-                                       early_stopping_rounds=1000
-
-    )   #5.79
-
-
-    #importance_matrix <- xgboost::xgb.importance(model = NCAA.stacked)
-    xgboost::xgb.save(NCAA.stacked, paste0(fdp,name,"_xgboost.model"))
-
-    # preds = predict(NCAA.stacked, validatex2 %>% dplyr::select(-feature) %>% as.matrix())
-    # cat("r2 for Validate ALL is: ",cor(validatex2[, "feature"], preds)^2, "\n")
-    # cat("rmse for Validate ALL is: ",sqrt(mean((validatex2[, "feature"] -  preds)^2)), "\n")
+    if(name == "Yield"){
+      NCAA.stacked = xgboostTraitLoop(max_depth = 6,min_child_weight = 0,refresh_leaf = 0,
+                                      grow_policy="lossguide", max_bin = 10000, max_leaves = 40,
+                                      eta = .17, nrounds = 3000, r2 = 0.8)
+    }
 
     #NCAA.stacked = bstDense
     #
@@ -705,22 +680,46 @@ xgblinearBV = function(  sdp,
     #                                                    allowParallel = T
     #                                                  )
     #       );NCAA.stacked # + 95
-    #
+    #---------------------------------------------------------------------------
     #       invisible(gc())
     #       #626063 + 36001
-    #       #----Yield Val = 59, 52
-    #       #----Yield tra = 79, 72
-    #       #----Yield apr = 76, 68
-    #
+    #       #----Yield Val = 58, 52
+    #       #----Yield tra = 67, 72
+    #       #----Yield apr = 63, 68
     #       #~~~~~~~~~~~~~~~~~~
-    #       #
+    #       #95958 + 5087
     #       #----pltht Val = 79, 74
     #       #----pltht tra = 83, 95
     #       #~~~~~~~~~~~~~~~~~~
     #       #95958 + 5087
-    #       #----earht Val = 53
+    #       #----earht Val = 60
     #       #----earht tra = 68
-    #
+    #       #~~~~~~~~~~~~~~~~~~
+    #       #95958 + 5087
+    #       #----gs.late Val = 40
+    #       #----gs.late tra = 53
+    #       #~~~~~~~~~~~~~~~~~~
+    #       #95958 + 5087
+    #       #----pct.hoh Val = 80
+    #       #----pct.hoh tra = 84
+    #       #~~~~~~~~~~~~~~~~~~
+    #       #95958 + 5087
+    #       #----rl.count Val = 42
+    #       #----rl.count tra = 60
+    #       #~~~~~~~~~~~~~~~~~~
+    #       #95958 + 5087
+    #       #----Y.M Val = 67
+    #       #----Y.M tra = 73
+    #       #~~~~~~~~~~~~~~~~~~
+    #       #95958 + 5087
+    #       #----Test.WT Val = 75
+    #       #----Test.WT tra = 76
+    #       #~~~~~~~~~~~~~~~~~~
+    #       #95958 + 5087
+    #       #----SL.Count Val = 47
+    #       #----SL.Count tra = 63
+
+    #---------------------------------------------------------------------------
     #       #######Validate Cor
     #       (caret::varImp(models.list2$qrf7, scale=T))
 
@@ -796,7 +795,7 @@ xgblinearBV = function(  sdp,
     #testx2 = testx2 %>% left_join(ap.prop[, colnames(ap.prop)[-c(1,2,4,5,6,7,8,9,10,11)]], by = "female")
     #testx2 = testx2[,c(6,3,4,2,5,1,7,8:ncol(testx2))]
 
-    preds.test = predict(NCAA.stacked, testx2 %>% mutate_all(as.numeric) %>% as.matrix())
+    preds.test = predict(NCAA.stacked, testx2[,c(6,3,4,2,5,1,7,8,9)] %>% mutate_all(as.numeric) %>% as.matrix())
 
     hist(preds.test, main= paste0(name))
 
