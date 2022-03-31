@@ -6,14 +6,14 @@ xgboostTraitLoop = function(max_depth, min_child_weight, refresh_leaf, grow_poli
   max_depth = 8 #11
   min_child_weight = 0 #5
   refresh_leaf = 0
-  grow_policy="depthwise"
+  grow_policy="lossguide"
   max_bin = 10000
-  max_leaves = 5
-  eta = .17
+  max_leaves = 85# 85
+  eta = 0.20
   nrounds = 3000
   r2 = 0.6
 
-  #24.90489
+  #24.63033
 
 
   gc()
