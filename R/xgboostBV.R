@@ -391,7 +391,7 @@ xgblinearBV = function(  sdp,
   rm(linked.peds, id.unk, gender,female,variety, male,male.3, id, field, female.grid)
   gc()
 
-  name="Yield"
+  name="EarHt"
   cat("G", "\n")
 
 
@@ -559,59 +559,60 @@ xgblinearBV = function(  sdp,
     # final_grid4 <- expand.grid(committees = 10, neighbors = 20)
 
     #trainx2$norm = (trainx2$Yield - mean(trainx2$Yield))/(max(trainx2$Yield)-min(trainx2$Yield))
+
     if(name == "Plt.Height"){
       NCAA.stacked = xgboostTraitLoop(max_depth = 6,min_child_weight = 0,refresh_leaf = 0,
                                       grow_policy="lossguide", max_bin = 10000, max_leaves = 40,
-                                      eta = .17, nrounds = 3000, r2 = 0.8)
+                                      eta = .17, nrounds = 3000, r2 = 0.8,subsample=1)
     }#done
 
-    if(name == "earHT"){
+    if(name == "EarHt"){
       NCAA.stacked = xgboostTraitLoop(max_depth = 6,min_child_weight = 0,refresh_leaf = 0,
                                       grow_policy="lossguide", max_bin = 10000, max_leaves = 40,
-                                      eta = .17, nrounds = 3000, r2 = 0.8)
+                                      eta = .17, nrounds = 3000, r2 = 0.8,subsample=1)
     }
 
     if(name == "GS.Late"){
       NCAA.stacked = xgboostTraitLoop(max_depth = 6,min_child_weight = 0,refresh_leaf = 0,
                                       grow_policy="lossguide", max_bin = 10000, max_leaves = 40,
-                                      eta = .17, nrounds = 3000, r2 = 0.8)
+                                      eta = .17, nrounds = 3000, r2 = 0.8,subsample=1)
     }
 
     if(name == "PCT.HOH"){
       NCAA.stacked = xgboostTraitLoop(max_depth = 6,min_child_weight = 0,refresh_leaf = 0,
                                       grow_policy="lossguide", max_bin = 10000, max_leaves = 40,
-                                      eta = .17, nrounds = 3000, r2 = 0.8)
+                                      eta = .17, nrounds = 3000, r2 = 0.8,subsample=1)
     }
 
     if(name == "RL.Count"){
       NCAA.stacked = xgboostTraitLoop(max_depth = 6,min_child_weight = 0,refresh_leaf = 0,
                                       grow_policy="lossguide", max_bin = 10000, max_leaves = 40,
-                                      eta = .17, nrounds = 3000, r2 = 0.8)
+                                      eta = .17, nrounds = 3000, r2 = 0.8,subsample=1)
     }
 
     if(name == "SL.Count"){
       NCAA.stacked = xgboostTraitLoop(max_depth = 6,min_child_weight = 0,refresh_leaf = 0,
                                       grow_policy="lossguide", max_bin = 10000, max_leaves = 40,
-                                      eta = .17, nrounds = 3000, r2 = 0.8)
+                                      eta = .17, nrounds = 3000, r2 = 0.8,subsample=1)
     }
 
     if(name == "Test.WT"){
       NCAA.stacked = xgboostTraitLoop(max_depth = 6,min_child_weight = 0,refresh_leaf = 0,
                                       grow_policy="lossguide", max_bin = 10000, max_leaves = 40,
-                                      eta = .17, nrounds = 3000, r2 = 0.8)
+                                      eta = .17, nrounds = 3000, r2 = 0.8,subsample=1)
     }
 
     if(name == "Y.M"){
       NCAA.stacked = xgboostTraitLoop(max_depth = 6,min_child_weight = 0,refresh_leaf = 0,
                                       grow_policy="lossguide", max_bin = 10000, max_leaves = 40,
-                                      eta = .17, nrounds = 3000, r2 = 0.8)
+                                      eta = .17, nrounds = 3000, r2 = 0.8,subsample=1)
     }
 
     if(name == "Yield"){
-      NCAA.stacked = xgboostTraitLoop(max_depth = 6,min_child_weight = 0,refresh_leaf = 0,
-                                      grow_policy="lossguide", max_bin = 10000, max_leaves = 40,
-                                      eta = .17, nrounds = 3000, r2 = 0.8)
-    }
+      NCAA.stacked = xgboostTraitLoop(max_depth = 8,min_child_weight = 0,refresh_leaf = 0,
+                                      grow_policy="lossguide", max_bin = 10000, max_leaves = 85,
+                                      eta = .2, nrounds = 3000, r2 = 0.6,subsample=0.95)
+    } #done
 
     #NCAA.stacked = bstDense
     #
@@ -683,7 +684,7 @@ xgblinearBV = function(  sdp,
     #---------------------------------------------------------------------------
     #       invisible(gc())
     #       #626063 + 36001
-    #       #----Yield Val = 58, 52
+    #       #----Yield Val = 59, 52
     #       #----Yield tra = 67, 72
     #       #----Yield apr = 63, 68
     #       #~~~~~~~~~~~~~~~~~~
