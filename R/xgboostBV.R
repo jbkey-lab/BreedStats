@@ -595,10 +595,10 @@ xgblinearBV = function(  sdp,
     }
 
     if(name == "Test.WT"){
-      NCAA.stacked = xgboostTraitLoop(max_depth = 6,min_child_weight = 0,refresh_leaf = 0,
-                                      grow_policy="lossguide", max_bin = 10000, max_leaves = 40,
-                                      eta = .17, nrounds = 3000, r2 = 0.8,subsample=1,nthread=nthread)
-    }
+      NCAA.stacked = xgboostTraitLoop(max_depth = 14,min_child_weight = 0,refresh_leaf = 0,
+                                      grow_policy="lossguide", max_bin = 20000, max_leaves = 500,
+                                      eta = 0.2, nrounds = 3000, r2 = 0.77,subsample=1,nthread=nthread)
+    } #done
 
     if(name == "Y.M"){
       NCAA.stacked = xgboostTraitLoop(max_depth = 8,min_child_weight = 0,refresh_leaf = 0,
