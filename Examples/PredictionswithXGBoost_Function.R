@@ -24,10 +24,6 @@ datasets=xgblinearBV(
   seas5 = "",
   season = "21S",
   inbred = "BRS313",
-  # rounds = 3000,
-  # eta = 1,
-  # lambda = 0.0003,
-  # alpha = 0.0003,
   male =   data.frame(male=c('BSQ033',	'GP734GTCBLL', "BFA143", "BQS025", "BQS986",
                              'BRQ529', 'GP718',	'BSR095',
                              'BRP251', 'BUR070',	'BRS312',
@@ -38,7 +34,8 @@ datasets=xgblinearBV(
                              "40QHQ-E07", "BQS941","BRS313","BSS009","GP738","BRR553"
   )),
   genotype=F,
-  seed=30
+  seed=30,
+  nthread=8
 
 )
 

@@ -1,20 +1,20 @@
 
 
 xgboostTraitLoop = function(max_depth, min_child_weight, refresh_leaf, grow_policy, max_bin, max_leaves,
-                            eta, nrounds,r2, subsample){
+                            eta, nrounds,r2, subsample,nthread){
 
 
-  max_depth = 15 #15
+  max_depth = 14 #14
   min_child_weight = 0 #5
   refresh_leaf = 0
   grow_policy="lossguide"
-  max_bin = 20000
-  max_leaves = 60# 50
-  eta = .2 #.2
+  max_bin = 20000 #20000
+  max_leaves = 500 # 500
+  eta = 0.17 #.2
   nrounds = 3000
-  r2 = 0.6
+  r2 = 0.77
   subsample = 1
-  #4.39459
+  # #1.388325
 
   gc()
   R2=r2
@@ -47,14 +47,13 @@ xgboostTraitLoop = function(max_depth, min_child_weight, refresh_leaf, grow_poli
               #  colsample_bytree = 0.7,
                min_child_weight = min_child_weight,
                max_depth = max_depth,
-               refresh_leaf =refresh_leaf,
-                grow_policy =grow_policy,
-                max_bin = max_bin,
+                 refresh_leaf =refresh_leaf,
+                  grow_policy =grow_policy,
+                 max_bin = max_bin,
                 max_leaves =max_leaves
-               # #sampling_method = "gradient_based"
-               # #scale_pos_weight = 1
-               # subsample =subsample
-
+               # # # #sampling_method = "gradient_based"
+               # # # #scale_pos_weight = 1
+               #   subsample =subsample
                #updater = "grow_colmaker" #grow_gpu_hist
                #predictor = "cpu_predictor",  #gpu_predictor
                #num_parallel_tree = 5
@@ -63,7 +62,7 @@ xgboostTraitLoop = function(max_depth, min_child_weight, refresh_leaf, grow_poli
   )
 
   NCAA.stacked <- xgboost::xgb.train(data = dtrain,
-                                     nthread = 8,
+                                     nthread = nthread,
                                      objective = "reg:squarederror",
                                      booster = "gbtree",  eta = eta, #eta=0.8 for tree_method = auto
                                      tree_method = "hist", #"gpu_hist"
