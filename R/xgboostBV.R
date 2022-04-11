@@ -58,54 +58,54 @@ xgblinearBV = function(  sdp,
 ){
 
   # #####################################################
-  s0=T
-  s1 =T
-  s2 =F
-  s3 =F
-  s4 =F
-  s5 =F
-  seas0 = 21
-  seas1 = 20
-  seas2 = ""
-  seas3 = ""
-  seas4 = ""
-  seas5 = ""
-  sdp = "C:/Users/jake.lamkey/Documents/"
-  fdp= "C:/Users/jake.lamkey/Documents/"
-  library(BreedStats)
-  library(tidyverse)
-  library(doParallel)
-  library(caretEnsemble)
-  library(caret)
-  library(data.table)
-  require(BGLR)
-  library(asreml)
-
-  season="21S"
-  #   rounds = 30
-  #   eta=1
-  #   alpha = .0003
-  #   lambda=.0003
-  male =   data.frame(male=c('BSQ033',	'GP734GTCBLL', "BFA143", "BQS025", "BQS986",
-                             'BRQ529', 'GP718',	'BSR095',
-                             'BRP251', 'BUR070',	'BRS312',
-                             'BAC020','BSU151', 'GP6823Hx1',	'I10516',	'W8039RPGJZ',
-                             'GP717', 'BAA441',	'GP738Hx1',	'BHH069',
-                             'TR4949', "BRS312", "BRS314", 'I12003',	'BSQ941',
-                             "BAA419","BHB075","BHJ471","GP702",
-                             "40QHQ-E07", "BQS941","BRS313","BSS009","GP738","BRR553"
-  ))
-  genotype=F
-  seed = 30
-  nthread = 8
-
-  season0=as.numeric(seas0)
-  season1=as.numeric(seas1)
-  season2=as.numeric(seas2)
-  season3=as.numeric(seas3)
-  season4=as.numeric(seas4)
-  season5=as.numeric(seas5)
-  male.3=male
+  # s0=T
+  # s1 =T
+  # s2 =F
+  # s3 =F
+  # s4 =F
+  # s5 =F
+  # seas0 = 21
+  # seas1 = 20
+  # seas2 = ""
+  # seas3 = ""
+  # seas4 = ""
+  # seas5 = ""
+  # sdp = "C:/Users/jake.lamkey/Documents/"
+  # fdp= "C:/Users/jake.lamkey/Documents/"
+  # library(BreedStats)
+  # library(tidyverse)
+  # library(doParallel)
+  # library(caretEnsemble)
+  # library(caret)
+  # library(data.table)
+  # require(BGLR)
+  # library(asreml)
+  #
+  # season="21S"
+  # #   rounds = 30
+  # #   eta=1
+  # #   alpha = .0003
+  # #   lambda=.0003
+  # male =   data.frame(male=c('BSQ033',	'GP734GTCBLL', "BFA143", "BQS025", "BQS986",
+  #                            'BRQ529', 'GP718',	'BSR095',
+  #                            'BRP251', 'BUR070',	'BRS312',
+  #                            'BAC020','BSU151', 'GP6823Hx1',	'I10516',	'W8039RPGJZ',
+  #                            'GP717', 'BAA441',	'GP738Hx1',	'BHH069',
+  #                            'TR4949', "BRS312", "BRS314", 'I12003',	'BSQ941',
+  #                            "BAA419","BHB075","BHJ471","GP702",
+  #                            "40QHQ-E07", "BQS941","BRS313","BSS009","GP738","BRR553"
+  # ))
+  # genotype=F
+  # seed = 30
+  # nthread = 8
+  #
+  # season0=as.numeric(seas0)
+  # season1=as.numeric(seas1)
+  # season2=as.numeric(seas2)
+  # season3=as.numeric(seas3)
+  # season4=as.numeric(seas4)
+  # season5=as.numeric(seas5)
+  # male.3=male
 
   cores=parallel::detectCores()
   cl <- parallel::makeCluster(cores[1]-2, outfile="")
@@ -559,55 +559,64 @@ xgblinearBV = function(  sdp,
     #trainx2$norm = (trainx2$Yield - mean(trainx2$Yield))/(max(trainx2$Yield)-min(trainx2$Yield))
 
     if(name == "Plt.Height"){
-      NCAA.stacked = xgboostTraitLoop(max_depth = 6,min_child_weight = 0,refresh_leaf = 0,
+      NCAA.stacked = xgboostTraitLoop(trainx2=trainx2,validatex2=validatex2,max_depth = 6,
+                                      min_child_weight = 0,refresh_leaf = 0,
                                       grow_policy="lossguide", max_bin = 10000, max_leaves = 40,
                                       eta = .17, nrounds = 3000, r2 = 0.8,subsample=1,nthread=nthread)
     }#done
 
     if(name == "EarHt"){
-      NCAA.stacked = xgboostTraitLoop(max_depth = 15,min_child_weight = 0,refresh_leaf = 0,
+      NCAA.stacked = xgboostTraitLoop(trainx2=trainx2,validatex2=validatex2,max_depth = 15,
+                                      min_child_weight = 0,refresh_leaf = 0,
                                       grow_policy="lossguide", max_bin = 20000, max_leaves = 50,
                                       eta = 0.15, nrounds = 3000, r2 = 0.6, subsample=1,nthread=nthread)
     }#done
 
     if(name == "GS.Late"){
-      NCAA.stacked = xgboostTraitLoop(max_depth = 9,min_child_weight = 0,refresh_leaf = 0,
+      NCAA.stacked = xgboostTraitLoop(trainx2=trainx2,validatex2=validatex2,max_depth = 9,
+                                      min_child_weight = 0,refresh_leaf = 0,
                                       grow_policy="lossguide", max_bin = 2000, max_leaves = 100,
                                       eta = 0.2, nrounds = 3000, r2 = 0.43,subsample=1,nthread=nthread)
     }#done
 
     if(name == "PCT.HOH"){
-      NCAA.stacked = xgboostTraitLoop(max_depth = 6,min_child_weight = 0,refresh_leaf = 0,
+      NCAA.stacked = xgboostTraitLoop(trainx2=trainx2,validatex2=validatex2,max_depth = 6,
+                                      min_child_weight = 0,refresh_leaf = 0,
                                       grow_policy="lossguide", max_bin = 10000, max_leaves = 40,
                                       eta = .17, nrounds = 3000, r2 = 0.8,subsample=1,nthread=nthread)
     }
 
     if(name == "RL.Count"){
-      NCAA.stacked = xgboostTraitLoop(max_depth = 6,min_child_weight = 0,refresh_leaf = 0,
+      NCAA.stacked = xgboostTraitLoop(trainx2=trainx2,validatex2=validatex2,max_depth = 6,
+                                      min_child_weight = 0,refresh_leaf = 0,
                                       grow_policy="lossguide", max_bin = 10000, max_leaves = 40,
                                       eta = .17, nrounds = 3000, r2 = 0.8,subsample=1,nthread=nthread)
     }
 
     if(name == "SL.Count"){
-      NCAA.stacked = xgboostTraitLoop(max_depth = 6,min_child_weight = 0,refresh_leaf = 0,
+      NCAA.stacked = xgboostTraitLoop(trainx2=trainx2,validatex2=validatex2,max_depth = 6,
+                                      min_child_weight = 0,refresh_leaf = 0,
                                       grow_policy="lossguide", max_bin = 10000, max_leaves = 40,
                                       eta = .17, nrounds = 3000, r2 = 0.8,subsample=1,nthread=nthread)
     }
 
     if(name == "Test.WT"){
-      NCAA.stacked = xgboostTraitLoop(max_depth = 14,min_child_weight = 0,refresh_leaf = 0,
+      NCAA.stacked = xgboostTraitLoop(trainx2=trainx2,validatex2=validatex2,max_depth = 14,
+                                      min_child_weight = 0,refresh_leaf = 0,
                                       grow_policy="lossguide", max_bin = 20000, max_leaves = 500,
                                       eta = 0.2, nrounds = 3000, r2 = 0.77,subsample=1,nthread=nthread)
     } #done
 
     if(name == "Y.M"){
-      NCAA.stacked = xgboostTraitLoop(max_depth = 8,min_child_weight = 0,refresh_leaf = 0,
+      NCAA.stacked = xgboostTraitLoop(trainx2=trainx2,validatex2=validatex2,max_depth = 8,
+                                      min_child_weight = 0,refresh_leaf = 0,
                                       grow_policy="lossguide", max_bin = 10000, max_leaves = 85,
                                       eta = .2, nrounds = 3000, r2 = 0.6,subsample=0.95,nthread=nthread)
     }
 
     if(name == "Yield"){
-      NCAA.stacked = xgboostTraitLoop(max_depth = 8,min_child_weight = 0,refresh_leaf = 0,
+      NCAA.stacked = xgboostTraitLoop(trainx2=trainx2,validatex2=validatex2,max_depth = 8,
+                                      min_child_weight = 0,refresh_leaf = 0,
                                       grow_policy="lossguide", max_bin = 10000, max_leaves = 85,
                                       eta = .2, nrounds = 3000, r2 = 0.6,subsample=0.95,nthread=nthread)
     } #done

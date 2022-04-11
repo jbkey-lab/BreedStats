@@ -1,7 +1,7 @@
 
 
 xgboostTraitLoop = function(max_depth, min_child_weight, refresh_leaf, grow_policy, max_bin, max_leaves,
-                            eta, nrounds,r2, subsample,nthread){
+                            eta, nrounds,r2, subsample,nthread,trainx2,validatex2){
 
 #
 #   max_depth = 14 #14
