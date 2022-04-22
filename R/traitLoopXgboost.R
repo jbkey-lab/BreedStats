@@ -3,18 +3,18 @@
 xgboostTraitLoop = function(max_depth, min_child_weight, refresh_leaf, grow_policy, max_bin, max_leaves,
                             eta, nrounds,r2, subsample,nthread,trainx2,validatex2){
 
-#
-#   max_depth = 14 #14
-#   min_child_weight = 0 #5
-#   refresh_leaf = 0
-#   grow_policy="lossguide"
-#   max_bin = 20000 #20000
-#   max_leaves = 500 # 500
-#   eta = 0.17 #.2
-#   nrounds = 3000
-#   r2 = 0.77
-#   subsample = 0.90
-#   # #1.387521
+  #
+  # max_depth = 8 #14
+  # min_child_weight = 0 #5
+  # refresh_leaf = 0
+  # grow_policy="lossguide"
+  # max_bin = 10000 #20000
+  # max_leaves = 85 # 500
+  # eta = 0.2 #.2
+  # nrounds = 3000
+  # r2 = 0.6
+  # subsample = 0.95
+  # #   # #1.387521
 
   gc()
   R2=r2
@@ -44,16 +44,17 @@ xgboostTraitLoop = function(max_depth, min_child_weight, refresh_leaf, grow_poli
                alpha= alpha,
                gamma = gamma,
                eval_metric = "rmse",
-              #  colsample_bytree = 0.7,
+               #  colsample_bytree = 0.7,
                min_child_weight = min_child_weight,
                max_depth = max_depth,
-                 refresh_leaf =refresh_leaf,
-                  grow_policy =grow_policy,
-                 max_bin = max_bin,
+                refresh_leaf =refresh_leaf,
+                grow_policy =grow_policy,
+                max_bin = max_bin,
                 max_leaves =max_leaves,
+                subsample =subsample
+
                # # # #sampling_method = "gradient_based"
                # # # #scale_pos_weight = 1
-                  subsample =subsample
                #updater = "grow_colmaker" #grow_gpu_hist
                #predictor = "cpu_predictor",  #gpu_predictor
                #num_parallel_tree = 5
@@ -80,9 +81,9 @@ xgboostTraitLoop = function(max_depth, min_child_weight, refresh_leaf, grow_poli
   # corr=round(cor(validatex2[, "feature"], preds)^2, 4)
   # xgboost::xgb.save(NCAA.stacked, paste0(fdp,season,"/",name,"_Valr2-",corr,"_xgboost.model"))
 
-   # preds = predict(NCAA.stacked, validatex2 %>% dplyr::select(-feature) %>% as.matrix())
-   # cat("r2 for Validate ALL is: ",cor(validatex2[, "feature"], preds)^2, "\n")
-   # cat("rmse for Validate ALL is: ",sqrt(mean((validatex2[, "feature"] -  preds)^2)), "\n")
+  # preds = predict(NCAA.stacked, validatex2 %>% dplyr::select(-feature) %>% as.matrix())
+  # cat("r2 for Validate ALL is: ",cor(validatex2[, "feature"], preds)^2, "\n")
+  # cat("rmse for Validate ALL is: ",sqrt(mean((validatex2[, "feature"] -  preds)^2)), "\n")
 
 
 

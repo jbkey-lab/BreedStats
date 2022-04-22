@@ -58,54 +58,54 @@ xgblinearBV = function(  sdp,
 ){
 
   # #####################################################
-  # s0=T
-  # s1 =T
-  # s2 =F
-  # s3 =F
-  # s4 =F
-  # s5 =F
-  # seas0 = 21
-  # seas1 = 20
-  # seas2 = ""
-  # seas3 = ""
-  # seas4 = ""
-  # seas5 = ""
-  # sdp = "C:/Users/jake.lamkey/Documents/"
-  # fdp= "C:/Users/jake.lamkey/Documents/"
-  # library(BreedStats)
-  # library(tidyverse)
-  # library(doParallel)
-  # library(caretEnsemble)
-  # library(caret)
-  # library(data.table)
-  # require(BGLR)
-  # library(asreml)
-  #
-  # season="21S"
-  # #   rounds = 30
-  # #   eta=1
-  # #   alpha = .0003
-  # #   lambda=.0003
-  # male =   data.frame(male=c('BSQ033',	'GP734GTCBLL', "BFA143", "BQS025", "BQS986",
-  #                            'BRQ529', 'GP718',	'BSR095',
-  #                            'BRP251', 'BUR070',	'BRS312',
-  #                            'BAC020','BSU151', 'GP6823Hx1',	'I10516',	'W8039RPGJZ',
-  #                            'GP717', 'BAA441',	'GP738Hx1',	'BHH069',
-  #                            'TR4949', "BRS312", "BRS314", 'I12003',	'BSQ941',
-  #                            "BAA419","BHB075","BHJ471","GP702",
-  #                            "40QHQ-E07", "BQS941","BRS313","BSS009","GP738","BRR553"
-  # ))
-  # genotype=F
-  # seed = 30
-  # nthread = 8
-  #
-  # season0=as.numeric(seas0)
-  # season1=as.numeric(seas1)
-  # season2=as.numeric(seas2)
-  # season3=as.numeric(seas3)
-  # season4=as.numeric(seas4)
-  # season5=as.numeric(seas5)
-  # male.3=male
+  s0=T
+  s1 =T
+  s2 =F
+  s3 =F
+  s4 =F
+  s5 =F
+  seas0 = 21
+  seas1 = 20
+  seas2 = ""
+  seas3 = ""
+  seas4 = ""
+  seas5 = ""
+  sdp = "C:/Users/jake.lamkey/Documents/"
+  fdp= "C:/Users/jake.lamkey/Documents/"
+  library(BreedStats)
+  library(tidyverse)
+  library(doParallel)
+  library(caretEnsemble)
+  library(caret)
+  library(data.table)
+  require(BGLR)
+  library(asreml)
+
+  season="21S"
+  #   rounds = 30
+  #   eta=1
+  #   alpha = .0003
+  #   lambda=.0003
+  male =   data.frame(male=c('BSQ033',	'GP734GTCBLL', "BFA143", "BQS025", "BQS986",
+                             'BRQ529', 'GP718',	'BSR095',
+                             'BRP251', 'BUR070',	'BRS312',
+                             'BAC020','BSU151', 'GP6823Hx1',	'I10516',	'W8039RPGJZ',
+                             'GP717', 'BAA441',	'GP738Hx1',	'BHH069',
+                             'TR4949', "BRS312", "BRS314", 'I12003',	'BSQ941',
+                             "BAA419","BHB075","BHJ471","GP702",
+                             "40QHQ-E07", "BQS941","BRS313","BSS009","GP738","BRR553"
+  ))
+  genotype=F
+  seed = 30
+  nthread = 8
+
+  season0=as.numeric(seas0)
+  season1=as.numeric(seas1)
+  season2=as.numeric(seas2)
+  season3=as.numeric(seas3)
+  season4=as.numeric(seas4)
+  season5=as.numeric(seas5)
+  male.3=male
 
   cores=parallel::detectCores()
   cl <- parallel::makeCluster(cores[1]-2, outfile="")
@@ -180,11 +180,190 @@ xgblinearBV = function(  sdp,
   trainingx2 = RE[[2]]
 
 
+
   trainingx2$popId = paste0(trainingx2$field,"00", trainingx2$male )
   trainingx2$popId = as.numeric(trainingx2$popId)
 
   trainingx2$popIdFemale = paste0(trainingx2$field,"00", trainingx2$female )
   trainingx2$popIdFemale = as.numeric(trainingx2$popIdFemale)
+
+  trainingx2$BreedLoc = trainingx2$FIELD
+
+  trainingx2$BreedLoc = plyr::revalue(trainingx2$BreedLoc,
+                                      c('Choice- Bourbon'='Beck - A-BB',
+                                      'Choice- Blissfield'='Beck - A-BF',
+                                      'Choice- Bluffton'='Beck - A-BU',
+                                      'Choice- Champaign'='Beck - A-CP',
+                                      'Choice- Greensburg'='Beck - A-GB',
+                                      'Choice- Grand Rapids'='Beck - A-GRC',
+                                      'Choice- Grelton'='Beck - A-GT',
+                                      'Choice- Jenera'='Beck - A-JEC',
+                                      'Choice- Kankakee'='Beck - A-KK',
+                                      'Choice- London'='Beck - A-LD',
+                                      'Choice- Lafayette'='Beck - A-LF',
+                                      'Choice- New Haven'='Beck - A-NH',
+                                      'Choice- Niles'='Beck - A-NI',
+                                      'Choice- Paris'='Beck - A-PS',
+                                      'Choice- Remington'='Beck - A-RM',
+                                      'Choice- Sandusky'='Beck - A-SD',
+                                      'Choice- Seymour'='Beck - A-SM',
+                                      'Choice- St. Marys'='Beck - A-SY',
+                                      'Choice- Terre Haute'='Beck - A-TH',
+                                      'Choice- Washington CH'='Beck - A-WC',
+                                      'Choice- Wheatfield'='Beck - A-WH',
+                                      'Choice- Beaver Dam'='Beck - E-BD',
+                                      'Choice- Bloomington'='Beck - E-BL',
+                                      'Choice- Dorsey'='Beck - E-DRC',
+                                      'Choice- Freeport'='Beck - E-FP',
+                                      'Choice- Janesville'='Beck - E-JN',
+                                      'Choice- Jacksonville'='Beck - E-JV',
+                                      'Choice- Princeton'='Beck - E-PR',
+                                      'Choice- Princeville'='Beck - E-PV',
+                                      'Choice- Rochelle'='Beck - E-RC',
+                                      'Choice- Seneca'='Beck - E-SE',
+                                      'Choice- Waterman'='Beck - E-WM',
+                                      'Choice- Waterloo'='Beck - E-WO',
+                                      'Choice- Benton'='Beck - H-BT',
+                                      'Choice- Columbia'='Beck - H-CO',
+                                      'Choice- Danville'='Beck - H-DK',
+                                      'Choice- Dyersburg'='Beck - H-DYC',
+                                      'Choice- Fort Branch'='Beck - H-FB',
+                                      'Choice- Neoga'='Beck - H-NGC',
+                                      'Choice- Paducah'='Beck - H-PD',
+                                      'Choice- Ridgeway'='Beck - H-RI',
+                                      'Choice- Russelville'='Beck - H-RUC',
+                                      'Choice- Sikeston'='Beck - H-SK',
+                                      'Choice- Union City'='Beck - H-UC',
+                                      'Choice- Kempton'='Beck - KE',
+                                      'Choice- Knightstown'='Beck - KT',
+                                      'Choice- Bradgate'='Beck - M-BG',
+                                      'Choice- Clinton'='Beck - M-CL',
+                                      'Choice- Chariton'='Beck - M-CT',
+                                      'Choice- Colfax'='Beck - M-CX',
+                                      'Choice- Dodgeville'='Beck - M-DG',
+                                      'Choice- Dayton'='Beck - M-DT',
+                                      'Choice- Dewitt'='Beck - M-DW',
+                                      'Choice- Iowa Falls'='Beck - M-IF',
+                                      'Choice- Ida Grove'='Beck - M-IG',
+                                      'Choice- Keota'='Beck - M-KA',
+                                      'Choice- Lexington'='Beck - M-LX',
+                                      'Choice- Nashua'='Beck - M-NU',
+                                      'Choice- Red Oak'='Beck - M-RO',
+                                      'Choice- Walcott'='Beck - M-WT2 (East)',
+                                      'Choice- Storm Lake'='Beck - SL',
+                                      'Choice- Washington'='Beck - WS',
+                                      'Choice- Charlotte'='Beck- CR',
+                                      'Choice- Frankfort'='Beck- FF',
+                                      'Choice- Rockville'='Beck- RK',
+                                      'Choice- Wabash'='Beck- WA',
+                                      'Choice- Webb'='Beck- WB',
+                                      'Choice- Charleston'='Beck-CH',
+                                      'Choice- Knoxville'='Beck-KX',
+                                      'Choice- Sacramento'='Beck-SC',
+                                      'Choice-3MG-Aberdeen'='Choice-Other',
+                                      'Choice-3MG-Wessington Springs'='Choice-Other',
+                                      'Choice- Royal Center'='Choice-Other',
+                                      'Choice- Stewartville Choice'='Choice-Other',
+                                      'Choice- Pekin'='Choice-Other',
+                                      'Choice- Virginia'='Choice-Other',
+                                      'Choice- Ridgway'='Choice-Other',
+                                      'Choice-CRD-Fairfax'='Choice-Other',
+                                      'Choice- Wells MN Choice'='Choice-Other',
+                                      'Choice- Protivin'='Choice-Other',
+                                      'Choice- Cascade'='Choice-Other',
+                                      'Choice- Chilicothe, OH'='Choice-Other',
+                                      'Choice- Paris TN'='Choice-Other',
+                                      'Choice- Portageville'='Choice-Other',
+                                      'Choice- Ft. Branch'='Choice-Other',
+                                      'Choice-CRD-Blomkest'='Choice-Other',
+                                      'Choice- Platteville'='Choice-Other',
+                                      'Choice- Chillicothe'='Choice-Other',
+                                      'Choice-CRD-Stewartville'='Choice-Other',
+                                      'CRD- Stewartville Choice'="Choice-Other")
+  )
+
+
+
+  trainingx2$BreedLoc = ifelse(grepl(trainingx2$BreedLoc, pattern = "*- A-*"),1,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- M-*"),2,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- O-*"),3,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- E-*"),4,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- H-*"),5,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- IG"),2,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- BF"),1,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- WC"),1,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- RM"),1,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- KT"),1,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- RO"),2,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- GB"),1,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- LF"),1,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- SE"),4,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- KK"),1,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- NH"),1,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- NI"),1,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- DT"),2,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- DG"),2,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- NU"),2,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- BG"),2,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- KA"),2,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- RC"),4,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- WT"),2,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- SL"),2,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- JN"),4,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- JV"),4,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- CP"),1,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- BL"),4,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- PV"),4,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- PS"),1,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- WM"),5,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- RI"),5,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- RK"),5,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- FB"),5,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- WA"),5,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- KE"),5,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- WS"),5,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- UC"),5,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- SK"),5,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- TH"),5,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- KE"),5,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- FP"),4,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- WB"),5,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- DW"),5,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- KX"),5,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- PR"),5,trainingx2$BreedLoc
+
+                                  )))))))))))))))))))))))))))))))))))))))))))))))
+
+
+
+  trainingx2$BreedLoc = ifelse(grepl(trainingx2$BreedLoc, pattern = "*- DN"),5,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- CR"),5,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- FF"),5,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*- CH"),5,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*-Keith"),1,
+                        #ifelse(grepl(trainingx2$BreedLoc, pattern = "Choice-*"),6,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "Contract -*"),7,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "Trade -*"),7,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "CRD*"),7,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "SSR-*"),7,
+
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "Choice-Other"),7,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*-CH"),5,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*-SC"),5,
+                        ifelse(grepl(trainingx2$BreedLoc, pattern = "*-KX"),5,
+
+
+
+
+                        ifelse(is.na(trainingx2$BreedLoc),0,
+                        ifelse((trainingx2$BreedLoc) == "",0,trainingx2$BreedLoc
+
+                        )))))))))))))))
+
+  Breedl = trainingx2[!duplicated(trainingx2$BreedLoc),c("BreedLoc")]
+  Breedl
+
+  BreedLoca = trainingx2[!duplicated(trainingx2$field),c("BreedLoc","field")]
 
   linked.peds.rmdups = linked.peds[!duplicated(linked.peds$match),]
 
@@ -305,9 +484,10 @@ xgblinearBV = function(  sdp,
   testx2$popId = paste0(testx2$field,"00",testx2$male)
   testx2$popIdFemale = paste0(testx2$field,"00",testx2$female)
 
+  testx2 = left_join(testx2, BreedLoca, by=c("field"))
   #testx2$field = 9
 
-  testx2 = testx2[ ,c(6,5,1,2,3,4,7,10,11)]
+  testx2 = testx2[ ,c(6,5,1,2,3,4,7,10,11,12)]
 
 
 
@@ -389,7 +569,7 @@ xgblinearBV = function(  sdp,
   rm(linked.peds, id.unk, gender,female,variety, male,male.3, id, field, female.grid)
   gc()
 
-  name="Test.WT"
+  name="Yield"
   cat("G", "\n")
 
 
@@ -418,6 +598,131 @@ xgblinearBV = function(  sdp,
 
 
     if(genotype){
+      # for (i in Index.PopID) {
+      #   print(paste0(i))
+      #   y = subset(QTL.MC.Entry.Population, PopID == paste0(i))
+      #
+      #   if (!is.na(sum(y$`Plt Height`))) {
+      #     print("Plt Height")
+      #     #hist(y[,"Plt Height"],main=paste0(i))
+      #     st.plt = shapiro.test(y$`Plt Height`)
+      #     PltHt.cv = print(st.plt$p.value)
+      #
+      #     plt.name = paste0(i)
+      #   } else{
+      #     PltHt.cv = print(paste0(i, " Plt Height has no values!"))
+      #     plt.name = paste0(i)
+      #
+      #   }
+      #
+      #   if (!is.na(sum(y$`EarHt`))) {
+      #     print("EarHt")
+      #     #hist(y[,"EarHt"],main=paste0(i))
+      #     st.ear = shapiro.test(y$`EarHt`)
+      #     EarHt.cv = print(st.ear$p.value)
+      #
+      #     ear.name = paste0(i)
+      #   } else{
+      #     EarHt.cv = print(paste0(i, " EarHt has no values!"))
+      #     ear.name = paste0(i)
+      #
+      #   }
+      #
+      #   CV.rank.plt[[length(CV.rank.plt) + 1]] = PltHt.cv
+      #   CV.rank.plt.name[[length(CV.rank.plt.name) + 1]] = plt.name
+      #
+      #   CV.rank.ear[[length(CV.rank.ear) + 1]] = EarHt.cv
+      #   CV.rank.ear.name[[length(CV.rank.ear.name) + 1]] = ear.name
+      #
+      #   rm(PltHt.cv, EarHt.cv, y, st.ear, st.plt)
+      #
+      # }
+      #
+      #
+      # ear.norm = ear.plt %>% filter(EarHt >= 0.05) %>% select(-`Plt.Height`, -X)
+      # colnames(ear.norm) = c("PopID", "Ear.norm")
+      # plt.norm = ear.plt %>% filter(`Plt.Height` >= 0.05) %>% select(-EarHt, -X)
+      # colnames(plt.norm) = c("PopID", "Plt.norm")
+      #
+      #
+      #
+      # if (!file.exists(destfile3) && !file.exists(destfile4)) {
+      #   nrowOfPopId.plt = list()
+      #   PopIdName.plt = list()
+      #   nrowOfPopId.ear = list()
+      #   PopIdName.ear = list()
+      #   CV.rank.plt = list()
+      #   CV.rank.ear = list()
+      #   Index.PopID = levels(as.factor(peds.QtlPopId.filtered$`PopID`))
+      #   length(Index.PopID)
+      #   setwd("R:/Breeding/MT_TP/Models/QTL/2020")
+      #   sink(file = paste0("QTL_20S_SelectedPopIds", wd, ".txt"),
+      #        split = TRUE)
+      #
+      #   for (i in Index.PopID) {
+      #     y = subset(peds.QtlPopId.filtered, PopID == paste0(i))
+      #     if (nrow(y) >= 3) {
+      #       if (!is.na(sum(y$`Plt Height`))) {
+      #         print("PltHt")
+      #         numOfRows.plt = print(nrow(y))
+      #         PopId.plt = paste0(i)
+      #         st.plt = shapiro.test(y$`Plt Height`)
+      #         PltHt.cv = print(st.plt$p.value)
+      #
+      #       } else{
+      #         numOfRows.plt = print(paste0(i, " PltHt has no values!"))
+      #         PltHt.cv = print(paste0(i, " PltHt has no values!"))
+      #
+      #         PopId.plt = paste0(i)
+      #
+      #       }
+      #
+      #       if (!is.na(sum(y$`EarHt`))) {
+      #         print("EarHt")
+      #         numOfRows.ear = print(nrow(y))
+      #         PopId.ear = paste0(i)
+      #         st.ear = shapiro.test(y$`EarHt`)
+      #         EarHt.cv = print(st.ear$p.value)
+      #
+      #       } else{
+      #         numOfRows.ear = print(paste0(i, " EarHt has no values!"))
+      #         EarHt.cv = print(paste0(i, " EarHt has no values!"))
+      #
+      #         PopId.ear = paste0(i)
+      #
+      #       }
+      #     } else{
+      #       numOfRows.ear = print(paste0(i, " EarHt has no values!"))
+      #       EarHt.cv = print(paste0(i, " EarHt has no values!"))
+      #
+      #       PopId.ear = paste0(i)
+      #       numOfRows.plt = print(paste0(i, " PltHt has no values!"))
+      #       PltHt.cv = print(paste0(i, " PltHt has no values!"))
+      #
+      #       PopId.plt = paste0(i)
+      #     }
+      #     nrowOfPopId.plt[[length(nrowOfPopId.plt) + 1]] = numOfRows.plt
+      #     PopIdName.plt[[length(PopIdName.plt) + 1]] = PopId.plt
+      #
+      #     nrowOfPopId.ear[[length(nrowOfPopId.ear) + 1]] = numOfRows.ear
+      #     PopIdName.ear[[length(PopIdName.ear) + 1]] = PopId.ear
+      #
+      #     CV.rank.plt[[length(CV.rank.plt) + 1]] = PltHt.cv
+      #     CV.rank.ear[[length(CV.rank.ear) + 1]] = EarHt.cv
+      #
+      #     rm(
+      #       numOfRows.plt,
+      #       PopId.plt,
+      #       st.plt,
+      #       PltHt.cv,
+      #       numOfRows.ear,
+      #       PopId.ear,
+      #       st.ear,
+      #       EarHt.cv,
+      #       y
+      #     )
+      #   }
+      #   sink()
 
       #markerList = list()
 
@@ -748,11 +1053,12 @@ xgblinearBV = function(  sdp,
     plot(preds.t, trainx2[,"feature"], col = c("red","blue"), main = paste0(name))
 
     #######AProp set
-    ap.prop = na.omit( BV.HSIdentical.df[, colnames(trainx2) ] )
+    ap.prop = na.omit( BV.HSIdentical.df[, colnames(trainx2) ] ) %>% mutate_all( as.numeric )
 
-    preds.ap = predict(NCAA.stacked, ap.prop %>% dplyr::select(-feature)%>%as.matrix())
+    preds.ap = predict(NCAA.stacked, ap.prop %>% dplyr::select(-feature) %>% as.matrix() )
     cat("r2 for Prop and A level is: ",cor(ap.prop[,"feature"], preds.ap)^2, "\n")
     cat("rmse for Prop and A level is: ", sqrt(mean((ap.prop[,"feature"] -  preds.ap)^2)), "\n")
+
 
     #sqrt(mean((ap.prop[,8] -  preds.ap)^2))
 
@@ -796,6 +1102,7 @@ xgblinearBV = function(  sdp,
     # gc()
     #######expand.grind set male.female.year
     rm(validatex2, trainx2)
+
     gc()
 
     cat("Predicting A and Prop test level for all combinations over Years, Locations, Male, Female", "\n")
@@ -803,7 +1110,7 @@ xgblinearBV = function(  sdp,
     #testx2 = testx2 %>% left_join(ap.prop[, colnames(ap.prop)[-c(1,2,4,5,6,7,8,9,10,11)]], by = "female")
     #testx2 = testx2[,c(6,3,4,2,5,1,7,8:ncol(testx2))]
 
-    preds.test = predict(NCAA.stacked, testx2[,c(6,3,4,2,5,1,7,8,9)] %>% mutate_all(as.numeric) %>% as.matrix())
+    preds.test = predict(NCAA.stacked, testx2[,colnames(ap.prop)[-ncol(ap.prop)]] %>% mutate_all(as.numeric) %>% as.matrix())
 
     hist(preds.test, main= paste0(name))
 
@@ -818,6 +1125,8 @@ xgblinearBV = function(  sdp,
     gc()
 
     preds.test = data.table(testx2, preds.test)
+    preds.test$preds.test = round(preds.test$preds.test, 0)
+
     gc()
     preds.test.bind = preds.test %>%
       dplyr::left_join( Year.2[,-2],by=c("Year"="num")) %>%
@@ -828,6 +1137,22 @@ xgblinearBV = function(  sdp,
 
     hist(preds.test$preds.test, main= paste0(name))
 
+
+
+    BreedlocName = data.frame(num = c(1,2,3,4,5,6),
+                              fieldName = c("Atlanta","Marshalltown","Olivia","Exp","Henderison","Choice"))
+
+
+    preds.test.loc = preds.test %>%
+      dplyr::mutate_all(as.numeric) %>%
+      dplyr::left_join( Year.2[,-2],by=c("Year"="num")) %>%
+      dplyr::left_join(BreedlocName, by=c("BreedLoc"="num")) %>%
+      dplyr::group_by(fieldName, ID) %>%
+      dplyr::summarize(preds.test = mean(preds.test)) %>%
+      dplyr::select(preds.test) %>%
+      data.frame()
+
+    #head(preds.test.loc)
     # preds.test.agg.FEMALE = preds.test.bind %>%
     #   group_by(FEMALE) %>%
     #   summarize(preds.test = mean(preds.test))
@@ -850,9 +1175,11 @@ xgblinearBV = function(  sdp,
 
     assign(paste0(name,"_XGBlinearBV_",season,"SbyField"), data.frame(preds.test.bind$preds.test))
 
+    assign(paste0(name,"_XGBlinearBV_",season,"SbyLoc"), data.frame(preds.test.loc$preds.test))
+
     rm(ap.prop,datasets, id.unk,models.list2, NCAA.stacked, preds.ap,preds.test.agg,preds.test.agg.FEMALE,preds.test.agg.MALE,
        trainx2, validatex2, preds,preds.t,preds.test,preds.test.bind)
-    rm(gender,field,id,variety)
+    rm(gender,field,id,variety,preds.test.loc)
     gc()
   }
 
@@ -860,6 +1187,7 @@ xgblinearBV = function(  sdp,
   dev.off()
   ###############################
   gc()
+  colnames(inbreds) = "FEMALE"
 
 
   preds.testFemale = dplyr::left_join(dplyr::left_join(dplyr::left_join(dplyr::left_join(dplyr::left_join(
@@ -902,7 +1230,34 @@ xgblinearBV = function(  sdp,
 
   colnames(preds.test) = names
 
+  preds.test = preds.test %>% filter( Test.WT >=55 )
+  preds.test = preds.test %>% filter( EarHT >=43 )
+  preds.test = preds.test %>% filter( Plt.Height >=96 )
+
   rm(list=grep(pattern = paste0("*_XGBlinearBV_",season,"SbyField"), x=ls(), value=TRUE))
+
+  gc()
+
+  preds.test.loc = cbind(eval(as.name(paste0("EarHt_XGBlinearBV_",season,"SbyLoc"))),
+                         eval(as.name(paste0("GS.Late_XGBlinearBV_",season,"SbyLoc"))),
+                         eval(as.name(paste0("PCT.HOH_XGBlinearBV_",season,"SbyLoc"))),
+                         eval(as.name(paste0("Plt.Height_XGBlinearBV_",season,"SbyLoc"))),
+                         #eval(as.name(paste0("RL.._XGBlinearBV_",season,"SbyLoc"))),
+                         eval(as.name(paste0("RL.Count_XGBlinearBV_",season,"SbyLoc"))),
+                         #eval(as.name(paste0("SL.._XGBlinearBV_",season,"SbyLoc"))),
+                         eval(as.name(paste0("SL.Count_XGBlinearBV_",season,"SbyLoc"))),
+                         #eval(as.name(paste0("StandCnt..Final._XGBlinearBV_",season,"SbyLoc"))),
+                         eval(as.name(paste0("Test.WT_XGBlinearBV_",season,"SbyLoc"))),
+                         eval(as.name(paste0("Y.M_XGBlinearBV_",season,"SbyLoc"))),
+                         eval(as.name(paste0("Yield_XGBlinearBV_",season,"SbyLoc"))))
+
+  colnames(preds.test.loc) = names
+
+  preds.test.loc = preds.test.loc %>% filter( Test.WT >=55 )
+  preds.test.loc = preds.test.loc %>% filter( EarHT >=43 )
+  preds.test.loc = preds.test.loc %>% filter( Plt.Height >=96 )
+
+  rm(list=grep(pattern = paste0("*_XGBlinearBV_",season,"SbyLoc"), x=ls(), value=TRUE))
 
   gc()
 
@@ -912,6 +1267,7 @@ xgblinearBV = function(  sdp,
     dplyr::group_by(field, ID, male, female) %>%
     dplyr::summarize(Year = mean(Year)) %>%
     dplyr::select(-Year)
+
 
   gc()
 
@@ -927,13 +1283,42 @@ xgblinearBV = function(  sdp,
 
   preds.test.bind$ID = paste0(preds.test.bind$FEMALE," + ", preds.test.bind$MALE)
 
-  rm(preds.test,testx2.2)
+  rm(preds.test, testx2.2)
 
   gc()
+  #################################
+  testx2.3 = testx2 %>%
+    dplyr::mutate_all(as.numeric) %>%
+    dplyr::left_join( Year.2[,-2],by=c("Year"="num")) %>%
+    dplyr::left_join(BreedlocName, by=c("BreedLoc"="num")) %>%
+    dplyr::group_by(fieldName, ID,male,female) %>%
+    dplyr::summarize(BreedlocName = mean(BreedlocName)) %>%
+    data.frame()
+
+
+  preds.test.loc = data.table(testx2.3, preds.test.loc)
+
+  gc()
+
+  preds.test.bind.loc = preds.test.loc %>%
+    #dplyr::left_join( field.2[, c(-2)],by=c("field"="num")) %>%
+    dplyr::left_join( male.2[, c(-2)],by=c("male"="num")) %>%
+    dplyr::left_join( female.2[, c(-2)],by=c("female"="num")) %>%
+    dplyr::select(-c(2:5))
+
+  preds.test.bind.loc = preds.test.bind.loc[,c(2:12,1)]
+
+  preds.test.bind.loc$ID = paste0(preds.test.bind.loc$FEMALE," + ", preds.test.bind.loc$MALE)
+
+
+  rm(preds.test.loc,testx2.3)
+
 
   #preds.test.agg.FIELD = tidyr::separate(preds.test.agg.FIELD, sep= " \\+ " ,col = LINE, into=c("FEMALE","MALE"), remove=F)
 
   preds.test.bind = preds.test.bind[,c(10:13,1:9)]
+  preds.test.bind.loc = preds.test.bind.loc[,c(10:13,1:9)]
+
   cat("Printing Colnames ", colnames(preds.test.bind), "\n")
 
   # preds.test.agg.FIELD = preds.test.agg.FIELD %>%
@@ -982,8 +1367,7 @@ xgblinearBV = function(  sdp,
       field.subset = subset(x=preds.test.bind, FIELD == i )
       openxlsx::write.xlsx(field.subset, paste0(fdp,season,"_genotype","/",Field,"/A.Prop",season,"_predsbyLINE",i,".xlsx"),rowNames=F,overwrite=T)
     }
-  }
-  else{
+  }else{
     openxlsx::write.xlsx(preds.test.bind.LINE, paste0(fdp,season,"/","A.Prop",season,"_predsByLine.xlsx"),rowNames=F,overwrite=T)
     rm(preds.test.bind.LINE);gc()
     cat("Finished writing by LINE", "\n")
@@ -993,10 +1377,12 @@ xgblinearBV = function(  sdp,
     openxlsx::write.xlsx(preds.testFemale, paste0(fdp,season,"/","A.Prop",season,"_predsByFemale.xlsx"),rowNames=F,overwrite=T)
     rm(preds.testFemale);gc()
     cat("Finished writing by FEMALE", "\n")
-
+    openxlsx::write.xlsx(preds.test.bind.loc, paste0(fdp,season,"/","A.Prop",season,"_predsByLocation.xlsx"),rowNames=F,overwrite=T)
+    rm(preds.test.bind.loc);gc()
+    cat("Finished writing by LOCATION", "\n")
     Field= "Field"
-    if(!dir.exists(paste0(fdp,season,Field))){
-      dir.create(paste0(fdp,season,Field))
+    if(!dir.exists(paste0(fdp,season,"/",Field))){
+      dir.create(paste0(fdp,season,"/",Field))
     }
 
     field.index = preds.test.bind[!duplicated(preds.test.bind$FIELD), "FIELD"]
@@ -1007,6 +1393,18 @@ xgblinearBV = function(  sdp,
       openxlsx::write.xlsx(field.subset, paste0(fdp,season,"/",Field,"/A.Prop",season,"_predsbyLINE",i,".xlsx"),rowNames=F,overwrite=T)
     }
   }
+
+  BreedLoca = dplyr::left_join(BreedLoca, field.2, by=c("field"="num"))
+  BreedLoca$BreedLoc = as.numeric( BreedLoca$BreedLoc)
+
+  BreedLoca = dplyr::left_join(BreedLoca, BreedlocName, by=c("BreedLoc"="num"))
+  preds.test.bind = dplyr::left_join(preds.test.bind,BreedLoca, by=c("FIELD"))
+  preds.test.bind = preds.test.bind[,c(1,2,3,4,17,5:13)]
+
+  rm(BreedLoca, BreedlocName,BV.HSIdentical.df, field.subset,trainingx2,testx2)
+  gc()
+  parallel::stopCluster(cl)
+  gc()
 
   cat("DONE", "\n")
 
