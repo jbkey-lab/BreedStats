@@ -1125,7 +1125,6 @@ xgblinearBV = function(  sdp,
     gc()
 
     preds.test = data.table(testx2, preds.test)
-    preds.test$preds.test = round(preds.test$preds.test, 0)
 
     gc()
     preds.test.bind = preds.test %>%
@@ -1170,12 +1169,13 @@ xgblinearBV = function(  sdp,
 
     #rm(preds.test.agg.FIELD);gc()
     ###############################
+    preds.test.agg$preds.ap = round(preds.test.agg$preds.ap, 0)
 
     assign(paste0(name,"_XGBlinearBV_",season,"SbyFemale"), preds.test.agg)
 
-    assign(paste0(name,"_XGBlinearBV_",season,"SbyField"), data.frame(preds.test.bind$preds.test))
+    assign(paste0(name,"_XGBlinearBV_",season,"SbyField"), data.frame(round(preds.test.bind$preds.test,0)))
 
-    assign(paste0(name,"_XGBlinearBV_",season,"SbyLoc"), data.frame(preds.test.loc$preds.test))
+    assign(paste0(name,"_XGBlinearBV_",season,"SbyLoc"), data.frame(round(preds.test.loc$preds.test,0)))
 
     rm(ap.prop,datasets, id.unk,models.list2, NCAA.stacked, preds.ap,preds.test.agg,preds.test.agg.FEMALE,preds.test.agg.MALE,
        trainx2, validatex2, preds,preds.t,preds.test,preds.test.bind)
@@ -1230,9 +1230,6 @@ xgblinearBV = function(  sdp,
 
   colnames(preds.test) = names
 
-  preds.test = preds.test %>% filter( Test.WT >=55 )
-  preds.test = preds.test %>% filter( EarHT >=43 )
-  preds.test = preds.test %>% filter( Plt.Height >=96 )
 
   rm(list=grep(pattern = paste0("*_XGBlinearBV_",season,"SbyField"), x=ls(), value=TRUE))
 
@@ -1253,9 +1250,6 @@ xgblinearBV = function(  sdp,
 
   colnames(preds.test.loc) = names
 
-  preds.test.loc = preds.test.loc %>% filter( Test.WT >=55 )
-  preds.test.loc = preds.test.loc %>% filter( EarHT >=43 )
-  preds.test.loc = preds.test.loc %>% filter( Plt.Height >=96 )
 
   rm(list=grep(pattern = paste0("*_XGBlinearBV_",season,"SbyLoc"), x=ls(), value=TRUE))
 
@@ -1272,6 +1266,12 @@ xgblinearBV = function(  sdp,
   gc()
 
   preds.test = data.table(testx2.2, preds.test)
+
+  preds.test = preds.test %>% filter( Yield >=180 )
+  preds.test = preds.test %>% filter( Test.WT >=55 )
+  preds.test = preds.test %>% filter( EarHt >=43 )
+  preds.test = preds.test %>% filter( Plt.Height >=96 )
+  preds.test = preds.test %>% filter( GS.Late <=4 )
 
   gc()
 
@@ -1297,6 +1297,12 @@ xgblinearBV = function(  sdp,
 
 
   preds.test.loc = data.table(testx2.3, preds.test.loc)
+
+  preds.test.loc = preds.test.loc %>% filter( Yield >=180 )
+  preds.test.loc = preds.test.loc %>% filter( Test.WT >=55 )
+  preds.test.loc = preds.test.loc %>% filter( EarHT >=43 )
+  preds.test.loc = preds.test.loc %>% filter( Plt.Height >=96 )
+  preds.test.loc = preds.test.loc %>% filter( GS.Late <=4 )
 
   gc()
 
